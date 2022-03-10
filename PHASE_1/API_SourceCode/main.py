@@ -1,5 +1,10 @@
 from fastapi import FastAPI
-from articleEndPoints import *
+try:
+  # for test files
+  from .articleEndPoints import *
+except:
+  # for running in current folder
+  from articleEndPoints import *
 
 app = FastAPI()
 

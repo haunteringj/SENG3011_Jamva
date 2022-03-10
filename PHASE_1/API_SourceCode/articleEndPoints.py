@@ -6,7 +6,7 @@ from firebase_admin import firestore
 import json
 
 # connect to database
-cred = credentials.Certificate("./firebasePrivateKey.json")
+cred = credentials.Certificate("../firebasePrivateKey.json")
 firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
 db = firestore.client()
 
