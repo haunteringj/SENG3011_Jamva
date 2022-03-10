@@ -1,5 +1,4 @@
 from datetime import datetime
-from http.client import HTTPException
 from fastapi.responses import JSONResponse
 import firebase_admin
 from firebase_admin import credentials
@@ -74,7 +73,7 @@ def fetchByCountry(country):
     
     # preprocessing to match country name
     countryProcessedName = country.lower()
-    countryProcessedName = ''.join(country.split())
+    countryProcessedName = ''.join(countryProcessedName.split())
 
     # query data base
     query = db.collection('articles').where('country', '==', countryProcessedName).get()
@@ -108,14 +107,16 @@ def fetchByDateArticle(startDate, endDate = ""):
     try: 
         start = datetime.strptime(startDate,'%Y/%m/%d')
     except:
-        return toJsonResponse(400, "Correct date format (yyyy/mm/dd).You entered:{}".format(startDate))
-    
+        if (endDate == ""):
+            return toJsonResponse(400, "Correct date format (yyyy/mm/dd).You entered:{}".format(startDate))
+        return toJsonResponse(400, "Correct date format (yyyy/mm/dd).You entered:{} to {}".format(startDate, endDate))
+        
     # convert end date from string to datetime
     if (endDate != ""):
         try: 
             end = datetime.strptime(endDate,'%Y/%m/%d')
         except:
-            return toJsonResponse(400, "Correct date format (yyyy/mm/dd).You entered:{}".format(endDate))
+            return toJsonResponse(400, "Correct date format (yyyy/mm/dd).You entered:{} to {}".format(startDate, endDate))
 
         # return a list of articles inbetween the start and end dates (inclusive)
         # query data base
@@ -123,7 +124,7 @@ def fetchByDateArticle(startDate, endDate = ""):
         listOfArticles = formListOfArticles(query)
 
         if (listOfArticles == []):
-            return toJsonResponse(404, "Correct date format (yyyy/mm/dd).You entered:{} to {}".format(startDate, endDate))
+            return toJsonResponse(404, "no articles were found with your specified date(s). You entered:{} to {}".format(startDate, endDate))
         else:
             return toJsonResponse(200, listOfArticles)
     else:
