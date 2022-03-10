@@ -1,8 +1,6 @@
 from fastapi.testclient import TestClient
 from main import app
 from datetime import datetime
-import firebase_admin
-from firebase_admin import credentials
 from firebase_admin import firestore
 import json
 
