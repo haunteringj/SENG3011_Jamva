@@ -1,14 +1,7 @@
 from datetime import datetime
 from fastapi.responses import JSONResponse
-import firebase_admin
-from firebase_admin import credentials
 from firebase_admin import firestore
 import json
-
-# connect to database
-cred = credentials.Certificate("../firebasePrivateKey.json")
-firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
-db = firestore.client()
 
 # Reorders the queryresults to have a consistent format
 def reorderFields(queryResult):
@@ -31,7 +24,7 @@ def toJsonResponse(statusCode, content):
     )
 
 # Endpoints
-def fetchlatestArticle():
+def fetchlatestArticle(db):
     # number of latest articles to be returned
     noOfArticles = 20
 
@@ -47,7 +40,7 @@ def fetchlatestArticle():
     else:
         return toJsonResponse(200, formListOfArticles(query))
 
-def fetchByIdArticle(id):
+def fetchByIdArticle(db, id):
     # check if id is an integer
     try:
         id = int(id)
@@ -64,7 +57,7 @@ def fetchByIdArticle(id):
     # return the article
     return toJsonResponse(200, article)
 
-def fetchByCountry(country):
+def fetchByCountry(db, country):
     # check if country is an string
     try:
         country = str(country)
@@ -83,7 +76,7 @@ def fetchByCountry(country):
     else:
         return toJsonResponse (200, listOfArticles)
 
-def fetchByDisease(disease):
+def fetchByDisease(db, disease):
     # check if disease is an string
     try:
         disease = str(disease)
@@ -102,7 +95,7 @@ def fetchByDisease(disease):
     else:
         return toJsonResponse(200, listOfArticles)
 
-def fetchByDateArticle(startDate, endDate = ""):
+def fetchByDateArticle(db, startDate, endDate = ""):
     # convert start date from string to datetime
     try: 
         start = datetime.strptime(startDate,"%Y-%m-%dT%H:%M:%S")

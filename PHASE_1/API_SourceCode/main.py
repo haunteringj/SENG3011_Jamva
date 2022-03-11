@@ -1,10 +1,16 @@
 from fastapi import FastAPI
-try:
-  # for test files
-  from .articleEndPoints import *
-except:
-  # for running in current folder
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+try: 
   from articleEndPoints import *
+except:
+  from .articleEndPoints import *
+
+# connect to database
+cred = credentials.Certificate("../firebasePrivateKey.json")
+firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
+db = firestore.client()
 
 app = FastAPI()
 
@@ -15,20 +21,20 @@ def alive():
 # Articles endpoints
 @app.get("/articles/latest")
 def fetchlatestArt():
-  return fetchlatestArticle()
+  return fetchlatestArticle(db)
 
 @app.get("/articles/search/id")
 def fetchByIdArt(id):
-  return fetchByIdArticle(id)
+  return fetchByIdArticle(db, id)
 
 @app.get("/articles/search/country")
 def fetchByCou(country):
-  return fetchByCountry(country)
+  return fetchByCountry(db, country)
 
 @app.get("/articles/search/disease")
 def fetchByDis(disease):
-  return fetchByDisease(disease)
+  return fetchByDisease(db, disease)
 
 @app.get("/articles/search/date")
 def fetchByDate(startDate, endDate = ""):
-  return fetchByDateArticle(startDate, endDate)
+  return fetchByDateArticle(db, startDate, endDate)
