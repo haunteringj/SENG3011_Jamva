@@ -105,18 +105,18 @@ def fetchByDisease(disease):
 def fetchByDateArticle(startDate, endDate = ""):
     # convert start date from string to datetime
     try: 
-        start = datetime.strptime(startDate,'%Y/%m/%d')
+        start = datetime.strptime(startDate,"%Y-%m-%dT%H:%M:%S")
     except:
         if (endDate == ""):
-            return toJsonResponse(400, "Correct date format (yyyy/mm/dd).You entered:{}".format(startDate))
-        return toJsonResponse(400, "Correct date format (yyyy/mm/dd).You entered:{} to {}".format(startDate, endDate))
+            return toJsonResponse(400, "Correct date format (yyyy-MM-ddTHH:mm:ss).You entered:{}".format(startDate))
+        return toJsonResponse(400, "Correct date format (yyyy-MM-ddTHH:mm:ss).You entered:{} to {}".format(startDate, endDate))
         
     # convert end date from string to datetime
     if (endDate != ""):
         try: 
-            end = datetime.strptime(endDate,'%Y/%m/%d')
+            end = datetime.strptime(endDate,"%Y-%m-%dT%H:%M:%S")
         except:
-            return toJsonResponse(400, "Correct date format (yyyy/mm/dd).You entered:{} to {}".format(startDate, endDate))
+            return toJsonResponse(400, "Correct date format (yyyy-MM-ddTHH:mm:ss).You entered:{} to {}".format(startDate, endDate))
 
         # return a list of articles inbetween the start and end dates (inclusive)
         # query data base

@@ -81,43 +81,43 @@ def test_article_disease_no_such_article():
 
 
 def test_article_date_success_start():
-    response = client.get("/articles/search/date?startDate=2022/3/9")
+    response = client.get("/articles/search/date?startDate=2022-3-9T00:00:00")
     assert response.status_code == 200
-    start = datetime.strptime("2022/3/9",'%Y/%m/%d')
+    start = datetime.strptime("2022-3-9T00:00:00","%Y-%m-%dT%H:%M:%S")
     query = db.collection('articles').where('publishDate', '>=', start).get()
     listOfArticles = formListOfArticles(query)
     assert response.json() == json.dumps(listOfArticles, default=str)
 
 def test_article_date_success_start_and_end():
-    response = client.get("/articles/search/date?startDate=2022/3/9&endDate=2022/3/12")
+    response = client.get("/articles/search/date?startDate=2022-3-9T00:00:00&endDate=2022-3-12T00:00:00")
     assert response.status_code == 200
-    start = datetime.strptime("2022/3/9",'%Y/%m/%d')
-    end = datetime.strptime("2022/3/12",'%Y/%m/%d')
+    start = datetime.strptime("2022-3-9T00:00:00","%Y-%m-%dT%H:%M:%S")
+    end = datetime.strptime("2022-3-12T00:00:00","%Y-%m-%dT%H:%M:%S")
     query = db.collection('articles').where('publishDate', '>=', start).where('publishDate', '<=', end).get()
     listOfArticles = formListOfArticles(query)
     assert response.json() == json.dumps(listOfArticles, default=str)
     
 def test_article_date_no_such_article():
-    response = client.get("/articles/search/date?startDate=2029/3/9")
+    response = client.get("/articles/search/date?startDate=2029-3-9T00:00:00")
     assert response.status_code == 404
-    assert response.json() == '"no articles were found with your specified date(s). You entered:2029/3/9"'
+    assert response.json() == '"no articles were found with your specified date(s). You entered:2029-3-9T00:00:00"'
 
 def test_article_date_incorrect_start():
     response = client.get("/articles/search/date?startDate=2/3/2009")
     assert response.status_code == 400
-    assert response.json() == '"Correct date format (yyyy/mm/dd).You entered:2/3/2009"'
+    assert response.json() == '"Correct date format (yyyy-MM-ddTHH:mm:ss).You entered:2/3/2009"'
 
 def test_article_date_incorrect_end():
     response = client.get("/articles/search/date?startDate=2022/3/12&endDate=13/3/2022")
     assert response.status_code == 400
-    assert response.json() == '"Correct date format (yyyy/mm/dd).You entered:2022/3/12 to 13/3/2022"'
+    assert response.json() == '"Correct date format (yyyy-MM-ddTHH:mm:ss).You entered:2022/3/12 to 13/3/2022"'
 
 def test_article_date_incorrect_start_and_end():
     response = client.get("/articles/search/date?startDate=9/3/2022&endDate=13/3/2022")
     assert response.status_code == 400
-    assert response.json() == '"Correct date format (yyyy/mm/dd).You entered:9/3/2022 to 13/3/2022"'
+    assert response.json() == '"Correct date format (yyyy-MM-ddTHH:mm:ss).You entered:9/3/2022 to 13/3/2022"'
 
 def test_article_date_backward_range():
-    response = client.get("/articles/search/date?startDate=2022/3/12&endDate=2022/3/9")
+    response = client.get("/articles/search/date?startDate=2022-3-12T00:00:00&endDate=2022-3-9T00:00:00")
     assert response.status_code == 404
-    assert response.json() == '"no articles were found with your specified date(s). You entered:2022/3/12 to 2022/3/9"'
+    assert response.json() == '"no articles were found with your specified date(s). You entered:2022-3-12T00:00:00 to 2022-3-9T00:00:00"'
