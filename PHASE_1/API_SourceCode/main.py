@@ -5,7 +5,6 @@ from firebase_admin import firestore
 import requests
 import time
 import datetime
-from API_SourceCode.diseasesEndpoints import *
   
 # connect to database
 cred = credentials.Certificate("../firebasePrivateKey.json")
