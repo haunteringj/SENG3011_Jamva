@@ -11,7 +11,7 @@ except:
   from .articleEndPoints import *
 
 # connect to database
-cred = credentials.Certificate("../firebasePrivateKey.json")
+cred = credentials.Certificate("../firebasePrivatekey.json")
 firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
 db = firestore.client()
 
