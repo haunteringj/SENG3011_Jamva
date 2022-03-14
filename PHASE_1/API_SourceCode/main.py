@@ -1,30 +1,84 @@
-
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 import requests
 import time
 import datetime
+  
+# connect to database
+cred = credentials.Certificate("../firebasePrivateKey.json")
+
 try: 
   from diseaseData import globalData, countryData
 except:
   from .diseaseData import globalData, countryData
 try: 
   from articleEndPoints import *
+  from userEndPoints import *
 except:
   from .articleEndPoints import *
+  from .userEndPoints import *
+try:
+  from diseasesEndpoints import *
+except:
+  from .diseasesEndpoints import *
+
+class userCreationModel(BaseModel):
+  email: str
+  country: str
+  username: str
+  state: str
+  city: str = None
+  password: str
+  age: int = None
+
+class userIdModel(BaseModel):
+  uid: str
 
 # connect to database
 cred = credentials.Certificate("../firebasePrivatekey.json")
+
 firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
 db = firestore.client()
 
 app = FastAPI()
 
-@app.get("/v1/alive")
+def getApp():
+  return app
+
+@app.get("/v1/alive", status_code=status.HTTP_200_OK)
 def alive():
   return {"hello": "JAMVA"}
+
+@app.post("/v1/users/create", status_code=status.HTTP_201_CREATED)
+def createUser(user : userCreationModel):
+  return createUserEntry(db, user)
+
+@app.delete("/v1/users/delete/{uid}", status_code=status.HTTP_204_NO_CONTENT)
+def deleteUser(uid: str):
+  return deleteUserEntry(db, uid)
+
+@app.get("/v1/users/details/{uid}", status_code=status.HTTP_200_OK)
+def getUser(uid: str):
+  return getUserDetail(db, uid)
+
+# Disease endpoints
+@app.get("/diseases/search")
+def fetchDiseaseName(disease):
+  return fetchDiseaseByName(db, disease)
+
+@app.get("/diseases/search/outbreaks")
+def fetchDiseaseLocation(location):
+  return fetchDiseaseByLocation(db, location)
+
+@app.get("/diseaseData/global")
+async def diseaseDataGlobal():
+    return globalData(db)
+
+@app.get("/diseaseData/{countryId}")
+async def diseaseDataGlobal(countryId):
+    return countryData(db, countryId)
 
 # Articles endpoints
 @app.get("/articles/latest")
@@ -46,26 +100,6 @@ def fetchByDis(disease):
 @app.get("/articles/search/date")
 def fetchByDate(startDate, endDate = ""):
   return fetchByDateArticle(db, startDate, endDate)
-
-@app.get("/v1/alive")
-async def alive():
-    return {"hello": "JAMVA"}
-
-
-@app.get("/diseaseData/global")
-async def diseaseDataGlobal():
-    return globalData(db)
-
-
-@app.get("/diseaseData/{countryId}")
-async def diseaseDataGlobal(countryId):
-    return countryData(db, countryId)
-
-
-@app.get("/log")
-async def getLog():
-    logFile = open('./log.txt', 'r')
-    return json.dump(json.loads(logFile), indent=1)
 
 # logger (keeps track of API performance) Runs for each request of the api
 @app.middleware("http")
@@ -121,4 +155,6 @@ def ipToLocation(ip):
 
   # Convert date into a json dictionary
   result = json.loads(result)
+
   return result['country_name'] + ", " + result['city']
+

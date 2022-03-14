@@ -14,8 +14,4 @@ starlette==0.16.0
 typing_extensions==4.0.1
 urllib3==1.26.7
 uvicorn==0.16.0
-<<<<<<< HEAD
-firebase-admin==22.0.3
-=======
 firebase_admin==5.2.0
->>>>>>> 231dce3d2b801fee3a51d788af8bbfd99e384449
