@@ -60,14 +60,15 @@ def deleteUserEntry(db, userId: str):
     db.collection("userDetails").document(userId).delete()
     return toJsonResponse(204)
   except:
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"user with {userId} wasn't found")
+    raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"user with {userId} wasn't found")
 
 def getUserDetail(db, uid: str):
   #
   try:
-    query = db.collection("userDetails").doc(uid).get()
+    query = db.collection("userDetails").document(uid).get()
   except:
     return toJsonResponse(500, "User id doesnt exist")
   queryDict = query.to_dict()
-  jsonData = json.dumps(queryDict)
+  jsonData = json.dumps(queryDict, separators=(",",":"))
   return toJsonResponse(200, jsonData)
+  
