@@ -3,7 +3,10 @@ from datetime import datetime
 from fastapi.testclient import TestClient
 from firebase_admin import firestore
 import json
-from API_SourceCode.diseasesEndpoints import *
+try:
+    from API_SourceCode.diseasesEndpoints import *
+except:
+    from API_SourceCode.diseasesEndpoints import *
 
 client = TestClient(app)
 
@@ -17,39 +20,42 @@ def test_is_alive():
     assert response.json() == {"hello": "JAMVA"}
 
 def test_search_success():
-    response = client.get("/diseases/search")
+    response = client.get("/diseases/search?disease=Smallpox")
     assert response.status_code == 200
-    #assert response.json() == json.dumps(listOfArticles, default=str)
-    
+        
 def test_search_false_input():
-    response = client.get("/diseases/search?search='123'")
+    response = client.get("/diseases/search?disease=123")
     assert response.status_code == 400
     assert response.json() == '"diseases are searched with a disease name (e.g Smallpox). You entered:123"'
 
 def test_search_no_disease():
-    response = client.get("/diseases/search?search='fabio'")
+    response = client.get("/diseases/search?disease=fabio")
     assert response.status_code == 404
-    assert response.json() == '"no diseases was found with that id. You entered:fabio"'
+    assert response.json() == '"no diseases was found with that name. You entered:fabio"'
     
 def test_search_failure():
-    #pssh
-    print("rawr")
+    response = fetchDiseaseByName(1, "banana")
+    assert response.status_code == 500
+    #assert response.json() == "Unable to fetch from database"
     
+
 def test_search_outbreaks_success():
-    response = client.get("/diseases/search/outbreaks?outbreaks='AU'")
+    response = client.get("/diseases/search/outbreaks?location=AU")
     assert response.status_code == 200
     #assert response.json() == json.dumps(listOfArticles, default=str)
     
 def test_search_outbreaks_false_input():
-    response = client.get("/diseases/search/outbreaks?outbreaks='123'")
+    response = client.get("/diseases/search/outbreaks?location=123")
     assert response.status_code == 400
-    assert response.json() == '"diseases are searched with a disease location (e.g "australia"). You entered:123"'
+    assert response.json() == '"diseases are searched with a country code (e.g AU). You entered:123"'
     
 def test_search_outbreaks_no_location():
-    response = client.get("/diseases/search/outbreaks?outbreaks='fabio'")
+    response = client.get("/diseases/search/outbreaks?location=fabio")
     assert response.status_code == 404
-    assert response.json() == '"no diseases was found with that id. You entered:fabio"'
+    assert response.json() == '"no diseases was found in that location. You entered:fabio"'
         
 def test_search_outbreaks_failure():
-    #psssh
-    print("rawr")
+    response = fetchDiseaseByLocation(1, "banana")
+    assert response.status_code == 500
+    #assert response.json() == "Unable to fetch from database"
+    

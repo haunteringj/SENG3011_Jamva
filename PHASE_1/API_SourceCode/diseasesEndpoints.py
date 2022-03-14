@@ -12,34 +12,35 @@ def toJsonResponse(statusCode, content):
     )
 
 # Endpoints
-def diseases_search(disease):
+def fetchDiseaseByName(db, disease):
     # check if disease is not a string
-    if not disease.isaplha():
-        return toJsonResponse(400, "diseases are searched with a disease query (e.g Smallpox). You entered:{disease}")
+    if disease.isdigit():
+        return toJsonResponse(400, f"diseases are searched with a disease name (e.g Smallpox). You entered:{disease}")
+    
+    query = []
     
     try:
-        query = db.collection('diseases').where('diseases', '==', disease).steam()
+        query = db.collection('diseases').where('diseaseName', '==', disease).get()
     except:
         return toJsonResponse(500, "Unable to fetch from database")
     
     if query == []:
-        return toJsonResponse(404, "no diseases was found with that name. You entered:{disease}")
+        return toJsonResponse(404, f"no diseases was found with that name. You entered:{disease}")
     
     return toJsonResponse(200, query)
 
-def diseases_locations(location):
+def fetchDiseaseByLocation(db, location):
     
     # check if disease exists/is a string
-    if not location.isaplha():
-        return toJsonResponse(400, "diseases are searched with a disease location (e.g 'australia'). You entered:{location}")
+    if location.isdigit():
+        return toJsonResponse(400, f"diseases are searched with a country code (e.g AU). You entered:{location}")
     
     try:
-        #query = db.collection('diseases').where(any(location in locations[])).steam()
-        print("hi")
+        query = db.collection('outbreaks').where('country','==', location).get()
     except:
         return toJsonResponse(500, "Unable to fetch from database")
     
     if query == []:
-        return toJsonResponse(404, "no diseases was found in that location. You entered:{location}")
+        return toJsonResponse(404, f"no diseases was found in that location. You entered:{location}")
     
     return toJsonResponse(200, query)

@@ -21,11 +21,11 @@ def alive():
 
 # Disease endpoints
 @app.get("/diseases/search")
-def fetchDiseaseByName(disease):
+def fetchDiseaseName(disease):
   return fetchDiseaseByName(db, disease)
 
 @app.get("/diseases/search/outbreaks")
-def fetchDiseaseByLocation(location):
+def fetchDiseaseLocation(location):
   return fetchDiseaseByLocation(db, location)
 
 # logger (keeps track of API performance) Runs for each request of the api
