@@ -18,7 +18,7 @@ def formListOfCountries(query):
     for result in query:
         country = result.to_dict()
         country["articles"] = formListOfArticles(country)
-        country["diseases"] = formListOfDiseases(country)
+        country["outbreaks"] = countryListOfOutbreaks(country)
         listofCountries.append(country)
     return listofCountries
 
@@ -30,11 +30,14 @@ def formListOfArticles(country):
     return listOfArticles
 
 
-def formListOfDiseases(country):
-    listOfDiseases = []
-    for disease in country["diseases"]:
-        listOfDiseases.append(disease.get().to_dict())
-    return listOfDiseases
+def countryListOfOutbreaks(country):
+    listOfOutbreaks = []
+    for outbreak in country["outbreaks"]:
+        outbreakDict = outbreak.get().to_dict()
+        outbreakDict["disease"] = outbreakDict["disease"].get().to_dict()
+        outbreakDict["disease"].pop("outbreaks")
+        listOfOutbreaks.append(outbreakDict)
+    return listOfOutbreaks
 
 
 def globalData(db):
@@ -66,6 +69,6 @@ def countryData(db, countryId):
         return toJsonResponse(404, f"The country with id:{countryId} does not exist.")
     country = query.get()[0].to_dict()
     country["articles"] = formListOfArticles(country)
-    country["diseases"] = formListOfDiseases(country)
+    country["outbreaks"] = countryListOfOutbreaks(country)
 
     return toJsonResponse(200, country)

@@ -21,22 +21,38 @@ def test_global_ok():
     response = client.get("diseaseData/global")
     assert response.status_code == 200
     dict_data = json.loads(response.json())
-    expected_dict = {
+    expected_country = {
+        "countryName": "testcountry",
+        "outbreaks": [
+            {
+                "disease": {
+                    "diseaseName": "COVID19",
+                    "syndromes": [
+                        "Haemorrhagic Fever",
+                        '"Acute Flacid Paralysis',
+                        '"Acute gastroenteritis',
+                    ],
+                    "id": 8701648,
+                },
+                "country": "AU",
+                "cases": 23,
+                "date": "2022-03-13 20:00:00+00:00",
+            }
+        ],
+        "id": "AAA",
         "articles": [
             {
                 "title": "Poliomyelitis update (10): Israel (JM) VDPV, RFI",
-                "country": " australia",
                 "content": "yeah nah",
                 "disease": "poliomyelitis ",
                 "id": 952,
+                "country": " australia",
                 "publishDate": "2022-03-09 13:00:00+00:00",
+                "url": "https://www.foodsafetynews.com/2022/03/cheese-recalled-because-of-link-to-listeria-infections/",
             }
         ],
-        "countryName": "testcountry",
-        "id": "AAA",
-        "diseases": [{"diseaseName": "swine flu", "country": "AU"}],
     }
-    assert dict_data[0] == expected_dict
+    assert dict_data[0] == expected_country
 
 
 def test_global_bad_data():
@@ -49,18 +65,35 @@ def test_global_bad_data():
 def test_country_ok():
     # Similar to previous tests, we run under the assumption that AAA wont be modified.
     response = client.get("diseaseData/AAA")
+
     assert json.loads(response.json()) == {
-        "id": "AAA",
-        "diseases": [{"country": "AU", "diseaseName": "swine flu"}],
         "countryName": "testcountry",
+        "outbreaks": [
+            {
+                "disease": {
+                    "diseaseName": "COVID19",
+                    "syndromes": [
+                        "Haemorrhagic Fever",
+                        '"Acute Flacid Paralysis',
+                        '"Acute gastroenteritis',
+                    ],
+                    "id": 8701648,
+                },
+                "country": "AU",
+                "cases": 23,
+                "date": "2022-03-13 20:00:00+00:00",
+            }
+        ],
+        "id": "AAA",
         "articles": [
             {
-                "publishDate": "2022-03-09 13:00:00+00:00",
+                "title": "Poliomyelitis update (10): Israel (JM) VDPV, RFI",
+                "content": "yeah nah",
+                "disease": "poliomyelitis ",
                 "id": 952,
                 "country": " australia",
-                "disease": "poliomyelitis ",
-                "content": "yeah nah",
-                "title": "Poliomyelitis update (10): Israel (JM) VDPV, RFI",
+                "publishDate": "2022-03-09 13:00:00+00:00",
+                "url": "https://www.foodsafetynews.com/2022/03/cheese-recalled-because-of-link-to-listeria-infections/",
             }
         ],
     }
