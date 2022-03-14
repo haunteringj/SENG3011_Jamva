@@ -6,7 +6,10 @@ from firebase_admin import firestore
 import requests
 import time
 import datetime
-from API_SourceCode.diseaseData import globalData, countryData
+try: 
+  from diseaseData import globalData, countryData
+except:
+  from .diseaseData import globalData, countryData
 try: 
   from articleEndPoints import *
 except:
