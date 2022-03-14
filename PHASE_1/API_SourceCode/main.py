@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status, HTTPException, Request
+from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -6,15 +6,27 @@ import requests
 import time
 import datetime
 try: 
+  from diseaseData import globalData, countryData
+except:
+  from .diseaseData import globalData, countryData
+try: 
   from articleEndPoints import *
   from userEndPoints import *
-  from responseHelpers import *
 except:
   from .articleEndPoints import *
   from .userEndPoints import *
-  from .responseHelpers import *
 
-from userModel import userCreationModel
+class userCreationModel(BaseModel):
+  email: str
+  country: str
+  username: str
+  state: str
+  city: str = None
+  password: str
+  age: int = None
+
+class userIdModel(BaseModel):
+  uid: str
 
 # connect to database
 cred = credentials.Certificate("../firebasePrivatekey.json")
@@ -38,7 +50,7 @@ def createUser(user : userCreationModel):
 
 @app.delete("/v1/users/delete/{uid}", status_code=status.HTTP_204_NO_CONTENT)
 def deleteUser(uid: str):
-  return deleteUser(db, uid)
+  return deleteUserEntry(db, uid)
 
 @app.get("/v1/users/details/{uid}", status_code=status.HTTP_200_OK)
 def getUser(uid: str):
@@ -64,6 +76,20 @@ def fetchByDis(disease):
 @app.get("/articles/search/date")
 def fetchByDate(startDate, endDate = ""):
   return fetchByDateArticle(db, startDate, endDate)
+
+@app.get("/v1/alive")
+async def alive():
+    return {"hello": "JAMVA"}
+
+
+@app.get("/diseaseData/global")
+async def diseaseDataGlobal():
+    return globalData(db)
+
+
+@app.get("/diseaseData/{countryId}")
+async def diseaseDataGlobal(countryId):
+    return countryData(db, countryId)
 
 # logger (keeps track of API performance) Runs for each request of the api
 @app.middleware("http")
