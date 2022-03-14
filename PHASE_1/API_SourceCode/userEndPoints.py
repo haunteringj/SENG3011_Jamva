@@ -1,12 +1,14 @@
-from Helpers.responseHelpers import toJsonResponse
+from responseHelpers import toJsonResponse
 from fastapi import status, HTTPException
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from firebase_admin import auth
 from firebase_admin import exceptions
+from .responseHelpers import *
 
-from UserEndpoints.userModel import userCreationModel
+from userModel import userCreationModel, userIdModel
+
 
 def createUserEntry(db, userInfo: userCreationModel):
   try:

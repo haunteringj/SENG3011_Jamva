@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, status, HTTPException, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -7,8 +7,14 @@ import time
 import datetime
 try: 
   from articleEndPoints import *
+  from userEndPoints import *
+  from responseHelpers import *
 except:
   from .articleEndPoints import *
+  from .userEndPoints import *
+  from .responseHelpers import *
+
+from userModel import userCreationModel
 
 # connect to database
 cred = credentials.Certificate("../firebasePrivatekey.json")
@@ -17,9 +23,26 @@ db = firestore.client()
 
 app = FastAPI()
 
-@app.get("/v1/alive")
+def getApp():
+  return app
+
+@app.get("/v1/alive", status_code=status.HTTP_200_OK)
 def alive():
   return {"hello": "JAMVA"}
+
+#-- USER ENDPOINTS --#
+
+@app.post("/v1/users/create", status_code=status.HTTP_201_CREATED)
+def createUser(user : userCreationModel):
+  return createUserEntry(db, user)
+
+@app.delete("/v1/users/delete/{uid}", status_code=status.HTTP_204_NO_CONTENT)
+def deleteUser(uid: str):
+  return deleteUser(db, uid)
+
+@app.get("/v1/users/details/{uid}", status_code=status.HTTP_200_OK)
+def getUser(uid: str):
+  return getUserDetail(db, uid)
 
 # Articles endpoints
 @app.get("/articles/latest")
