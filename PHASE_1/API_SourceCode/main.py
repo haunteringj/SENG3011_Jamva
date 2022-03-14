@@ -19,8 +19,12 @@ try:
 except:
   from .articleEndPoints import *
   from .userEndPoints import *
+try:
+  from diseasesEndpoints import *
+except:
+  from .diseasesEndpoints import *
 
-class userCreationModel(BaseModel):
+ class userCreationModel(BaseModel):
   email: str
   country: str
   username: str
