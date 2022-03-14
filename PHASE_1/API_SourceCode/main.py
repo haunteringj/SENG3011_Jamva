@@ -61,6 +61,12 @@ async def diseaseDataGlobal():
 async def diseaseDataGlobal(countryId):
     return countryData(db, countryId)
 
+
+@app.get("/log")
+async def getLog():
+    logFile = open('./log.txt', 'r')
+    return json.dump(json.loads(logFile), indent=1)
+
 # logger (keeps track of API performance) Runs for each request of the api
 @app.middleware("http")
 async def Logger(request: Request, call_next):
