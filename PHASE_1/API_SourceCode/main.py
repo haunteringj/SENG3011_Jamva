@@ -8,7 +8,19 @@ import datetime
   
 # connect to database
 cred = credentials.Certificate("../firebasePrivateKey.json")
-# ADD PRIVATE KEY
+
+try: 
+  from diseaseData import globalData, countryData
+except:
+  from .diseaseData import globalData, countryData
+try: 
+  from articleEndPoints import *
+except:
+  from .articleEndPoints import *
+
+# connect to database
+cred = credentials.Certificate("../firebasePrivatekey.json")
+
 firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
 db = firestore.client()
 
@@ -26,6 +38,41 @@ def fetchDiseaseName(disease):
 @app.get("/diseases/search/outbreaks")
 def fetchDiseaseLocation(location):
   return fetchDiseaseByLocation(db, location)
+
+# Articles endpoints
+@app.get("/articles/latest")
+def fetchlatestArt():
+  return fetchlatestArticle(db)
+
+@app.get("/articles/search/id")
+def fetchByIdArt(id):
+  return fetchByIdArticle(db, id)
+
+@app.get("/articles/search/country")
+def fetchByCou(country):
+  return fetchByCountry(db, country)
+
+@app.get("/articles/search/disease")
+def fetchByDis(disease):
+  return fetchByDisease(db, disease)
+
+@app.get("/articles/search/date")
+def fetchByDate(startDate, endDate = ""):
+  return fetchByDateArticle(db, startDate, endDate)
+
+@app.get("/v1/alive")
+async def alive():
+    return {"hello": "JAMVA"}
+
+
+@app.get("/diseaseData/global")
+async def diseaseDataGlobal():
+    return globalData(db)
+
+
+@app.get("/diseaseData/{countryId}")
+async def diseaseDataGlobal(countryId):
+    return countryData(db, countryId)
 
 # logger (keeps track of API performance) Runs for each request of the api
 @app.middleware("http")
@@ -81,4 +128,5 @@ def ipToLocation(ip):
 
   # Convert date into a json dictionary
   result = json.loads(result)
+
   return result['country_name'] + ", " + result['city']
