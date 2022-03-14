@@ -1,4 +1,3 @@
-
 from fastapi import FastAPI, Request
 import firebase_admin
 from firebase_admin import credentials
@@ -6,6 +5,10 @@ from firebase_admin import firestore
 import requests
 import time
 import datetime
+  
+# connect to database
+cred = credentials.Certificate("../firebasePrivateKey.json")
+
 try: 
   from diseaseData import globalData, countryData
 except:
@@ -17,6 +20,7 @@ except:
 
 # connect to database
 cred = credentials.Certificate("../firebasePrivatekey.json")
+
 firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
 db = firestore.client()
 
@@ -25,6 +29,15 @@ app = FastAPI()
 @app.get("/v1/alive")
 def alive():
   return {"hello": "JAMVA"}
+
+# Disease endpoints
+@app.get("/diseases/search")
+def fetchDiseaseName(disease):
+  return fetchDiseaseByName(db, disease)
+
+@app.get("/diseases/search/outbreaks")
+def fetchDiseaseLocation(location):
+  return fetchDiseaseByLocation(db, location)
 
 # Articles endpoints
 @app.get("/articles/latest")
@@ -115,4 +128,5 @@ def ipToLocation(ip):
 
   # Convert date into a json dictionary
   result = json.loads(result)
+
   return result['country_name'] + ", " + result['city']
