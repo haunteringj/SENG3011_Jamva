@@ -1,0 +1,7 @@
+/v1/alive [GET, 200, testclient, 2022-03-14 22:10:08.117337, 0.001s, 17B]
+/diseases/search [GET, 422, testclient, 2022-03-14 22:10:08.137285, 0.001s, 92B]
+/diseases/search?search='123' [GET, 422, testclient, 2022-03-14 22:10:08.333808, 0.001s, 92B]
+/diseases/search?search='fabio' [GET, 422, testclient, 2022-03-14 22:10:08.345200, 0.0s, 92B]
+/diseases/search/outbreaks?outbreaks='AU' [GET, 422, testclient, 2022-03-14 22:10:08.360156, 0.001s, 93B]
+/diseases/search/outbreaks?outbreaks='123' [GET, 422, testclient, 2022-03-14 22:10:08.372124, 0.0s, 93B]
+/diseases/search/outbreaks?outbreaks='fabio' [GET, 422, testclient, 2022-03-14 22:10:08.386121, 0.0s, 93B]
