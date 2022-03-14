@@ -22,6 +22,8 @@ def test_is_alive():
 def test_search_success():
     response = client.get("/diseases/search?disease=Smallpox")
     assert response.status_code == 200
+    query = db.collection('diseases').where('diseaseName', '==', 'Smallpox').get()
+    #{'outbreaks': [{'country': 'AU', 'cases': 23, 'date': DatetimeWithNanoseconds(2022, 3, 13, 20, 0, tzinfo=datetime.timezone.utc)}], 'id': 8701648, 'diseaseName': 'Smallpox', 'syndromes': ['Haemorrhagic Fever', '"Acute Flacid Paralysis', '"Acute gastroenteritis']}
         
 def test_search_false_input():
     response = client.get("/diseases/search?disease=123")
@@ -36,14 +38,13 @@ def test_search_no_disease():
 def test_search_failure():
     response = fetchDiseaseByName(1, "banana")
     assert response.status_code == 500
-    #assert response.json() == "Unable to fetch from database"
     
 
 def test_search_outbreaks_success():
     response = client.get("/diseases/search/outbreaks?location=AU")
     assert response.status_code == 200
-    #assert response.json() == json.dumps(listOfArticles, default=str)
-    
+    #assert json.loads(response.json()) == {'date': DatetimeWithNanoseconds(2022, 3, 13, 20, 0, tzinfo=datetime.timezone.utc), 'cases': 23, 'disease': {'diseaseName': 'Smallpox', 'id': 8701648, 'syndromes': ['Haemorrhagic Fever', '"Acute Flacid Paralysis', '"Acute gastroenteritis']}, 'country': 'AU'}    
+
 def test_search_outbreaks_false_input():
     response = client.get("/diseases/search/outbreaks?location=123")
     assert response.status_code == 400
@@ -57,5 +58,4 @@ def test_search_outbreaks_no_location():
 def test_search_outbreaks_failure():
     response = fetchDiseaseByLocation(1, "banana")
     assert response.status_code == 500
-    #assert response.json() == "Unable to fetch from database"
     
