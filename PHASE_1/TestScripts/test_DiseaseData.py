@@ -3,8 +3,8 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from fastapi.testclient import TestClient
 import json
-from jamvaapi import app
-from PHASE_1.API_SourceCode.diseaseData import globalData, countryData
+from API_SourceCode.main import app
+from API_SourceCode.diseaseData import globalData, countryData
 
 client = TestClient(app)
 
@@ -26,7 +26,7 @@ def test_global_ok():
         "outbreaks": [
             {
                 "disease": {
-                    "diseaseName": "COVID19",
+                    "diseaseName": "Smallpox",
                     "syndromes": [
                         "Haemorrhagic Fever",
                         '"Acute Flacid Paralysis',
@@ -71,7 +71,7 @@ def test_country_ok():
         "outbreaks": [
             {
                 "disease": {
-                    "diseaseName": "COVID19",
+                    "diseaseName": "Smallpox",
                     "syndromes": [
                         "Haemorrhagic Fever",
                         '"Acute Flacid Paralysis',
