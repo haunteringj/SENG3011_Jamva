@@ -17,6 +17,10 @@ try:
   from articleEndPoints import *
 except:
   from .articleEndPoints import *
+try:
+  from diseasesEndpoints import *
+except:
+  from .diseasesEndpoints import *
 
 # connect to database
 cred = credentials.Certificate("../firebasePrivatekey.json")
