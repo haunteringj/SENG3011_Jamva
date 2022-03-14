@@ -1,3 +1,4 @@
+
 from fastapi import FastAPI, Request
 import firebase_admin
 from firebase_admin import credentials
@@ -5,6 +6,7 @@ from firebase_admin import firestore
 import requests
 import time
 import datetime
+from API_SourceCode.diseaseData import globalData, countryData
 try: 
   from articleEndPoints import *
 except:
@@ -41,6 +43,20 @@ def fetchByDis(disease):
 @app.get("/articles/search/date")
 def fetchByDate(startDate, endDate = ""):
   return fetchByDateArticle(db, startDate, endDate)
+
+@app.get("/v1/alive")
+async def alive():
+    return {"hello": "JAMVA"}
+
+
+@app.get("/diseaseData/global")
+async def diseaseDataGlobal():
+    return globalData(db)
+
+
+@app.get("/diseaseData/{countryId}")
+async def diseaseDataGlobal(countryId):
+    return countryData(db, countryId)
 
 # logger (keeps track of API performance) Runs for each request of the api
 @app.middleware("http")
