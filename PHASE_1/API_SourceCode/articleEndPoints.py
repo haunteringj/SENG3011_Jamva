@@ -5,7 +5,7 @@ import json
 
 # Reorders the queryresults to have a consistent format
 def reorderFields(queryResult):
-    orderOfFields = ["id", "title", "publishDate", "disease", "country", "content"]
+    orderOfFields = ["id", "title", "publishDate", "disease", "country", "url", "content"]
     return {k: queryResult.to_dict()[k] for k in orderOfFields}
 
 # form list of Articles from a query get result
