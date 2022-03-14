@@ -4,11 +4,11 @@ from fastapi.responses import JSONResponse
 
 from firebase_admin import credentials
 from firebase_admin import firestore
-from PHASE_1.API_SourceCode.diseaseData import globalData, countryData
+from API_SourceCode.diseaseData import globalData, countryData
 import json
 
 # connect to database
-cred = credentials.Certificate("PHASE_1/serviceAccountKey.json")
+cred = credentials.Certificate("../serviceAccountKey.json")
 firebase_admin.initialize_app(
     cred,
     {
@@ -17,7 +17,6 @@ firebase_admin.initialize_app(
 )
 db = firestore.client()
 app = FastAPI()
-
 
 
 @app.get("/v1/alive")
