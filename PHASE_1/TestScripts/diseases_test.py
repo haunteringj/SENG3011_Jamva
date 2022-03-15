@@ -41,17 +41,17 @@ def test_search_failure():
     
 
 def test_search_outbreaks_success():
-    response = client.get("/diseases/search/outbreaks?location=AU")
+    response = client.get("/diseases/search/location?location=AU")
     assert response.status_code == 200
     #assert json.loads(response.json()) == {'date': DatetimeWithNanoseconds(2022, 3, 13, 20, 0, tzinfo=datetime.timezone.utc), 'cases': 23, 'disease': {'diseaseName': 'Smallpox', 'id': 8701648, 'syndromes': ['Haemorrhagic Fever', '"Acute Flacid Paralysis', '"Acute gastroenteritis']}, 'country': 'AU'}    
 
 def test_search_outbreaks_false_input():
-    response = client.get("/diseases/search/outbreaks?location=123")
+    response = client.get("/diseases/search/location?location=123")
     assert response.status_code == 400
     assert response.json() == '"diseases are searched with a country code (e.g AU). You entered:123"'
     
 def test_search_outbreaks_no_location():
-    response = client.get("/diseases/search/outbreaks?location=fabio")
+    response = client.get("/diseases/search/location?location=fabio")
     assert response.status_code == 404
     assert response.json() == '"no diseases was found in that location. You entered:fabio"'
         
