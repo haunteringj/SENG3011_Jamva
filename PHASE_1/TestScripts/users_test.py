@@ -50,9 +50,9 @@ def test_existing_user():
   jsonData = json.loads(response_two.json())
   deleteData = json.loads(response_one.json())
   uid = str(deleteData.get("uid"))
+  client.delete(f"/v1/users/delete/{uid}")
   assert jsonData.get("status") == "failed_userExists"
   assert response_two.status_code == 409
-  client.delete(f"/v1/users/delete/{uid}")
 
 def test_delete_user():
   jsonValue = {
