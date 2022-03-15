@@ -88,6 +88,8 @@ def test_get_user_detail():
   jsonData = json.loads(response.json())
   uid = str(jsonData.get("uid"))
   response = client.get(f"/v1/users/details/{uid}")
-  assert response.json() == {"username":"JacksAccount2","city":"Sydney","state":"NSW","age":23,"alerts":[],"country":"AUS"}
-  assert response.status_code == 200
   client.delete(f"/v1/users/delete/{uid}")
+  content = {'username': 'JacksAccount2', 'city': 'Sydney', 'state': 'NSW', 'age': 23, 'alerts': [], 'country': 'AUS'}
+  json.dumps(content, default=str)
+  assert response.json() == json.dumps(content, default=str)
+  assert response.status_code == 200

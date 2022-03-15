@@ -20,6 +20,11 @@ class userCreationModel(BaseModel):
 class userIdModel(BaseModel):
   uid: str
 
+# Reorders the queryresults to have a consistent format
+def reorderFields(queryResult):
+    orderOfFields = ["username", "city", "state", "age", "alerts", "country"]
+    return {k: queryResult.to_dict()[k] for k in orderOfFields}
+
 def toJsonResponse(statusCode, content):
     return JSONResponse(
         status_code=statusCode,
@@ -68,6 +73,6 @@ def getUserDetail(db, uid: str):
     query = db.collection("userDetails").document(uid).get()
   except:
     return toJsonResponse(500, "User id doesnt exist")
-  queryDict = query.to_dict()
+  queryDict = reorderFields(query)
   return toJsonResponse(200, queryDict)
   
