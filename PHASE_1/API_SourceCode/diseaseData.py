@@ -9,7 +9,7 @@ def toJsonResponse(statusCode, content):
     return JSONResponse(
         status_code=statusCode,
         # "default=str" to convert datetimewithnanoseconds to string
-        content=json.dumps(content, default=str),
+        content=json.loads(json.dumps(content, default=str)),
     )
 
 

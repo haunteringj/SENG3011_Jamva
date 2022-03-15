@@ -22,18 +22,32 @@ def test_is_alive():
 def test_search_success():
     response = client.get("/v1/diseases/search?disease=Smallpox")
     assert response.status_code == 200
-    query = db.collection('diseases').where('diseaseName', '==', 'Smallpox').get()
-    #{'outbreaks': [{'country': 'AU', 'cases': 23, 'date': DatetimeWithNanoseconds(2022, 3, 13, 20, 0, tzinfo=datetime.timezone.utc)}], 'id': 8701648, 'diseaseName': 'Smallpox', 'syndromes': ['Haemorrhagic Fever', '"Acute Flacid Paralysis', '"Acute gastroenteritis']}
+    assert response.json() == {
+    "syndromes": [
+        "Haemorrhagic Fever",
+        "\"Acute Flacid Paralysis",
+        "\"Acute gastroenteritis"
+    ],
+    "id": 8701648,
+    "diseaseName": "Smallpox",
+    "outbreaks": [
+        {
+        "cases": 23,
+        "country": "AU",
+        "date": "2022-03-13 20:00:00+00:00"
+        }
+    ]
+    }
         
 def test_search_false_input():
     response = client.get("/v1/diseases/search?disease=123")
     assert response.status_code == 400
-    assert response.json() == '"diseases are searched with a disease name (e.g Smallpox). You entered:123"'
+    assert response.json() == "diseases are searched with a disease name (e.g Smallpox). You entered:123"
 
 def test_search_no_disease():
     response = client.get("/v1/diseases/search?disease=fabio")
     assert response.status_code == 404
-    assert response.json() == '"no diseases was found with that name. You entered:fabio"'
+    assert response.json() == "no diseases was found with that name. You entered:fabio"
     
 def test_search_failure():
     response = fetchDiseaseByName(1, "banana")
@@ -48,12 +62,12 @@ def test_search_outbreaks_success():
 def test_search_outbreaks_false_input():
     response = client.get("/v1/diseases/search/outbreaks?location=123")
     assert response.status_code == 400
-    assert response.json() == '"diseases are searched with a country code (e.g AU). You entered:123"'
+    assert response.json() == "diseases are searched with a country code (e.g AU). You entered:123"
     
 def test_search_outbreaks_no_location():
     response = client.get("/v1/diseases/search/outbreaks?location=fabio")
     assert response.status_code == 404
-    assert response.json() == '"no diseases was found in that location. You entered:fabio"'
+    assert response.json() == "no diseases was found in that location. You entered:fabio"
         
 def test_search_outbreaks_failure():
     response = fetchDiseaseByLocation(1, "banana")

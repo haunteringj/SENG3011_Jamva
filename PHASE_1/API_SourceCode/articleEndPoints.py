@@ -19,7 +19,6 @@ def formListOfArticles(queryGetResult):
 def toJsonResponse(statusCode, body):
     return JSONResponse(
         status_code=statusCode,
-        # "default=str" to convert datetimewithnanoseconds to string
         content=body,
     )
 

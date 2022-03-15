@@ -7,7 +7,6 @@ import json
 def toJsonResponse(statusCode, body):
     return JSONResponse(
         status_code=statusCode,
-        # "default=str" to convert datetimewithnanoseconds to string
         content=body
     )
 
@@ -18,12 +17,6 @@ def formListOfOutbreaks(diseases_info):
         outbreakDict.pop('disease')
         listOfOutbreaks.append(json.loads(json.dumps(outbreakDict,  default= str)))
     return listOfOutbreaks
-
-def formDiseaseInfo(location_info):
-    disease = location_info.get().to_dict()
-    disease.pop('outbreaks')
-    
-    return disease
 
 # Endpoints
 def fetchDiseaseByName(db, disease):
