@@ -64,40 +64,40 @@ def getUser(uid: str):
   return getUserDetail(db, uid)
 
 # Disease endpoints
-@app.get("/diseases/search")
+@app.get("/v1/diseases/search")
 def fetchDiseaseName(disease):
   return fetchDiseaseByName(db, disease)
 
-@app.get("/diseases/search/outbreaks")
+@app.get("/v1/diseases/search/outbreaks")
 def fetchDiseaseLocation(location):
   return fetchDiseaseByLocation(db, location)
 
-@app.get("/diseaseData/global")
+@app.get("/v1/diseaseData/global")
 async def diseaseDataGlobal():
     return globalData(db)
 
-@app.get("/diseaseData/{countryId}")
+@app.get("/v1/diseaseData/{countryId}")
 async def diseaseDataGlobal(countryId):
     return countryData(db, countryId)
 
 # Articles endpoints
-@app.get("/articles/latest")
+@app.get("/v1/articles/latest")
 def fetchlatestArt():
   return fetchlatestArticle(db)
 
-@app.get("/articles/search/id")
+@app.get("/v1/articles/search/id")
 def fetchByIdArt(id):
   return fetchByIdArticle(db, id)
 
-@app.get("/articles/search/country")
+@app.get("/v1/articles/search/country")
 def fetchByCou(country):
   return fetchByCountry(db, country)
 
-@app.get("/articles/search/disease")
+@app.get("/v1/articles/search/disease")
 def fetchByDis(disease):
   return fetchByDisease(db, disease)
 
-@app.get("/articles/search/date")
+@app.get("/v1/articles/search/date")
 def fetchByDate(startDate, endDate = ""):
   return fetchByDateArticle(db, startDate, endDate)
 

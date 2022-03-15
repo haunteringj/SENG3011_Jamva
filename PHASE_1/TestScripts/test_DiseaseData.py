@@ -18,7 +18,7 @@ def test_global_ok():
     # This test uses a test piece of data, a country that has a 3 digit country code "AAA", meaning it should
     # Always come first in the list of countries for global. This also means that it cannot be modified by the scraper
     # because there are no other countries that have the code AAA. This means its response should be able to be predicted.
-    response = client.get("diseaseData/global")
+    response = client.get("/v1/diseaseData/global")
     assert response.status_code == 200
     dict_data = json.loads(response.json())
     expected_country = {
@@ -64,7 +64,7 @@ def test_global_bad_data():
 
 def test_country_ok():
     # Similar to previous tests, we run under the assumption that AAA wont be modified.
-    response = client.get("diseaseData/AAA")
+    response = client.get("/v1/diseaseData/AAA")
 
     assert json.loads(response.json()) == {
         "countryName": "testcountry",
@@ -103,7 +103,7 @@ def test_country_bad_country():
     # If the format of country code is incorrect, we return a 400 error. Note we use [A-Z]{2,3} in regex. Because this allows for AAA to still exist.
     # It also allows for 3 character country code if we would ever want them. It could have been more robust if we created a list of all of the possible
     # Country codes, but this will most likely be something that the frontend handles.
-    response = client.get("diseaseData/123")
+    response = client.get("/v1/diseaseData/123")
     assert response.status_code == 400
     assert (
         response.json()
@@ -113,7 +113,7 @@ def test_country_bad_country():
 
 def test_country_no_country():
     # Typical functionality, if given a country id that doesnt exist, we will say that it doesnt.
-    response = client.get("diseaseData/AWD")
+    response = client.get("/v1/diseaseData/AWD")
     assert response.status_code == 404
     assert response.json() == '"The country with id:AWD does not exist."'
 
