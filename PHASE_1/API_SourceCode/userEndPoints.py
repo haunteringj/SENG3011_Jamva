@@ -58,7 +58,7 @@ def deleteUserEntry(db, userId: str):
   try:
     auth.delete_user(userId)
     db.collection("userDetails").document(userId).delete()
-    return toJsonResponse(204)
+    return toJsonResponse(204, {})
   except:
     raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"user with {userId} wasn't found")
 
