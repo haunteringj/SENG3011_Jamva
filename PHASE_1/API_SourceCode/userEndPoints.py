@@ -69,6 +69,5 @@ def getUserDetail(db, uid: str):
   except:
     return toJsonResponse(500, "User id doesnt exist")
   queryDict = query.to_dict()
-  jsonData = json.dumps(queryDict, separators=(",",":"))
-  return toJsonResponse(200, jsonData)
+  return toJsonResponse(200, queryDict)
   
