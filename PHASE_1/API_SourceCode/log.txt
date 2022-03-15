@@ -60,3 +60,4 @@
 /v1/diseaseData/global [GET, 200, 127.0.0.1, 2022-03-15 21:25:29.814147, 0.6237s, 908B]
 /v1/diseaseData/AAA [GET, 200, 127.0.0.1, 2022-03-15 21:27:22.736630, 0.2546s, 554B]
 /v1/diseases/search?disease=Smallpox [GET, 200, 127.0.0.1, 2022-03-15 21:39:37.672653, 0.3359s, 204B]
+/v1/diseases/search?disease=Smallpox [GET, 200, 127.0.0.1, 2022-03-15 22:41:21.807632, 0.8108s, 204B]

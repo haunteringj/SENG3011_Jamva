@@ -127,9 +127,15 @@ async def Logger(request: Request, call_next):
   # Track request packet body size (bytes)
   size = response.headers['content-length']
   
+  # write to backend log file
   logFile = open('./log.txt', 'a')
   logEntry = endpoint + " [" + method + ", " + status + ", " + ip + ", " + requestTime + ", " + processTime + ", " + size + "B]\n" 
   logFile.write(logEntry)
+  
+  # Return log info to user
+  response.headers["Team-Name"] = "Jamva"
+  response.headers["Accessed-Time"] = requestTime
+  response.headers["Data-Source"] = "https://promedmail.org/"
   return response
 
 
