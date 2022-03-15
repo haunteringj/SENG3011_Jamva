@@ -12,15 +12,15 @@ def reorderFields(queryResult):
 def formListOfArticles(queryGetResult):
     listOfArticles = []
     for queryResult in queryGetResult:
-        listOfArticles.append(reorderFields(queryResult))
+        listOfArticles.append(json.loads(json.dumps(reorderFields(queryResult), default= str)))
     return listOfArticles
 
 # returns a json response 
-def toJsonResponse(statusCode, content):
+def toJsonResponse(statusCode, body):
     return JSONResponse(
         status_code=statusCode,
         # "default=str" to convert datetimewithnanoseconds to string
-        content=json.dumps(content, default=str),
+        content=body,
     )
 
 # Endpoints
@@ -55,7 +55,7 @@ def fetchByIdArticle(db, id):
         return toJsonResponse(404,"no articles was found with that id. You entered:{}".format(id))
 
     # return the article
-    return toJsonResponse(200, article)
+    return toJsonResponse(200,  json.loads(json.dumps(article , default= str)))
 
 def fetchByCountry(db, country):
     # check if country is an string
