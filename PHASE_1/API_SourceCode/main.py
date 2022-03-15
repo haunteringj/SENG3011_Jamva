@@ -5,10 +5,6 @@ from firebase_admin import firestore
 import requests
 import time
 import datetime
-  
-# connect to database
-cred = credentials.Certificate("../firebasePrivateKey.json")
-
 try: 
   from diseaseData import globalData, countryData
 except:
