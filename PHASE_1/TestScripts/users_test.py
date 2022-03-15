@@ -45,10 +45,11 @@ def test_existing_user():
     "username": "JacksAccount2",
     "age": 23,
   }
-  client.post("/v1/users/create", json=jsonValue)
-  response = client.post("/v1/users/create", json=jsonValue)
-  jsonData = json.loads(response.json())
-  uid = str(jsonData.get("uid"))
+  response_one = client.post("/v1/users/create", json=jsonValue)
+  response_two = client.post("/v1/users/create", json=jsonValue)
+  jsonData = json.loads(response_two.json())
+  deleteData = json.loads(response_one.json())
+  uid = str(deleteData.get("uid"))
   assert jsonData.get("status") == "failed_userExists"
   assert response.status_code == 409
   client.delete(f"/v1/users/delete/{uid}")
