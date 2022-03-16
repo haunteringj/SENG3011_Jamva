@@ -185,16 +185,15 @@ def fetchByDateArticle(db, startDate, endDate = ""):
         else:
             return toJsonResponse(200, listOfArticles)
 
-def search(db,startDate, endDate, keyTerms, location):
+def search(db,startDate, endDate, location, keyTerms = ""):
     # convert date from string to dateTime
     start = convertDate(startDate)
     end = convertDate(endDate)
     # check for valid date input
     if start == "Invalid date input" or end == "Invalid date input":
         return toJsonResponse(400, "Correct date format (yyyy-MM-ddTHH:mm:ss) *can use 'x' for filler but year can't be filler. You entered:{} to {}".format(startDate, endDate))
-    elif endDate < startDate:
+    elif start > end:
         return toJsonResponse(400, "starting date needs to be before the ending date. You entered:{} to {}".format(startDate, endDate))
-
     # query data base with date restriction
     query = db.collection('articles').where('date_of_publication', '>=', start).where('date_of_publication', '<=', end).get()
     listOfArticles = formListOfArticles(query)
@@ -207,6 +206,8 @@ def search(db,startDate, endDate, keyTerms, location):
             if re.search(term, article['main_text'], re.IGNORECASE) != None and location.lower() in article['reports']['locations']:
                 finalListOfArticles.append(article)
                 break
+    if finalListOfArticles == []:
+        return toJsonResponse(404, "no articles were found")
     
     return toJsonResponse(200, finalListOfArticles)
 
