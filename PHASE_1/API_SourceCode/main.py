@@ -5,24 +5,16 @@ from firebase_admin import firestore
 import requests
 import time
 import datetime
-  
-# connect to database
-cred = credentials.Certificate("../firebasePrivateKey.json")
-
 try: 
   from diseaseData import globalData, countryData
-except:
-  from .diseaseData import globalData, countryData
-try: 
+  from diseasesEndpoints import *
   from articleEndPoints import *
   from userEndPoints import *
 except:
+  from .diseasesEndpoints import *
+  from .diseaseData import globalData, countryData
   from .articleEndPoints import *
   from .userEndPoints import *
-try:
-  from diseasesEndpoints import *
-except:
-  from .diseasesEndpoints import *
 
 class userCreationModel(BaseModel):
   email: str
@@ -50,6 +42,10 @@ def getApp():
 @app.get("/v1/alive", status_code=status.HTTP_200_OK)
 def alive():
   return {"hello": "JAMVA"}
+
+@app.get("/v1/search")
+def searchDiseaseReport(startDate, endDate, location, keyTerm = ""):
+  return search(db,startDate, endDate, location, keyTerm)
 
 @app.post("/v1/users/create", status_code=status.HTTP_201_CREATED)
 def createUser(user : userCreationModel):
@@ -131,9 +127,15 @@ async def Logger(request: Request, call_next):
   # Track request packet body size (bytes)
   size = response.headers['content-length']
   
+  # write to backend log file
   logFile = open('./log.txt', 'a')
   logEntry = endpoint + " [" + method + ", " + status + ", " + ip + ", " + requestTime + ", " + processTime + ", " + size + "B]\n" 
   logFile.write(logEntry)
+  
+  # Return log info to user
+  response.headers["Team-Name"] = "Jamva"
+  response.headers["Accessed-Time"] = requestTime
+  response.headers["Data-Source"] = "https://promedmail.org/"
   return response
 
 

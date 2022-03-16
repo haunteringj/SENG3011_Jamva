@@ -2,25 +2,68 @@ from datetime import datetime
 from fastapi.responses import JSONResponse
 from firebase_admin import firestore
 import json
+import re
+import pycountry
 
-# Reorders the queryresults to have a consistent format
-def reorderFields(queryResult):
-    orderOfFields = ["id", "title", "publishDate", "disease", "country", "url", "content"]
-    return {k: queryResult.to_dict()[k] for k in orderOfFields}
+# Reorders the articles field and deferences report field
+def reorderArticleFields(queryResult):
+    orderOfFields = ["url", "date_of_publication", "headline", "main_text", "reports"]
+    orderDict = {}
+    for k in orderOfFields:
+        # Deference disease to get content of linked disease
+        if k == "reports":
+            listOfReports = []
+            for report in queryResult.to_dict()[k]:
+                orderDict[k] = dereferenceReports(report.get().to_dict())
+        else:
+            orderDict[k] = queryResult.to_dict()[k]
+    return orderDict
+
+# Reorders the report field to have a consistent format
+def reorderReportfields(report):
+    orderOfFields = ["diseases", "syndromes", "event_date", "locations"]
+    return {k: report[k] for k in orderOfFields}
+
+# dereferences all fields in report
+def dereferenceReports(report):
+    reportDict = {}
+    for field in report:
+        # dereference locations
+        if field == "locations":
+            listOfLocations = []
+            for location in report[field]:
+                # just add the location name
+                listOfLocations.append(location.get().to_dict()['countryName'])
+            reportDict[field] = listOfLocations
+        # ignore article field
+        elif field == "article":
+            pass
+        # dereference diseases
+        elif field == "diseases":
+            listOfDiseases = []
+            for disease in report[field]:
+                # just add disease name
+                listOfDiseases.append(disease.get().to_dict()['diseaseName'])
+                # add syndromes to the report's field
+                reportDict["syndromes"] =disease.get().to_dict()['syndromes']
+            reportDict[field] = listOfDiseases
+        # other field are just their values
+        else:
+            reportDict[field] = report[field]
+    return reorderReportfields(reportDict)
 
 # form list of Articles from a query get result
 def formListOfArticles(queryGetResult):
     listOfArticles = []
     for queryResult in queryGetResult:
-        listOfArticles.append(reorderFields(queryResult))
+        listOfArticles.append(reorderArticleFields(queryResult))
     return listOfArticles
 
 # returns a json response 
-def toJsonResponse(statusCode, content):
+def toJsonResponse(statusCode, body):
     return JSONResponse(
         status_code=statusCode,
-        # "default=str" to convert datetimewithnanoseconds to string
-        content=json.dumps(content, default=str),
+        content=json.loads(json.dumps(body, default= str))
     )
 
 # Endpoints
@@ -30,7 +73,7 @@ def fetchlatestArticle(db):
 
     # query database
     try:
-        query = db.collection("articles").order_by("publishDate", direction=firestore.Query.DESCENDING).limit(noOfArticles).get()
+        query = db.collection("articles").order_by("date_of_publication", direction=firestore.Query.DESCENDING).limit(noOfArticles).get()
     except:
         return toJsonResponse(500, "Unable to fetch from database")
 
@@ -50,12 +93,12 @@ def fetchByIdArticle(db, id):
     # query data base
     query = db.collection('articles').where('id', '==', id).stream()
     try: 
-        article = reorderFields(next(query))
+        article = reorderArticleFields(next(query))
     except:
         return toJsonResponse(404,"no articles was found with that id. You entered:{}".format(id))
 
     # return the article
-    return toJsonResponse(200, article)
+    return toJsonResponse(200,  json.loads(json.dumps(article , default= str)))
 
 def fetchByCountry(db, country):
     # check if country is an string
@@ -65,12 +108,21 @@ def fetchByCountry(db, country):
         return toJsonResponse(400, "articles are searched with a country name (e.g America). You entered:{}".format(country))
     
     # preprocessing to match country name
+    #TODO: match country name to country code
+
     countryProcessedName = country.lower()
     countryProcessedName = ''.join(countryProcessedName.split())
-
+    try:
+        countryCode = pycountry.countries.get(name=countryProcessedName).alpha_2
+    except:
+        return toJsonResponse(404, "no articles was found with that country. You entered:{}".format(country))
+        
     # query data base
-    query = db.collection('articles').where('country', '==', countryProcessedName).get()
-    listOfArticles = formListOfArticles(query)
+    docRef = db.document('countries/{}'.format(countryCode))
+    query = db.collection('reports').where('locations', "array_contains", docRef).get()
+    listOfArticles = []
+    for entry in query:
+        listOfArticles.append(reorderArticleFields(entry.to_dict()["article"].get()))
     if (listOfArticles == []):
         return toJsonResponse(404, "no articles was found with that country. You entered:{}".format(country))
     else:
@@ -87,9 +139,11 @@ def fetchByDisease(db, disease):
     diseaseProcessedName = disease.lower()
 
     # query data base
-    query = db.collection('articles').where('disease', '==', diseaseProcessedName).get()
-    listOfArticles = formListOfArticles(query)
-    
+    docRef = db.document('diseases/{}'.format(diseaseProcessedName))
+    query = db.collection('reports').where('diseases', "array_contains", docRef).get()
+    listOfArticles = []
+    for entry in query:
+        listOfArticles.append(reorderArticleFields(entry.to_dict()["article"].get()))
     if (listOfArticles == []):
         return toJsonResponse (404, "no articles was found with that disease. You entered:{}".format(disease))
     else:
@@ -113,7 +167,7 @@ def fetchByDateArticle(db, startDate, endDate = ""):
 
         # return a list of articles inbetween the start and end dates (inclusive)
         # query data base
-        query = db.collection('articles').where('publishDate', '>=', start).where('publishDate', '<=', end).get()
+        query = db.collection('articles').where('date_of_publication', '>=', start).where('date_of_publication', '<=', end).get()
         listOfArticles = formListOfArticles(query)
 
         if (listOfArticles == []):
@@ -123,7 +177,7 @@ def fetchByDateArticle(db, startDate, endDate = ""):
     else:
         # return a list of articles after the start date (inclusive)
         # query data base
-        query = db.collection('articles').where('publishDate', '>=', start).get()
+        query = db.collection('articles').where('date_of_publication', '>=', start).get()
         listOfArticles = formListOfArticles(query)
 
         if (listOfArticles == []):
@@ -131,3 +185,44 @@ def fetchByDateArticle(db, startDate, endDate = ""):
         else:
             return toJsonResponse(200, listOfArticles)
 
+def search(db,startDate, endDate, location, keyTerms = ""):
+    # convert date from string to dateTime
+    start = convertDate(startDate)
+    end = convertDate(endDate)
+    # check for valid date input
+    if start == "Invalid date input" or end == "Invalid date input":
+        return toJsonResponse(400, "Correct date format (yyyy-MM-ddTHH:mm:ss) *can use 'x' for filler but year can't be filler. You entered:{} to {}".format(startDate, endDate))
+    elif start > end:
+        return toJsonResponse(400, "starting date needs to be before the ending date. You entered:{} to {}".format(startDate, endDate))
+    # query data base with date restriction
+    query = db.collection('articles').where('date_of_publication', '>=', start).where('date_of_publication', '<=', end).get()
+    listOfArticles = formListOfArticles(query)
+
+    # filter results with keyTerms and location
+    finalListOfArticles = []
+    for article in listOfArticles:
+        terms = keyTerms.split(",")
+        for term in terms:
+            if re.search(term, article['main_text'], re.IGNORECASE) != None and location.lower() in article['reports']['locations']:
+                finalListOfArticles.append(article)
+                break
+    if finalListOfArticles == []:
+        return toJsonResponse(404, "no articles were found")
+    
+    return toJsonResponse(200, finalListOfArticles)
+
+# converts date from string to datetime. Returns datetime or error message
+def convertDate(date):
+    # when date string has "T" to separate date and time
+    try:
+        parts = date.split("T")
+        datePart = parts[0]
+        timePart = parts[1]
+    except:
+        return "Invalid date input"
+    datePart = datePart.replace("xx", "01")
+    timePart = timePart.replace("x", "0")
+    try: 
+        return datetime.strptime(datePart + "T" + timePart,"%Y-%m-%dT%H:%M:%S")
+    except:
+        return "Invalid date input"
