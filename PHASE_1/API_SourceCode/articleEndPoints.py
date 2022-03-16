@@ -2,6 +2,7 @@ from datetime import datetime
 from fastapi.responses import JSONResponse
 from firebase_admin import firestore
 import json
+import re
 
 # Reorders the articles field and deferences report field
 def reorderArticleFields(queryResult):
@@ -106,12 +107,16 @@ def fetchByCountry(db, country):
         return toJsonResponse(400, "articles are searched with a country name (e.g America). You entered:{}".format(country))
     
     # preprocessing to match country name
-    countryProcessedName = country.lower()
-    countryProcessedName = ''.join(countryProcessedName.split())
+    # TODO: match country name to country code
+    # countryProcessedName = country.lower()
+    # countryProcessedName = ''.join(countryProcessedName.split())
 
     # query data base
-    query = db.collection('articles').where('country', '==', countryProcessedName).get()
-    listOfArticles = formListOfArticles(query)
+    docRef = db.document('countries/{}'.format(country))
+    query = db.collection('reports').where('locations', "array_contains", docRef).get()
+    listOfArticles = []
+    for entry in query:
+        listOfArticles.append(reorderArticleFields(entry.to_dict()["article"].get()))
     if (listOfArticles == []):
         return toJsonResponse(404, "no articles was found with that country. You entered:{}".format(country))
     else:
@@ -128,9 +133,11 @@ def fetchByDisease(db, disease):
     diseaseProcessedName = disease.lower()
 
     # query data base
-    query = db.collection('articles').where('disease', '==', diseaseProcessedName).get()
-    listOfArticles = formListOfArticles(query)
-    
+    docRef = db.document('diseases/{}'.format(diseaseProcessedName))
+    query = db.collection('reports').where('diseases', "array_contains", docRef).get()
+    listOfArticles = []
+    for entry in query:
+        listOfArticles.append(reorderArticleFields(entry.to_dict()["article"].get()))
     if (listOfArticles == []):
         return toJsonResponse (404, "no articles was found with that disease. You entered:{}".format(disease))
     else:
@@ -172,3 +179,43 @@ def fetchByDateArticle(db, startDate, endDate = ""):
         else:
             return toJsonResponse(200, listOfArticles)
 
+def search(db,startDate, endDate, keyTerms, location):
+    # convert date from string to dateTime
+    start = convertDate(startDate)
+    end = convertDate(endDate)
+    # check for valid date input
+    if start == "Invalid date input" or end == "Invalid date input":
+        return toJsonResponse(400, "Correct date format (yyyy-MM-ddTHH:mm:ss) *can use 'x' for filler but year can't be filler. You entered:{} to {}".format(startDate, endDate))
+    elif endDate < startDate:
+        return toJsonResponse(400, "starting date needs to be before the ending date. You entered:{} to {}".format(startDate, endDate))
+
+    # query data base with date restriction
+    query = db.collection('articles').where('date_of_publication', '>=', start).where('date_of_publication', '<=', end).get()
+    listOfArticles = formListOfArticles(query)
+
+    # filter results with keyTerms and location
+    finalListOfArticles = []
+    for article in listOfArticles:
+        terms = keyTerms.split(",")
+        for term in terms:
+            if re.search(term, article['main_text'], re.IGNORECASE) != None and location.lower() in article['reports']['locations']:
+                finalListOfArticles.append(article)
+                break
+    
+    return toJsonResponse(200, finalListOfArticles)
+
+# converts date from string to datetime. Returns datetime or error message
+def convertDate(date):
+    # when date string has "T" to separate date and time
+    try:
+        parts = date.split("T")
+        datePart = parts[0]
+        timePart = parts[1]
+    except:
+        return "Invalid date input"
+    datePart = datePart.replace("xx", "01")
+    timePart = timePart.replace("x", "0")
+    try: 
+        return datetime.strptime(datePart + "T" + timePart,"%Y-%m-%dT%H:%M:%S")
+    except:
+        return "Invalid date input"

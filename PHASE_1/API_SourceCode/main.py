@@ -47,6 +47,10 @@ def getApp():
 def alive():
   return {"hello": "JAMVA"}
 
+@app.get("/v1/search")
+def searchDiseaseReport(startDate, endDate, keyTerm, location):
+  return search(db,startDate, endDate, keyTerm, location)
+
 @app.post("/v1/users/create", status_code=status.HTTP_201_CREATED)
 def createUser(user : userCreationModel):
   return createUserEntry(db, user)
