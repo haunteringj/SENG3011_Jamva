@@ -3,23 +3,65 @@ from fastapi.responses import JSONResponse
 from firebase_admin import firestore
 import json
 
-# Reorders the queryresults to have a consistent format
-def reorderFields(queryResult):
-    orderOfFields = ["id", "title", "publishDate", "disease", "country", "url", "content"]
-    return {k: queryResult.to_dict()[k] for k in orderOfFields}
+# Reorders the articles field and deferences report field
+def reorderArticleFields(queryResult):
+    orderOfFields = ["url", "date_of_publication", "headline", "main_text", "reports"]
+    orderDict = {}
+    for k in orderOfFields:
+        # Deference disease to get content of linked disease
+        if k == "reports":
+            listOfReports = []
+            for report in queryResult.to_dict()[k]:
+                orderDict[k] = dereferenceReports(report.get().to_dict())
+        else:
+            orderDict[k] = queryResult.to_dict()[k]
+    return orderDict
+
+# Reorders the report field to have a consistent format
+def reorderReportfields(report):
+    orderOfFields = ["diseases", "syndromes", "event_date", "locations"]
+    return {k: report[k] for k in orderOfFields}
+
+# dereferences all fields in report
+def dereferenceReports(report):
+    reportDict = {}
+    for field in report:
+        # dereference locations
+        if field == "locations":
+            listOfLocations = []
+            for location in report[field]:
+                # just add the location name
+                listOfLocations.append(location.get().to_dict()['countryName'])
+            reportDict[field] = listOfLocations
+        # ignore article field
+        elif field == "article":
+            pass
+        # dereference diseases
+        elif field == "diseases":
+            listOfDiseases = []
+            for disease in report[field]:
+                # just add disease name
+                listOfDiseases.append(disease.get().to_dict()['diseaseName'])
+                # add syndromes to the report's field
+                reportDict["syndromes"] =disease.get().to_dict()['syndromes']
+            reportDict[field] = listOfDiseases
+        # other field are just their values
+        else:
+            reportDict[field] = report[field]
+    return reorderReportfields(reportDict)
 
 # form list of Articles from a query get result
 def formListOfArticles(queryGetResult):
     listOfArticles = []
     for queryResult in queryGetResult:
-        listOfArticles.append(json.loads(json.dumps(reorderFields(queryResult), default= str)))
+        listOfArticles.append(reorderArticleFields(queryResult))
     return listOfArticles
 
 # returns a json response 
 def toJsonResponse(statusCode, body):
     return JSONResponse(
         status_code=statusCode,
-        content=body,
+        content=json.loads(json.dumps(body, default= str))
     )
 
 # Endpoints
@@ -29,7 +71,7 @@ def fetchlatestArticle(db):
 
     # query database
     try:
-        query = db.collection("articles").order_by("publishDate", direction=firestore.Query.DESCENDING).limit(noOfArticles).get()
+        query = db.collection("articles").order_by("date_of_publication", direction=firestore.Query.DESCENDING).limit(noOfArticles).get()
     except:
         return toJsonResponse(500, "Unable to fetch from database")
 
@@ -49,7 +91,7 @@ def fetchByIdArticle(db, id):
     # query data base
     query = db.collection('articles').where('id', '==', id).stream()
     try: 
-        article = reorderFields(next(query))
+        article = reorderArticleFields(next(query))
     except:
         return toJsonResponse(404,"no articles was found with that id. You entered:{}".format(id))
 
@@ -112,7 +154,7 @@ def fetchByDateArticle(db, startDate, endDate = ""):
 
         # return a list of articles inbetween the start and end dates (inclusive)
         # query data base
-        query = db.collection('articles').where('publishDate', '>=', start).where('publishDate', '<=', end).get()
+        query = db.collection('articles').where('date_of_publication', '>=', start).where('date_of_publication', '<=', end).get()
         listOfArticles = formListOfArticles(query)
 
         if (listOfArticles == []):
@@ -122,7 +164,7 @@ def fetchByDateArticle(db, startDate, endDate = ""):
     else:
         # return a list of articles after the start date (inclusive)
         # query data base
-        query = db.collection('articles').where('publishDate', '>=', start).get()
+        query = db.collection('articles').where('date_of_publication', '>=', start).get()
         listOfArticles = formListOfArticles(query)
 
         if (listOfArticles == []):
