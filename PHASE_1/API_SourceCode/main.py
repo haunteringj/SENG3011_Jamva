@@ -64,7 +64,7 @@ def getUser(uid: str):
 def fetchDiseaseName(disease):
   return fetchDiseaseByName(db, disease)
 
-@app.get("/v1/diseases/search/outbreaks")
+@app.get("/v1/diseases/search/location")
 def fetchDiseaseLocation(location):
   return fetchDiseaseByLocation(db, location)
 

@@ -108,8 +108,6 @@ def fetchByCountry(db, country):
         return toJsonResponse(400, "articles are searched with a country name (e.g America). You entered:{}".format(country))
     
     # preprocessing to match country name
-    #TODO: match country name to country code
-
     countryProcessedName = country.lower()
     countryProcessedName = ''.join(countryProcessedName.split())
     try:
