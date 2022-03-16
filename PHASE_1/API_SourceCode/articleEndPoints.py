@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from firebase_admin import firestore
 import json
 import re
+import pycountry
 
 # Reorders the articles field and deferences report field
 def reorderArticleFields(queryResult):
@@ -107,12 +108,17 @@ def fetchByCountry(db, country):
         return toJsonResponse(400, "articles are searched with a country name (e.g America). You entered:{}".format(country))
     
     # preprocessing to match country name
-    # TODO: match country name to country code
-    # countryProcessedName = country.lower()
-    # countryProcessedName = ''.join(countryProcessedName.split())
+    #TODO: match country name to country code
 
+    countryProcessedName = country.lower()
+    countryProcessedName = ''.join(countryProcessedName.split())
+    try:
+        countryCode = pycountry.countries.get(name=countryProcessedName).alpha_2
+    except:
+        return toJsonResponse(404, "no articles was found with that country. You entered:{}".format(country))
+        
     # query data base
-    docRef = db.document('countries/{}'.format(country))
+    docRef = db.document('countries/{}'.format(countryCode))
     query = db.collection('reports').where('locations', "array_contains", docRef).get()
     listOfArticles = []
     for entry in query:

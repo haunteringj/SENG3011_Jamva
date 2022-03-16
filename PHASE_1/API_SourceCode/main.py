@@ -7,18 +7,14 @@ import time
 import datetime
 try: 
   from diseaseData import globalData, countryData
-except:
-  from .diseaseData import globalData, countryData
-try: 
+  from diseasesEndpoints import *
   from articleEndPoints import *
   from userEndPoints import *
 except:
+  from .diseasesEndpoints import *
+  from .diseaseData import globalData, countryData
   from .articleEndPoints import *
   from .userEndPoints import *
-try:
-  from diseasesEndpoints import *
-except:
-  from .diseasesEndpoints import *
 
 class userCreationModel(BaseModel):
   email: str

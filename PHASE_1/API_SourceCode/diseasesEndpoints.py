@@ -1,6 +1,5 @@
 from datetime import datetime
 from fastapi.responses import JSONResponse
-from firebase_admin import firestore
 import json
 
 # returns a json response 
@@ -25,9 +24,8 @@ def fetchDiseaseByName(db, disease):
         return toJsonResponse(400, f"diseases are searched with a disease name (e.g Smallpox). You entered:{disease}")
     
     query = []
-    
     try:
-        query = db.collection('diseases').where('diseaseName', '==', disease)
+        query = db.collection('diseases').where('diseaseName', '==', disease.lower())
     except:
         return toJsonResponse(500, "Unable to fetch from database")
     

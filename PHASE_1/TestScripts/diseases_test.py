@@ -23,18 +23,18 @@ def test_search_success():
     response = client.get("/v1/diseases/search?disease=Smallpox")
     assert response.status_code == 200
     assert response.json() == {
+    "id": 8701648,
     "syndromes": [
         "Haemorrhagic Fever",
-        "\"Acute Flacid Paralysis",
-        "\"Acute gastroenteritis"
+        "Acute Flacid Paralysis",
+        "Acute gastroenteritis"
     ],
-    "id": 8701648,
-    "diseaseName": "Smallpox",
+    "diseaseName": "smallpox",
     "outbreaks": [
         {
         "cases": 23,
-        "country": "AU",
-        "date": "2022-03-13 20:00:00+00:00"
+        "date": "2022-03-13 20:00:00+00:00",
+        "country": "AU"
         }
     ]
     }
