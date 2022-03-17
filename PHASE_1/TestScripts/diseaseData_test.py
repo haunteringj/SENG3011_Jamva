@@ -1,8 +1,4 @@
-from cmath import exp
-from fastapi import FastAPI
-from fastapi.responses import JSONResponse
 from fastapi.testclient import TestClient
-import json
 from API_SourceCode.main import app
 from API_SourceCode.diseaseData import globalData, countryData
 
