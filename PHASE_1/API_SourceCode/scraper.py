@@ -33,7 +33,7 @@ try:
     wait.until(EC.presence_of_element_located((By.XPATH, "//a[@class='lcl']")))
     print("latest list loaded")
     # if this is the first time the scraper is running
-    # time.sleep(5)
+    time.sleep(5)
     list_div = driver.find_element(By.XPATH, "//div[@class='latest_list']/ul")
     items = list_div.find_elements(By.TAG_NAME, value="li")
 
