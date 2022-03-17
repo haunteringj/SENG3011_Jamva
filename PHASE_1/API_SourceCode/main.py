@@ -2,7 +2,7 @@ from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-import requests
+# import requests
 import time
 import datetime
 try: 
@@ -144,24 +144,24 @@ async def Logger(request: Request, call_next):
   return response
 
 
-# Used to find the location of ip address 
-# *Not Used for now as it slows down response time considerably
-def ipToLocation(ip):
-  # use a website to find the location of ip
-  requestUrl = 'https://geolocation-db.com/jsonp/' + ip
-  try:
-    response = requests.get(requestUrl)
-  except:
-    return "ip to location website is currently unavailable"
+# # Used to find the location of ip address 
+# # *Not Used for now as it slows down response time considerably
+# def ipToLocation(ip):
+#   # use a website to find the location of ip
+#   requestUrl = 'https://geolocation-db.com/jsonp/' + ip
+#   try:
+#     response = requests.get(requestUrl)
+#   except:
+#     return "ip to location website is currently unavailable"
   
-  # decode content
-  result = response.content.decode()
+#   # decode content
+#   result = response.content.decode()
 
-  # remove uncessary infomation
-  result = result.split("(")[1].strip(")")
+#   # remove uncessary infomation
+#   result = result.split("(")[1].strip(")")
 
-  # Convert date into a json dictionary
-  result = json.loads(result)
+#   # Convert date into a json dictionary
+#   result = json.loads(result)
 
-  return result['country_name'] + ", " + result['city']
+#   return result['country_name'] + ", " + result['city']
 
