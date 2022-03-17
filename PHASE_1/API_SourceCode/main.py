@@ -10,11 +10,17 @@ try:
   from diseasesEndpoints import *
   from articleEndPoints import *
   from userEndPoints import *
+  # connect to real database
+  cred = credentials.Certificate("../dataBasePrivateKey.json")
+  firebase_admin.initialize_app(cred, {'projectId': "jamva-real",})
 except:
   from .diseasesEndpoints import *
   from .diseaseData import globalData, countryData
   from .articleEndPoints import *
   from .userEndPoints import *
+  # connect to test database
+  cred = credentials.Certificate("../testDataBasePrivateKey.json")
+  firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
 
 class userCreationModel(BaseModel):
   email: str
@@ -28,15 +34,7 @@ class userCreationModel(BaseModel):
 class userIdModel(BaseModel):
   uid: str
 
-# connect to test database
-# cred = credentials.Certificate("../testDataBasePrivateKey.json")
-
-# firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
-
-# connect to real database
-cred = credentials.Certificate("../dataBasePrivateKey.json")
-
-firebase_admin.initialize_app(cred, {'projectId': "jamva-real",})
+# Connect to database
 db = firestore.client()
 
 app = FastAPI()
