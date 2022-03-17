@@ -9,19 +9,6 @@ client = TestClient(app)
 # connect to database
 db = firestore.client()
 
-# # Helper functions
-# # Reorders the queryresults to have a consistent format
-# def reorderFields(queryResult):
-#     orderOfFields = ["id", "title", "publishDate", "disease", "country", "url", "content"]
-#     return {k: queryResult.to_dict()[k] for k in orderOfFields}
-
-# # form list of Articles from a query get result
-# def formListOfArticles(queryGetResult):
-#     listOfArticles = []
-#     for queryResult in queryGetResult:
-#         listOfArticles.append(json.loads(json.dumps(reorderFields(queryResult), default= str)))
-#     return listOfArticles
-
 # Tests
 def test_is_alive():
     response = client.get("/v1/alive")

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "jamva-real",
+  "private_key_id": "4c2f9dd8579cb35c0da16b51e92da29245019eb5",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDLisolSFhfBhjH\nTqWXWuu429O9saRiLb7/aj+pxFJ8mRb0ophxzCjFp/mLshiY9zNYxNAMt+KUYono\nHjJeXrFrx6zrY1G2G8MX3w/gOPd/sTht8VjrpmdXboXQCcaRNvbR3rZhSA9YfECM\nX37Vrmf7MGp0QrWh44VVF8GqICWN6jjUGFIrM7Jx9oDgHZ3LoDnh7YQbtS1hWsSF\n08Cfhv5uyw9qEUFSOXUZHd2eFo9tRhglq0WGJ1fa/b+pf7meRmAAY5hzRNvSFR4t\nPm5/75fWZYR0WX2Fe0osPS2AiBE+y4jWZyPCWi/1OsL59th/qOrir8SZ3ETlgGbz\nmJRPYpFnAgMBAAECggEASPJPOyhf34JgXAGwL/vaUjCahLgHGVaaxpAOC+o7w8Lb\n6sXhC5unGxt1wF6OGTgy80Pp6jz228Yq9YDo/VBDlsSDkQLR1InDlCkR2AKilOVv\nO1vNSfsjuz51f5cZTo7by2BdjaTVNxmkyooo+yzbwDbcWBlWXhQcA2CVvEJ0IxUk\nM+xHxr1QdnGRYjKdJr06IC4WSIM9alIJGr3R/HAs9VL/vmJRtDNwEHn20G3WNdzF\nQb3j0CM6AKMf346fZ3abt7OgkFlE0CzeEeGRVl0u4cTGI7shkzMS9a7GrXC9dQpX\nxr3xGBp8LoPpKhtopLqCpUD0mdj1ptkG4W8V2A3WGQKBgQDmG5XbWu6Un/cfQdRb\nuAxSk3CBWJnHb4fxTETkUSRmdgHhiyf9fVJjs5sTDfjgM6zDYDJCJeMV07JSGLKV\nD59fXgnYg5MVzYFS2tGAH5jl9zMedb7NjXPYYz4MFrJb0yetJTI8X2mPBQf8rOiL\nNdZEghpChyll5ZMIJ1XMNlf8GQKBgQDicfad9ACy2yiAUa39/UuTlXDyDsVAAjCF\n0dLdb9mbAHnR3rxyE+C86oWHgAFGDIZODqTyuLANNh9iIregtibVk/9sZH6Pk28Z\nQs+DlENjpxnw7eip9a26ysVIjQTduTPWAz/nNMZNmfHfQUignObnA2z1WlQ53WKR\nuGs58NCpfwKBgD9r1Pbbbix6lnMAAtawuHy99GFCGUhVniNMgSRolN7EoaoXX5NH\nSkD+jLxIupKYy4Ih7lg69wbaDSkBc58P6j4vvgj14sE8netHMjzc+JhRdL5td4RR\n+17lo4FTdB9I6IOZX+ox5fcsTNJAmetckEzbiv9RH4DdMJQru0MIq2FpAoGBAILL\nTKVDcLveNnCXvSX9jg+6u7g0q94i5aAF6AQbPNd42OROAQ7rSF4WH/Z6C0JIrbKc\nZs4DuzyGTG5Em0fqrlei2l/jU+7eO8edfXsEwj/nHua4pDC3RRelU3pqaasf9D7j\nNZ/4LapZBwnrDWYn+n7ozaCSAiBCLVL58IVRAVVFAoGAVptCg65IJ3E+deJNve49\nuivvsmroyKUCAKOMQs2OVE4Z/iFFaL5xpUiZ8hICFhgv90dWcGqOa4TvZBQmqRrl\nBVDTdjj1Loqm5TcWc+/E6B44q55Hvu3ZH+bF7X3yYrEF/wW3wJF5TAb347e4ESwY\n+i5/kLvEWmG1wWiA9I/0sbE=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-971gc@jamva-real.iam.gserviceaccount.com",
+  "client_id": "107111481769924579340",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-971gc%40jamva-real.iam.gserviceaccount.com"
+}
