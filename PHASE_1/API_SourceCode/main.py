@@ -2,7 +2,7 @@ from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-import requests
+# import requests
 import time
 import datetime
 
@@ -11,11 +11,17 @@ try:
   from diseasesEndpoints import *
   from articleEndPoints import *
   from userEndPoints import *
+  # connect to real database
+  cred = credentials.Certificate("../dataBasePrivateKey.json")
+  firebase_admin.initialize_app(cred, {'projectId': "jamva-real",})
 except:
   from .diseasesEndpoints import *
   from .diseaseData import globalData, countryData
   from .articleEndPoints import *
   from .userEndPoints import *
+  # connect to test database
+  cred = credentials.Certificate("../testDataBasePrivateKey.json")
+  firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
 
 
 class userCreationModel(BaseModel):
@@ -125,6 +131,7 @@ def fetchByDate(startDate, endDate=""):
 # logger (keeps track of API performance) Runs for each request of the api
 @app.middleware("http")
 async def Logger(request: Request, call_next):
+
     # Track which endpoint this log is for
     parts = str(request.url)
     parts = parts.split("/")[3:]

@@ -1,9 +1,8 @@
 from API_SourceCode import app
-from datetime import datetime
 from fastapi.testclient import TestClient
 from firebase_admin import firestore
-import json
 
+import json
 try:
     from API_SourceCode.diseasesEndpoints import *
 except:
