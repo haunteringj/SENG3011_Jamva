@@ -526,9 +526,8 @@ for element in latest_id_list:
         "event_date": element["published_date"],
         "locations": [db.collection("countries").document(countrycode)],
     }
-    id = str(len(db.collection("reports").get()))
 
-    db.collection("reports").document(id).set(report)
+    db.collection("reports").document(element["id"]).set(report)
     a["reports"].append(db.collection("reports").document(id))
     db.collection("articles").document(element["id"]).set(a)
     # Get the country list of articles and add our article to it.
@@ -551,7 +550,7 @@ for element in latest_id_list:
             .update(
                 {
                     "reports": firestore.ArrayUnion(
-                        [db.collection("reports").document(id)]
+                        [db.collection("reports").document(element["id"])]
                     )
                 }
             )
