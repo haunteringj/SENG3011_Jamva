@@ -37,16 +37,6 @@ class userCreationModel(BaseModel):
 class userIdModel(BaseModel):
     uid: str
 
-
-# connect to database
-cred = credentials.Certificate("../testDataBasePrivateKey.json")
-
-firebase_admin.initialize_app(
-    cred,
-    {
-        "projectId": "jamva-4e82e",
-    },
-)
 db = firestore.client()
 
 app = FastAPI()
