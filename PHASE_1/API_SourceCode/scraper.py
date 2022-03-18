@@ -174,7 +174,7 @@ for e in latest_id_list:
         "date_of_publication": e['published_date'],
         "headline":e['title'],
         "id":id,
-        "main_text":e['main_text'],
+        "main_text":e['main'],
         "reports":[],
         "url": e['original_source']
     }
