@@ -20,7 +20,7 @@ To run deployed server:
 2. Once connected to virtual machine go to "SENG3011_Jamva/PHASE_1/API_SourceCode"
 3. run the following command: "uvicorn main:app --reload"
 
-## Include Credits
+## Credits
 Specifications managed by UNSW SENG3011 T1 2022 Team
 Development Team:
 - Jay Patel,  jaysun1967@gmail.com
