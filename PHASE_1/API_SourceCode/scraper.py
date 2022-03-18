@@ -528,7 +528,7 @@ for element in latest_id_list:
     }
 
     db.collection("reports").document(element["id"]).set(report)
-    a["reports"].append(db.collection("reports").document(id))
+    a["reports"].append(db.collection("reports").document(element["id"]))
     db.collection("articles").document(element["id"]).set(a)
     # Get the country list of articles and add our article to it.
     updated_country = (
