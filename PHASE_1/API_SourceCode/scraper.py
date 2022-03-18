@@ -10,14 +10,14 @@ import json
 from firebase_admin import credentials
 from firebase_admin import firestore
 import firebase_admin
+from firebase_admin import db
 
 cred = credentials.Certificate("../dataBasePrivateKey.json")
 firebase_admin.initialize_app(cred, {'projectId': "jamva-real",})
-# # from requests_html import HTMLSession
-# session = HTMLSession()
 
-from firebase_admin import db
-ref = db.reference("/")
+
+db = firestore.client()
+
 
 url1 = "https://promedmail.org"
 postid = 0
@@ -154,19 +154,40 @@ except Exception as e:
 
 
 driver.close()
-# for post_id in latest_id_list:
-#     driver.get(f"https://promedmail.org/promed-post/?place={post_id}#promedmailmap")
-
 
 # for each id in the list get the article data
 count = 0
 for element in latest_id_list:
-    if count == 100:
+    if count == 9:
         break
     getArticleData(element)
     count += 1
 
 
-ref.set(json.dumps(latest_id_list))
+
+# \collection\docid
+count = 0
+for e in latest_id_list:
+    if count == 10:
+        break
+    a = {
+        "date_of_publication": e['published_date'],
+        "headline":e['title'],
+        "id":id,
+        "main_text":main_text,
+        "reports":[],
+        "url": e['original_source']
+    }
+    db.collection("articles").document(e['id']).set(a)
+
+    report = {
+   "article": '',
+   "cases": 0, 
+   "diseases": [],
+   "event_date": e['published_date'],
+   "locations":[],
+}
+    count += 1
+
 
 print(json.dumps(latest_id_list))
