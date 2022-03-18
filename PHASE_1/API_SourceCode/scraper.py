@@ -161,7 +161,7 @@ driver.close()
 # for each id in the list get the article data
 count = 0
 for element in latest_id_list:
-    if count == 5:
+    if count == 100:
         break
     getArticleData(element)
     count += 1
