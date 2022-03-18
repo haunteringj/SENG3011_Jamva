@@ -1,4 +1,30 @@
-[![Tests](https://github.com/haunteringj/SENG3011_Jamva/actions/workflows/testingWorkflow.yml/badge.svg)](https://github.com/haunteringj/SENG3011_Jamva/actions/workflows/testingWorkflow.yml)
-# Jamva
-SENG3011 API
-test
+# Jamva SENG3011 API
+
+## Project Description
+An API to access disease reports from offical outbreak websites. From thoese reports reformat the infomation to fit our users requirements. 
+A platform that provides one or more of the following functions for an end
+user interested in epidemics detection.
+For more information check the following documents:
+https://jamva.atlassian.net/wiki/spaces/JAMVA/pages/491521/Design+Details 
+
+## Run the Project
+To install required libraries:
+1. pip install -r requirement.txt
+
+To run locally:
+1. go into API_SourceCode folder
+2. run the following command: "uvicorn main:app --reload"
+
+To run deployed server:
+1. run the following command: "sudo ssh -i "jamvakey.pem" ubuntu@ec2-3-24-215-58.ap-southeast-2.compute.amazonaws.com"
+2. Once connected to virtual machine go to "SENG3011_Jamva/PHASE_1/API_SourceCode"
+3. run the following command: "uvicorn main:app --reload"
+
+## Include Credits
+Specifications managed by UNSW SENG3011 T1 2022 Team
+Development Team:
+- Jay Patel,  jaysun1967@gmail.com
+- Jesse Merhi, jessejmerhi@gmail.com 
+- Vishnu Birudavolu, vishnu.brdvl@gmail.com
+- Jack Whaling, jackwhaling98@gmail.com
+- Marko Wong, nfslolmiku@gmail.com
