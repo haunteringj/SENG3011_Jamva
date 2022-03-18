@@ -16,7 +16,7 @@ Testing doc:
 https://jamva.atlassian.net/wiki/spaces/JAMVA/pages/1474561/Testing+Documentation
 
 Swagger API doc:
-https://app.swaggerhub.com/apis-docs/Jam35/JamvaReal/1.0.0#/articles/get_articles_latest
+https://app.swaggerhub.com/apis/Jam35/JamvaReal/1.0.0
 
 
 ## Run the Project
