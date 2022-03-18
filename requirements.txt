@@ -16,3 +16,4 @@ urllib3==1.26.7
 uvicorn==0.16.0
 firebase_admin==5.2.0
 pycountry==22.3.5
+selenium==4.1.3
