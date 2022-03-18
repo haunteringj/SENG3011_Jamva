@@ -158,7 +158,7 @@ driver.close()
 # for each id in the list get the article data
 count = 0
 for element in latest_id_list:
-    if count == 9:
+    if count == 10:
         break
     getArticleData(element)
     count += 1
@@ -174,7 +174,7 @@ for e in latest_id_list:
         "date_of_publication": e['published_date'],
         "headline":e['title'],
         "id":id,
-        "main_text":main_text,
+        "main_text":e['main_text'],
         "reports":[],
         "url": e['original_source']
     }
