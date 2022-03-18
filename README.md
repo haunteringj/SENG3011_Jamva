@@ -32,4 +32,7 @@ Development Team:
 - Marko Wong, nfslolmiku@gmail.com
 
 ## Change log
-
+### Changes made to reports between delieverables 1 and 2
+1. Management Information has been updated to include software tools alternatives
+2. Design Details has been changed to include more design princples, justifications, and has had and update to the overall presentation
+3. In other words... implemented feedback from D1 and updated respective reports and documents...
