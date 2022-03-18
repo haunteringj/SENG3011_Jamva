@@ -8,6 +8,7 @@ user interested in epidemics detection.
 For more information check the following documents:
 https://jamva.atlassian.net/wiki/spaces/JAMVA/pages/491521/Design+Details 
 
+
 ## Run the Project
 To install required libraries:
 1. pip install -r requirement.txt
@@ -29,3 +30,6 @@ Development Team:
 - Vishnu Birudavolu, vishnu.brdvl@gmail.com
 - Jack Whaling, jackwhaling98@gmail.com
 - Marko Wong, nfslolmiku@gmail.com
+
+## Change log
+
