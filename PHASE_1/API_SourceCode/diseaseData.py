@@ -1,6 +1,8 @@
+from datetime import datetime
 from fastapi.responses import JSONResponse
+
 try:
-    from articleEndPoints import dereferenceReports 
+    from articleEndPoints import dereferenceReports
 except:
     from .articleEndPoints import dereferenceReports
 import json
@@ -14,24 +16,27 @@ def toJsonResponse(statusCode, content):
         content=json.loads(json.dumps(content, default=str)),
     )
 
+
 def formListOfCountries(query):
     listofCountries = []
     for result in query:
         country = result.to_dict()
         country["articles"] = formListOfArticles(country)
-        country["outbreaks"] = countryListOfOutbreaks(country)
         listofCountries.append(reOrderCountry(country))
     return listofCountries
 
+
 def reOrderCountry(country):
-    orderOfFields = ["id", "countryName", "articles", "outbreaks"]
+    orderOfFields = ["id", "countryName", "articles"]
     return {k: country[k] for k in orderOfFields}
+
 
 def formListOfArticles(country):
     listOfArticles = []
     for article in country["articles"]:
         listOfArticles.append(reOrderArticle(article.get().to_dict()))
     return listOfArticles
+
 
 def reOrderArticle(article):
     orderOfFields = ["url", "date_of_publication", "headline", "main_text", "reports"]
@@ -47,31 +52,27 @@ def reOrderArticle(article):
     return orderDict
 
 
-def countryListOfOutbreaks(country):
-    listOfOutbreaks = []
-    for outbreak in country["outbreaks"]:
-        outbreakDict = outbreak.get().to_dict()
-        outbreakDict["disease"] = reOrderDisease(outbreakDict["disease"].get().to_dict())
-        # outbreakDict["disease"].pop("outbreaks")
-        listOfOutbreaks.append(reOrderOutbreak(outbreakDict))
-    return listOfOutbreaks
-
 def reOrderOutbreak(outbreak):
     orderOfFields = ["cases", "country", "date", "disease"]
     return {k: outbreak[k] for k in orderOfFields}
+
 
 def reOrderDisease(disease):
     orderOfFields = ["id", "diseaseName", "syndromes"]
     return {k: disease[k] for k in orderOfFields}
 
+
 # Endpoints
 def globalData(db):
-
+    print("HERE")
     try:
         query = db.collection("countries").get()
     except:
         return toJsonResponse(500, "Unable to fetch from database")
-    listofCountries = formListOfCountries(query)
+    try:
+        listofCountries = formListOfCountries(query)
+    except Exception as e:
+        return toJsonResponse(500, f"Error in processing data. {e}")
     if listofCountries == []:
         return toJsonResponse(
             500, "Our database is empty :O Very Odd please contact development"
@@ -94,6 +95,5 @@ def countryData(db, countryId):
         return toJsonResponse(404, f"The country with id:{countryId} does not exist.")
     country = query.get()[0].to_dict()
     country["articles"] = formListOfArticles(country)
-    country["outbreaks"] = countryListOfOutbreaks(country)
 
     return toJsonResponse(200, country)

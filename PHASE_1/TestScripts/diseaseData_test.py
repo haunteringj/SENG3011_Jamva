@@ -17,91 +17,25 @@ def test_global_ok():
     response = client.get("/v1/diseaseData/global")
     assert response.status_code == 200
     dict_data = response.json()
-    expected_country = [
-    {
-      "id": "AAA",
-      "countryName": "testcountry",
-      "articles": [
-        {
-          "url": "https://www.foodsafetynews.com/2022/03/cheese-recalled-because-of-link-to-listeria-infections/",
-          "date_of_publication": "2022-03-10 13:00:00+00:00",
-          "headline": "Poliomyelitis update (10): Israel (JM) VDPV, RFI",
-          "main_text": "yeah nah Poliomyelitis",
-          "reports": {
-            "diseases": [
-              "poliomyelitis"
-            ],
-            "syndromes": [
-              "fever",
-              "high temp"
-            ],
-            "event_date": "2022-03-02 13:00:00+00:00",
-            "locations": [
-              "testcountry",
-              "australia"
-            ]
-          }
-        }
-      ],
-      "outbreaks": [
-        {
-          "cases": 23,
-          "country": "AU",
-          "date": "2022-03-13 20:00:00+00:00",
-          "disease": {
-            "id": "39393",
-            "diseaseName": "poliomyelitis",
-            "syndromes": [
-              "fever",
-              "high temp"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "AU",
-      "countryName": "australia",
-      "articles": [
-        {
-          "url": "https://www.foodsafetynews.com/2022/03/cheese-recalled-because-of-link-to-listeria-infections/",
-          "date_of_publication": "2022-03-10 13:00:00+00:00",
-          "headline": "Poliomyelitis update (10): Israel (JM) VDPV, RFI",
-          "main_text": "yeah nah Poliomyelitis",
-          "reports": {
-            "diseases": [
-              "poliomyelitis"
-            ],
-            "syndromes": [
-              "fever",
-              "high temp"
-            ],
-            "event_date": "2022-03-02 13:00:00+00:00",
-            "locations": [
-              "testcountry",
-              "australia"
-            ]
-          }
-        }
-      ],
-      "outbreaks": [
-        {
-          "cases": 23,
-          "country": "AU",
-          "date": "2022-03-13 20:00:00+00:00",
-          "disease": {
-            "id": "39393",
-            "diseaseName": "poliomyelitis",
-            "syndromes": [
-              "fever",
-              "high temp"
-            ]
-          }
-        }
-      ]
+    expected_country = {
+        "id": "AAA",
+        "countryName": "testcountry",
+        "articles": [
+            {
+                "url": "https://www.foodsafetynews.com/2022/03/cheese-recalled-because-of-link-to-listeria-infections/",
+                "date_of_publication": "2022-03-10 13:00:00+00:00",
+                "headline": "Poliomyelitis update (10): Israel (JM) VDPV, RFI",
+                "main_text": "yeah nah Poliomyelitis",
+                "reports": {
+                    "diseases": ["poliomyelitis"],
+                    "syndromes": ["fever", "high temp"],
+                    "event_date": "2022-03-02 13:00:00+00:00",
+                    "locations": ["testcountry", "australia"],
+                },
+            }
+        ],
     }
-  ]
-    assert dict_data == expected_country
+    assert dict_data[0] == expected_country
 
 
 def test_global_bad_data():
@@ -116,46 +50,23 @@ def test_country_ok():
     response = client.get("/v1/diseaseData/AAA")
 
     assert response.json() == {
-    "articles": [
-      {
-        "url": "https://www.foodsafetynews.com/2022/03/cheese-recalled-because-of-link-to-listeria-infections/",
-        "date_of_publication": "2022-03-10 13:00:00+00:00",
-        "headline": "Poliomyelitis update (10): Israel (JM) VDPV, RFI",
-        "main_text": "yeah nah Poliomyelitis",
-        "reports": {
-          "diseases": [
-            "poliomyelitis"
-          ],
-          "syndromes": [
-            "fever",
-            "high temp"
-          ],
-          "event_date": "2022-03-02 13:00:00+00:00",
-          "locations": [
-            "testcountry",
-            "australia"
-          ]
-        }
-      }
-    ],
-    "countryName": "testcountry",
-    "id": "AAA",
-    "outbreaks": [
-      {
-        "cases": 23,
-        "country": "AU",
-        "date": "2022-03-13 20:00:00+00:00",
-        "disease": {
-          "id": "39393",
-          "diseaseName": "poliomyelitis",
-          "syndromes": [
-            "fever",
-            "high temp"
-          ]
-        }
-      }
-    ]
-  }
+        "id": "AAA",
+        "countryName": "testcountry",
+        "articles": [
+            {
+                "url": "https://www.foodsafetynews.com/2022/03/cheese-recalled-because-of-link-to-listeria-infections/",
+                "date_of_publication": "2022-03-10 13:00:00+00:00",
+                "headline": "Poliomyelitis update (10): Israel (JM) VDPV, RFI",
+                "main_text": "yeah nah Poliomyelitis",
+                "reports": {
+                    "diseases": ["poliomyelitis"],
+                    "syndromes": ["fever", "high temp"],
+                    "event_date": "2022-03-02 13:00:00+00:00",
+                    "locations": ["testcountry", "australia"],
+                },
+            }
+        ],
+    }
 
 
 def test_country_bad_country():
@@ -165,8 +76,7 @@ def test_country_bad_country():
     response = client.get("/v1/diseaseData/123")
     assert response.status_code == 400
     assert (
-        response.json()
-        == "Countries are searched with an id (e.g AU). You entered:123"
+        response.json() == "Countries are searched with an id (e.g AU). You entered:123"
     )
 
 
