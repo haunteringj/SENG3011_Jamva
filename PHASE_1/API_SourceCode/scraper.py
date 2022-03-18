@@ -81,10 +81,90 @@ except Exception as e:
 
 driver.close()
 
+def findDisease(title):
+    diseases = []
+    for disease in diseasesList:
+        search = re.search(disease["name"], title, re.IGNORECASE)
+        if search:
+            diseases.append(search[0])
+    
+    return diseases
+
 # for each id in the list get the article data
 count = 0
 for element in latest_id_list:
-    if count == 20:
+    diseasesList = [
+    {"name": "unknown"},
+    {"name": "other"},
+    {"name": "anthrax cutaneous"},
+    {"name": "anthrax gastrointestinous"},
+    {"name": "anthrax inhalation"},
+    {"name": "botulism"},
+    {"name": "brucellosis"},
+    {"name": "chikungunya"},
+    {"name": "cholera"},
+    {"name": "cryptococcosis"},
+    {"name": "cryptosporidiosis"},
+    {"name": "crimean-congo haemorrhagic fever"},
+    {"name": "dengue"},
+    {"name": "diphteria"},
+    {"name": "ebola haemorrhagic fever"},
+    {"name": "ehec (e.coli)"},
+    {"name": "enterovirus 71 infection"},
+    {"name": "influenza a/h5n1"},
+    {"name": "influenza a/h7n9"},
+    {"name": "influenza a/h9n2"},
+    {"name": "influenza a/h1n1"},
+    {"name": "influenza a/h1n2"},
+    {"name": "influenza a/h3n5"},
+    {"name": "influenza a/h3n2"},
+    {"name": "influenza a/h2n2"},
+    {"name": "hand, foot and mouth disease"},
+    {"name": "hantavirus"},
+    {"name": "hepatitis a"},
+    {"name": "hepatitis b"},
+    {"name": "hepatitis c"},
+    {"name": "hepatitis d"},
+    {"name": "hepatitis e"},
+    {"name": "histoplasmosis"},
+    {"name": "hiv/aids"},
+    {"name": "lassa fever"},
+    {"name": "malaria"},
+    {"name": "marburg virus disease"},
+    {"name": "measles"},
+    {"name": "mers-cov"},
+    {"name": "mumps"},
+    {"name": "nipah virus"},
+    {"name": "norovirus infection"},
+    {"name": "pertussis"},
+    {"name": "plague"},
+    {"name": "pneumococcus pneumonia"},
+    {"name": "poliomyelitis"},
+    {"name": "q fever"},
+    {"name": "rabies"},
+    {"name": "rift valley fever"},
+    {"name": "rotavirus infection"},
+    {"name": "rubella"},
+    {"name": "salmonellosis"},
+    {"name": "sars"},
+    {"name": "shigellosis"},
+    {"name": "smallpox"},
+    {"name": "staphylococcal enterotoxin b"},
+    {"name": "thypoid fever"},
+    {"name": "tuberculosis"},
+    {"name": "tularemia"},
+    {"name": "vaccinia and cowpox"},
+    {"name": "varicella"},
+    {"name": "west nile virus"},
+    {"name": "yellow fever"},
+    {"name": "yersiniosis"},
+    {"name": "zika"},
+    {"name": "legionares"},
+    {"name": "listeriosis"},
+    {"name": "monkeypox"},
+    {"name": "COVID-19"},
+]
+    if count == 1:
         break
     driver1 = webdriver.Safari()
 
@@ -153,8 +233,65 @@ for element in latest_id_list:
         "reports":[],
         "url": element['original_source']
     }
-    db.collection("articles").document(element['id']).set(a)
-    
+    diseases = findDisease(a["headline"])
+    #
+    articleRef = db.collection("articles").document(element["id"])
+    diseaseRefList = []
+
+    for disease in diseases:
+        diseaseref = db.collection("diseases").document(disease)
+        if diseaseref.get().exists:
+            diseaseRefList.append(diseaseref)
+        else:
+            db.collection("diseases").document(disease).set(
+                {
+                    "diseaseName": disease,
+                    "id": len(db.collection("diseases").size.get()),
+                    "reports": [],
+                    "syndromes": [],
+                }
+            )
+            diseaseRefList.append(db.collection("diseases").document(disease))
+
+    # Now we create our report, which takes our diseases reference list
+    report = {
+        "article": articleRef,
+        "cases": 0,
+        "diseases": diseaseRefList,
+        "event_date": element["published_date"],
+        "locations": [db.collection("countries").document(element["country"])],
+    }
+    finalreport = (
+        db.collection("reports").document(str(len(db.collection("reports").get()))).set(report)
+    )
+    a["reports"].append(finalreport)
+    db.collection("articles").document(element["id"]).set(a)
+    # Get the country list of articles and add our article to it.
+    updated_country = (
+        db.collection("countries")
+        .document(element["country"])
+        .update(
+            {
+                "articles": firestore.ArrayUnion(
+                    [db.collection("articles").document(element["id"])]
+                )
+            }
+        )
+    )
+    # Get the diseases list of reports, add our report to it
+    for disease in diseases:
+        diseaseref = (
+            db.collection("diseases")
+            .document(disease)
+            .update(
+                {
+                    "reports": firestore.ArrayUnion(
+                        [db.collection("reports").document(element["id"])]
+                    )
+                }
+            )
+        )
+
     driver1.close()
     count += 1
 
