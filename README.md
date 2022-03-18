@@ -22,6 +22,12 @@ To run deployed server:
 2. Once connected to virtual machine go to "SENG3011_Jamva/PHASE_1/API_SourceCode"
 3. run the following command: "uvicorn main:app --reload"
 
+Public IP:
+https://3.106.142.227/
+
+version 1 base path: 
+v1/
+
 ## Credits
 Specifications managed by UNSW SENG3011 T1 2022 Team
 Development Team:
