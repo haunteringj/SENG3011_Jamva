@@ -28,9 +28,10 @@ To run locally:
 2. run the following command: "uvicorn main:app --reload"
 
 To run deployed server:
-1. run the following command: "sudo ssh -i "jamvakey.pem" ubuntu@ec2-3-24-215-58.ap-southeast-2.compute.amazonaws.com"
-2. Once connected to virtual machine go to "SENG3011_Jamva/PHASE_1/API_SourceCode"
-3. run the following command: "uvicorn main:app --reload"
+1. go to "SENG3011_Jamva/PHASE_1/"
+2. run the following command: "sudo ssh -i "jamvakey.pem" ubuntu@ec2-3-106-142-227.ap-southeast-2.compute.amazonaws.com"
+3. Once connected to virtual machine go to "SENG3011_Jamva/PHASE_1/API_SourceCode"
+4. run the following command: "uvicorn main:app --reload"
 
 Public IP:
 https://3.106.142.227/
