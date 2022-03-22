@@ -6,7 +6,17 @@ An API to access disease reports from offical outbreak websites. From thoese rep
 A platform that provides one or more of the following functions for an end
 user interested in epidemics detection.
 For more information check the following documents:
-https://jamva.atlassian.net/wiki/spaces/JAMVA/pages/491521/Design+Details 
+Design Details doc:
+https://jamva.atlassian.net/wiki/spaces/JAMVA/pages/491521/Design+Details
+
+Management doc:
+https://jamva.atlassian.net/wiki/spaces/JAMVA/pages/262145/Management+Information
+
+Testing doc:
+https://jamva.atlassian.net/wiki/spaces/JAMVA/pages/1474561/Testing+Documentation
+
+Swagger API doc:
+https://app.swaggerhub.com/apis/Jam35/JamvaReal/1.0.0
 
 
 ## Run the Project
@@ -18,9 +28,16 @@ To run locally:
 2. run the following command: "uvicorn main:app --reload"
 
 To run deployed server:
-1. run the following command: "sudo ssh -i "jamvakey.pem" ubuntu@ec2-3-24-215-58.ap-southeast-2.compute.amazonaws.com"
-2. Once connected to virtual machine go to "SENG3011_Jamva/PHASE_1/API_SourceCode"
-3. run the following command: "uvicorn main:app --reload"
+1. go to "SENG3011_Jamva/PHASE_1/"
+2. run the following command: "sudo ssh -i "jamvakey.pem" ubuntu@ec2-3-106-142-227.ap-southeast-2.compute.amazonaws.com"
+3. Once connected to virtual machine go to "SENG3011_Jamva/PHASE_1/API_SourceCode"
+4. run the following command: "uvicorn main:app --reload"
+
+Public IP:
+https://3.106.142.227/
+
+version 1 base path: 
+v1/
 
 ## Credits
 Specifications managed by UNSW SENG3011 T1 2022 Team

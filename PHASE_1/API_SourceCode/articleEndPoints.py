@@ -12,8 +12,8 @@ def reorderArticleFields(queryResult):
     for k in orderOfFields:
         # Deference disease to get content of linked disease
         if k == "reports":
-            listOfReports = []
             for report in queryResult.to_dict()[k]:
+                print(report.get().to_dict())
                 orderDict[k] = dereferenceReports(report.get().to_dict())
         else:
             orderDict[k] = queryResult.to_dict()[k]
@@ -27,6 +27,9 @@ def reorderReportfields(report):
 # dereferences all fields in report
 def dereferenceReports(report):
     reportDict = {}
+    if report == None:
+        return {}
+    print(report)
     for field in report:
         # dereference locations
         if field == "locations":
@@ -109,7 +112,6 @@ def fetchByCountry(db, country):
     
     # preprocessing to match country name
     countryProcessedName = country.lower()
-    countryProcessedName = ''.join(countryProcessedName.split())
     try:
         countryCode = pycountry.countries.get(name=countryProcessedName).alpha_2
     except:

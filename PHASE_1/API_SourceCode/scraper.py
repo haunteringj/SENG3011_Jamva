@@ -10,6 +10,7 @@ from firebase_admin import firestore
 import firebase_admin
 from firebase_admin import db
 import pycountry
+import datetime
 from webdriver_manager.chrome import ChromeDriverManager
 
 driver = webdriver.Chrome(ChromeDriverManager().install())
@@ -453,8 +454,9 @@ for element in latest_id_list:
         # print(f"The published date on promed {published_date.text}")
         element["published_date"] = published_date.text
     except Exception as e:
-        element["published_date"] = ""
+        element["published_date"] = datetime.datetime.now()
         print(e)
+
     try:
         day = driver1.find_element(
             By.XPATH, '//*[@id="main"]/div/div/div[4]/div/text()[6]'
@@ -488,20 +490,18 @@ for element in latest_id_list:
     except Exception as e:
         element["original_source"] = ""
         print(e)
-
     a = {
         "date_of_publication": element["published_date"],
         "headline": element["title"],
-        "id": element["id"],
+        "id": int(element["id"]),
         "main_text": element["main"],
         "reports": [],
         "url": element["original_source"],
     }
     diseases = findDisease(a["headline"])
-    #
+
     articleRef = db.collection("articles").document(element["id"])
     diseaseRefList = []
-    print("DISEASES", diseases)
     for disease in diseases:
         diseaseref = db.collection("diseases").document(disease)
         if diseaseref.get().exists:
@@ -528,7 +528,7 @@ for element in latest_id_list:
     }
 
     db.collection("reports").document(element["id"]).set(report)
-    a["reports"].append(db.collection("reports").document(id))
+    a["reports"].append(db.collection("reports").document(element["id"]))
     db.collection("articles").document(element["id"]).set(a)
     # Get the country list of articles and add our article to it.
     updated_country = (
@@ -555,6 +555,6 @@ for element in latest_id_list:
                 }
             )
         )
-
+    print(element)
     driver1.close()
     count += 1
