@@ -9,6 +9,8 @@ import json
 import re
 
 # returns a json response
+
+
 def toJsonResponse(statusCode, content):
     return JSONResponse(
         status_code=statusCode,
@@ -39,7 +41,8 @@ def formListOfArticles(country):
 
 
 def reOrderArticle(article):
-    orderOfFields = ["url", "date_of_publication", "headline", "main_text", "reports"]
+    orderOfFields = ["url", "date_of_publication",
+                     "headline", "main_text", "reports"]
     orderDict = {}
     for k in orderOfFields:
         # Deference disease to get content of linked disease

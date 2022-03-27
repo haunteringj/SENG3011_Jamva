@@ -1,9 +1,7 @@
 import { useContext } from "react";
-import { useUserContext } from "../context/userState";
+import { userContext } from "../context/userState";
 
 const user = () => {
-  const { userValues, setUserValues } = useUserContext;
-
   return (
     <div>
       <h1>

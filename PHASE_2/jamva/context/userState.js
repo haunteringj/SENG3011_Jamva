@@ -1,6 +1,7 @@
-import { createContext, useContext } from "react";
+import { createContext } from "react";
+import { useState } from "react";
 
-const userContext = createContext(null);
+export const userContext = createContext(null);
 
 const INITIAL_USER_STATE = {
   alerts: [],
@@ -13,15 +14,11 @@ const INITIAL_USER_STATE = {
 }
 
 export function UserWrapper({ children }) {
-  let userState = INITIAL_USER_STATE;
+  const [userValues, setUserValues] = useState(INITIAL_USER_STATE);
 
   return (
-    <userContext.Provider value={userState}>
+    <userContext.Provider value={{ userValues, setUserValues }}>
       {children}
     </userContext.Provider>
   );
-}
-
-export function useUserContext() {
-  return useContext(userContext);
 }
