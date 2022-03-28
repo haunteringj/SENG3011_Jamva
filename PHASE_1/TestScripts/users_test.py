@@ -20,7 +20,7 @@ def test_new_user():
   jsonValue = {
     "email": "jackwhaling99@gmail.com", 
     "password": "Test1234", 
-    "country": "AUS",
+    "country": "AU",
     "state": "NSW",
     "city": "Sydney",
     "username": "JacksAccount2",
@@ -38,7 +38,7 @@ def test_existing_user():
   jsonValue = {
     "email": "jackwhaling99@gmail.com", 
     "password": "Test1234", 
-    "country": "AUS", 
+    "country": "AU", 
     "city": "Sydney",
     "state": "NSW",
     "username": "JacksAccount2",
@@ -57,7 +57,7 @@ def test_delete_user():
   jsonValue = {
     "email": "jackwhaling99@gmail.com", 
     "password": "Test1234", 
-    "country": "AUS",
+    "country": "AU",
     "state": "NSW",
     "city": "Sydney",
     "username": "JacksAccount2",
@@ -77,7 +77,7 @@ def test_get_user_detail():
   jsonValue = {
     "email": "jackwhaling99@gmail.com", 
     "password": "Test1234", 
-    "country": "AUS",
+    "country": "AU",
     "state": "NSW",
     "city": "Sydney",
     "username": "JacksAccount2",
@@ -88,7 +88,7 @@ def test_get_user_detail():
   uid = str(jsonData.get("uid"))
   response = client.get(f"/v1/users/details/{uid}")
   client.delete(f"/v1/users/delete/{uid}")
-  content = {'username': 'JacksAccount2', 'city': 'Sydney', 'state': 'NSW', 'age': 23, 'alerts': [], 'country': 'AUS'}
+  content = {'username': 'JacksAccount2', 'city': 'Sydney', 'state': 'NSW', 'age': 23, 'alerts': [], 'country': 'AU'}
   json.dumps(content, default=str)
   assert response.json() == json.dumps(content, default=str)
   assert response.status_code == 200

@@ -1,7 +1,9 @@
+from getpass import getuser
 from fastapi import status, HTTPException
 from fastapi.responses import JSONResponse
 from firebase_admin import auth
 from firebase_admin import exceptions
+from firebase_admin import firestore
 import json
 from pydantic import BaseModel
 
@@ -46,6 +48,7 @@ def createUserEntry(db, userInfo: userCreationModel):
     }
     try:
       db.collection("userDetails").document(user.uid).set(createUserDetail)
+      db.collection("countries").document(userInfo.country).update({"users": firestore.ArrayUnion([user.uid])})
       return toJsonResponse(201, successResponse)
     except:
       return toJsonResponse(409, {"status": "failed_userDetailExists", "uid": 0})
@@ -58,6 +61,10 @@ def createUserEntry(db, userInfo: userCreationModel):
 
 def deleteUserEntry(db, userId: str):
   try:
+    query = db.collection("userDetails").document(userId).get()
+    queryDict = reorderFields(query)
+    country = queryDict["country"]
+    db.collection("countries").document(country).update({"users": firestore.ArrayRemove([userId])})
     auth.delete_user(userId)
     db.collection("userDetails").document(userId).delete()
     return toJsonResponse(204, {})
