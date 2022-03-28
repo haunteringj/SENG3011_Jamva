@@ -3,9 +3,10 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image'
 import styles from '../styles/Home.module.scss'
 import Alerts from '../components/users/alerts';
+import Globe from '../components/earth';
 
 export default function Home() {
-  const Globe = dynamic(import('react-globe.gl'), { ssr: false });
+  // const Globe = dynamic(import('react-globe.gl'), { ssr: false });
 
   return (
     <div>
