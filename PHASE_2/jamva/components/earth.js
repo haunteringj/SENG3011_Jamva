@@ -7,40 +7,19 @@ import dynamic from 'next/dynamic';
 export default function Earth () {
   const Globe = dynamic(import('react-globe.gl'), { ssr: false });
 
-  // const [arcsData, setArcsData] = useState([]);
-  // const [ringsData, setRingsData] = useState([]);
-
-  // const prevCoords = useRef({ lat: 0, lng: 0 });
-  // const emitArc = useCallback(({ lat: endLat, lng: endLng }) => {
-  //   const { lat: startLat, lng: startLng } = prevCoords.current;
-  //   prevCoords.current = { lat: endLat, lng: endLng };
-
-  //   // add and remove arc after 1 cycle
-  //   const arc = { startLat, startLng, endLat, endLng };
-  //   setArcsData(curArcsData => [...curArcsData, arc]);
-  //   setTimeout(() => setArcsData(curArcsData => curArcsData.filter(d => d !== arc)), FLIGHT_TIME * 2);
-
-  //   // add and remove start rings
-  //   const srcRing = { lat: startLat, lng: startLng };
-  //   setRingsData(curRingsData => [...curRingsData, srcRing]);
-  //   setTimeout(() => setRingsData(curRingsData => curRingsData.filter(r => r !== srcRing)), FLIGHT_TIME * ARC_REL_LEN);
-
-  //   // add and remove target rings
-  //   setTimeout(() => {
-  //     const targetRing = { lat: endLat, lng: endLng };
-  //     setRingsData(curRingsData => [...curRingsData, targetRing]);
-  //     setTimeout(() => setRingsData(curRingsData => curRingsData.filter(r => r !== targetRing)), FLIGHT_TIME * ARC_REL_LEN);
-  //   }, FLIGHT_TIME);
-  // }, []);
-
-  const redirectToTop5Page = useCallback((polygon) => {
+  const redirectToTop5Page = useCallback((polygon, { lat: endLat, lng: endLng }) => {
+    // get the contient the clicked on country is on
     console.log(polygon.properties.CONTINENT)
+
+    // Move camera to center in on that country
+    console.log(endLat)
+    console.log(endLng)
+
+    // Update/Create overlay of top 3 dieseases
+    
     }, []);
 
-  const globeEl = useRef();
   const [countries, setCountries] = useState({ features: []});
-  const [continents, setContinents] = useState({ features: []});
-  const [altitude, setAltitude] = useState(0.1);
   const [transitionDuration, setTransitionDuration] = useState(1000);
 
   useEffect(() => {
@@ -48,15 +27,9 @@ export default function Earth () {
     fetch('/countries.geojson').then(res => res.json())
     .then(countries=> {
       setCountries(countries);
-    // load data
-    // fetch('/continents.geojson').then(res => res.json())
-    //   .then(continents=> {
-    //     setContinents(continents);
 
         setTimeout(() => {
           setTransitionDuration(4000);
-          // setAltitude(() => feat => Math.max(0.1, Math.sqrt(+feat.properties.POP_EST) * 7e-5));
-          // setAltitude(() => 10);
         }, 3000);
       });
   }, []);
@@ -65,9 +38,8 @@ export default function Earth () {
   return <Globe
     globeImageUrl="/images/earth-blue-marble.jpg"
     backgroundImageUrl='/images/night-sky.png'
-    // polygonsData={continents.features}
     polygonsData={countries.features.filter(d => d.properties.ISO_A2 !== 'AQ')}
-    polygonAltitude={() => 1}
+    // polygonAltitude={() => 1}
     polygonCapColor={() => `#${Math.round(Math.random() * Math.pow(2, 24)).toString(16).padStart(6, '0')}`}
     polygonSideColor={() => 'rgba(0, 100, 0, 0.15)'}
     polygonLabel={({ properties: d }) => `
