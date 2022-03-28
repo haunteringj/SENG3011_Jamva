@@ -51,3 +51,4 @@ docs/_build/
 
 # ignore text files (for log.txt)
 *.txt
+PHASE_2/jamva/package-lock.json
