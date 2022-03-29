@@ -1,12 +1,18 @@
-import axios from "axios";
-
-export const addQuizApi = async (auth, values) => {
+export const addQuizApi = async (values) => {
   try {
-    const header = {
-      "Content-Type": "application/json",
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: values,
     };
-    console.log("waiting Post");
-    const resp = axios.post("/api/", values, { headers: header });
+
+    console.log(values);
+    const resp = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/`,
+      requestOptions
+    );
     return resp;
   } catch (error) {
     throw error;

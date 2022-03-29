@@ -108,7 +108,6 @@ const Index = () => {
       };
       console.log("HERE");
       await addQuizApi(values);
-      router.push("/");
     } catch (error) {
       console.log("error", error);
     } finally {

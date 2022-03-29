@@ -3,11 +3,11 @@ import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
 
 export const addQuiz = async (quizData) => {
   console.log("HERE");
-  const response = await addDoc(collection(db, "quizzes"), {
+  const docRef = await addDoc(collection(db, "cities"), {
     name: "Tokyo",
     country: "Japan",
   });
-
+  console.log("HERE");
   return response;
 };
 export const getAllQuiz = async () => {
