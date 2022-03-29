@@ -48,10 +48,11 @@ export default function Earth () {
   //   globeEl.current.pointOfView(MAP_CENTER, 0);
   // }, [globeEl]);
 
-  return <Globe
-    ref={globeEl}
+  return <div>
+    <Globe
     globeImageUrl="/images/earth-blue-marble.jpg"
     backgroundImageUrl='/images/night-sky.png'
+    backgroundColor="rgba(0,0,0,0)"
     polygonsData={countries.features.filter(d => d.properties.ISO_A2 !== 'AQ')}
     // polygonAltitude={() => 1}
     // polygonCapColor={() => `#${Math.round(Math.random() * Math.pow(2, 24)).toString(16).padStart(6, '0')}`}
@@ -65,4 +66,5 @@ export default function Earth () {
     onPolygonClick={redirectToTop5Page}
     // globeEl.pointOfView({ lat: 0, lng: 0, altitude: 1.5 },0)
   />;
+  </div>
 };
