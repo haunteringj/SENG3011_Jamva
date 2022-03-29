@@ -1,5 +1,5 @@
-import Link from "next/link"
-import navStyles from "../../styles/Nav.module.scss"
+import Link from "next/link";
+import navStyles from "../../styles/Nav.module.scss";
 
 const Nav = () => {
   return (
@@ -11,9 +11,12 @@ const Nav = () => {
         <li>
           <Link href="/user">Account</Link>
         </li>
+        <li>
+          <Link href="/quiz">Quiz</Link>
+        </li>
       </ul>
     </nav>
-  )
-}
+  );
+};
 
-export default Nav
+export default Nav;
