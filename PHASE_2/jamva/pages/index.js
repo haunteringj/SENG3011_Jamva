@@ -1,17 +1,36 @@
-import Head from 'next/head'
 import dynamic from 'next/dynamic';
-import Image from 'next/image'
 import styles from '../styles/Home.module.scss'
 import Alerts from '../components/users/alerts';
-import Globe from '../components/earth';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import Earth from '../components/earth';
+import CountryData from '../components/country_data';
 
-export default function Home() {
-  // const Globe = dynamic(import('react-globe.gl'), { ssr: false });
 
+export default function Home({ cData }) {
+ 
   return (
-    <div>
-      <Globe />
-      <Alerts />
+    <div className={styles.main}>
+      
+      <div className={styles.earth}>
+      <Earth />
+
+      </div>
+      <div className={styles.sidebar}> <CountryData countryData={"COuntry"}/> </div>
+      
+      
+      {/* <Alerts /> */}
     </div>
   )
+}
+
+export async function getServerSideProps(context) {
+  // get all the required covid data
+  // and other data
+
+  return {
+    props: {
+      cData: { 'test': true },
+      // countries: countries
+    }
+  };
 }
