@@ -1,27 +1,46 @@
+from array import array
+from typing import List
+
+from sqlite3 import Timestamp
+from tkinter.messagebox import QUESTION
 from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from fastapi.middleware.cors import CORSMiddleware
+
 # import requests
 import time
 import datetime
 
 try:
-  from diseaseData import globalData, countryData
-  from diseasesEndpoints import *
-  from articleEndPoints import *
-  from userEndPoints import *
-  # connect to real database
-  cred = credentials.Certificate("../dataBasePrivateKey.json")
-  firebase_admin.initialize_app(cred, {'projectId': "jamva-real",})
+    from diseaseData import globalData, countryData
+    from diseasesEndpoints import *
+    from articleEndPoints import *
+    from userEndPoints import *
+
+    # connect to real database
+    cred = credentials.Certificate("../dataBasePrivateKey.json")
+    firebase_admin.initialize_app(
+        cred,
+        {
+            "projectId": "jamva-real",
+        },
+    )
 except:
-  from .diseasesEndpoints import *
-  from .diseaseData import globalData, countryData
-  from .articleEndPoints import *
-  from .userEndPoints import *
-  # connect to test database
-  cred = credentials.Certificate("../testDataBasePrivateKey.json")
-  firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
+    from .diseasesEndpoints import *
+    from .diseaseData import globalData, countryData
+    from .articleEndPoints import *
+    from .userEndPoints import *
+
+    # connect to test database
+    cred = credentials.Certificate("../testDataBasePrivateKey.json")
+    firebase_admin.initialize_app(
+        cred,
+        {
+            "projectId": "jamva-4e82e",
+        },
+    )
 
 
 class userCreationModel(BaseModel):
@@ -37,9 +56,32 @@ class userCreationModel(BaseModel):
 class userIdModel(BaseModel):
     uid: str
 
+
+class questionModel(BaseModel):
+    title: str
+
+
+class quizModel(BaseModel):
+    title: str
+    decription: str
+    questions: List[questionModel]
+    createdAt: datetime
+    updatedAt: datetime
+
+
 db = firestore.client()
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def getApp():
@@ -116,6 +158,12 @@ def fetchByDis(disease):
 @app.get("/v1/articles/search/date")
 def fetchByDate(startDate, endDate=""):
     return fetchByDateArticle(db, startDate, endDate)
+
+
+@app.post("/v1/quiz/")
+def postNewQuiz(quizData: quizModel):
+    print(quizData)
+    return {}
 
 
 # logger (keeps track of API performance) Runs for each request of the api
