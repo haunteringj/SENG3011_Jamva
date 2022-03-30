@@ -25,17 +25,12 @@ export default function Home({ cData }) {
     });
   
     const [countries, setCountries] = useState({ features: []});
-    const [transitionDuration, setTransitionDuration] = useState(1000);
   
     useEffect(() => {
       // load data
       fetch('/countries.geojson').then(res => res.json())
       .then(countries=> {
         setCountries(countries);
-  
-          setTimeout(() => {
-            setTransitionDuration(4000);
-          }, 3000);
         });
     }, []);
   
@@ -52,7 +47,6 @@ export default function Home({ cData }) {
           <b>${d.ADMIN} (${d.ISO_A2})</b> <br />
           Population: <i>${Math.round(+d.POP_EST / 1e4) / 1e2}M</i>
         `}
-        polygonsTransitionDuration={transitionDuration}
         onPolygonClick={showOverlay}
       />;
     </div>
