@@ -23,16 +23,16 @@ const ContinentCovidData = (props) => {
     }, [props.continent]);
 
     // format the data into a string
-    var body = "Cases: " + data["cases"] + 
-        "Today Cases: " + data["todayCases"] + 
-        "Deaths: " + data["deaths"] + 
-        "Today Deaths" + data["todayDeaths"] +
+    var body = "Cases: " + data["cases"] + "\n" +
+        "Today Cases: " + data["todayCases"] + "\n" +
+        "Deaths: " + data["deaths"] + "\n" +
+        "Today Deaths" + data["todayDeaths"] + "\n" +
         "Tests" + data["tests"]
 
     // return component
     return (
         <div>
-            <h> {props.continent}'s Top Dieseases</h>
+            <h> {props.continent}'s Covid-19</h>
             <body>{body}</body>
         </div>
     )

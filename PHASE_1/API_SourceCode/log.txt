@@ -2882,3 +2882,4 @@
 /v1/top5Dieseases?continent=Russia [GET, 404, 127.0.0.1, 2022-03-30 22:35:19.934530, 0.0264s, 12B]
 /v1/top5Dieseases?continent=World [GET, 200, 127.0.0.1, 2022-03-30 22:55:12.985075, 0.2436s, 187B]
 /v1/top5Dieseases?continent=Asia [GET, 200, 127.0.0.1, 2022-03-30 22:55:19.841519, 0.0289s, 188B]
+/v1/top5Dieseases?continent=World [GET, 200, 127.0.0.1, 2022-03-30 22:56:17.730287, 0.1348s, 187B]
