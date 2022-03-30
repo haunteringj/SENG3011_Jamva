@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import CountryData from './country_data';
+import CountryData from './covid_overlay';
 import TopDiseases from './earth_overlay';
 import { useState, useEffect, useRef, useCallback } from 'react';  
 import styles from '../../styles/Home.module.scss'
@@ -60,7 +60,7 @@ function Earth () {
                 <TopDiseases continent={latestContinent}/>
             </div>
             <div className={styles.sidebar}>
-                <CountryData countryData={latestCountry}/>
+                <CountryData continent={latestContinent}/>
             </div>
         </div>
     )
