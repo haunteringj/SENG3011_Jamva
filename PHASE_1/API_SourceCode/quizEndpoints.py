@@ -41,3 +41,27 @@ def fetchQuizzes(db):
         return toJsonResponse(200, quizzes)
     except:
         return toJsonResponse(500, "Unable to fetch from database")
+
+def fetchQuiz(db,id):
+    try:
+        query = db.collection("quizzes").document(id).get().to_dict()
+
+        return toJsonResponse(200, query)
+    except:
+        return toJsonResponse(500, "Unable to fetch from database")
+def addAnswer(db,id, questionData):
+    try:
+        query = db.collection("answers").add(questionData)
+        print("DOC",query[1].id)
+        return toJsonResponse(200,{"answerId": query[1].id})
+    except:
+        return toJsonResponse(500, "Unable to fetch from database")
+
+
+def fetchAnswer(db,id):
+    try:
+        query = db.collection("answers").document(id).get().to_dict()
+
+        return toJsonResponse(200, query)
+    except:
+        return toJsonResponse(500, "Unable to fetch from database")

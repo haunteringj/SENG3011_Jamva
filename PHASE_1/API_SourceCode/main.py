@@ -3,7 +3,6 @@ from typing import List
 from datetime import date, datetime
 from tkinter.messagebox import QUESTION
 
-from django.forms import DateTimeInput
 from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
@@ -84,8 +83,13 @@ class quizModel(BaseModel):
     questions: List[questionModel]
     createdAt: datetime
     updatedAt: datetime
-
-
+class keyvalueQuestionModel(BaseModel):
+    questionId: str
+    answerId: str
+class answerModel(BaseModel):
+    questions: List[keyvalueQuestionModel]
+    createdAt: datetime
+    updatedAt: datetime
 db = firestore.client()
 
 app = FastAPI()
@@ -186,7 +190,17 @@ async def postNewQuiz(quizData: quizModel):
 async def getQuizzes():
     return fetchQuizzes(db)
 
+@app.get("/v1/quiz/{id}")
+async def getQuiz(id):
+    return fetchQuiz(db,id)
 
+@app.post("/v1/quiz/{id}/answer")
+async def createAnswer(id, questiondata: answerModel):
+    return addAnswer(db,id, jsonable_encoder(questiondata))
+
+@app.get("/v1/answer/{id}")
+async def getQuiz(id):
+    return fetchAnswer(db,id)
 # logger (keeps track of API performance) Runs for each request of the api
 @app.middleware("http")
 async def Logger(request: Request, call_next):
