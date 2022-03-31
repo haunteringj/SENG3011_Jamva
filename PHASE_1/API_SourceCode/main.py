@@ -1,12 +1,15 @@
 from array import array
 from typing import List
-
-from sqlite3 import Timestamp
+from datetime import date, datetime
 from tkinter.messagebox import QUESTION
+
+from django.forms import DateTimeInput
 from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from fastapi.encoders import jsonable_encoder
+
 from fastapi.middleware.cors import CORSMiddleware
 
 # import requests
@@ -18,6 +21,7 @@ try:
     from diseasesEndpoints import *
     from articleEndPoints import *
     from userEndPoints import *
+    from quizEndpoints import *
 
     # connect to real database
     cred = credentials.Certificate("../dataBasePrivateKey.json")
@@ -32,6 +36,7 @@ except:
     from .diseaseData import globalData, countryData
     from .articleEndPoints import *
     from .userEndPoints import *
+    from .quizEndpoints import *
 
     # connect to test database
     cred = credentials.Certificate("../testDataBasePrivateKey.json")
@@ -57,13 +62,25 @@ class userIdModel(BaseModel):
     uid: str
 
 
+class optionsModel(BaseModel):
+    title: str
+    optionId: str
+
+
+class basicModel(BaseModel):
+    title: str
+
+
 class questionModel(BaseModel):
     title: str
+    answer: str
+    options: List[optionsModel]
+    questionId: str
 
 
 class quizModel(BaseModel):
     title: str
-    decription: str
+    description: str
     questions: List[questionModel]
     createdAt: datetime
     updatedAt: datetime
@@ -160,10 +177,14 @@ def fetchByDate(startDate, endDate=""):
     return fetchByDateArticle(db, startDate, endDate)
 
 
-@app.post("/v1/quiz/")
-def postNewQuiz(quizData: quizModel):
-    print(quizData)
-    return {}
+@app.post("/v1/quiz/create", status_code=status.HTTP_201_CREATED)
+async def postNewQuiz(quizData: quizModel):
+    return newQuiz(db, jsonable_encoder(quizData))
+
+
+@app.get("/v1/quiz/getAll")
+async def getQuizzes():
+    return fetchQuizzes(db)
 
 
 # logger (keeps track of API performance) Runs for each request of the api

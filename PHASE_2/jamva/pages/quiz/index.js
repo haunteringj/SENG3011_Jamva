@@ -7,12 +7,12 @@ import {
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
+import axios from "axios"
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import nav from "../../components/global/nav";
-import { getAllQuiz, getAllUsers } from "../../utils/db";
-import { db } from "../../lib/firebase";
+import { getAllQuiz } from "../../utils/db";
 
 const Home = (props) => {
   const quiz = JSON.parse(props.quiz);
@@ -25,9 +25,6 @@ const Home = (props) => {
           {singleQuiz.title}
         </Heading>
 
-        <Text color="gray.500" mt={2}>
-          Posted By: {singleQuiz.user.name}
-        </Text>
         <Text color="gray.500" mt={2}>
           No of Questions: {singleQuiz.questions.length}
         </Text>
@@ -72,14 +69,9 @@ const Home = (props) => {
 };
 
 export async function getServerSideProps(_context) {
-  const quiz = getAllQuiz();
-  const data = quiz.map((singleQuiz) => {
-    return {
-      ...singleQuiz,
-      user: users.find((user) => user.id === singleQuiz.userId),
-    };
-  });
-  return { props: { quiz: JSON.stringify(data) } };
+  const snapshot = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/getAll`);
+  console.log("DATA", snapshot.data)
+  return { props: { quiz: JSON.stringify(snapshot.data) } };
 }
 
 export default Home;
