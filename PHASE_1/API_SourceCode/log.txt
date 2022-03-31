@@ -3231,3 +3231,4 @@
 /v1/top5Dieseases?continent=North%20America [GET, 200, 127.0.0.1, 2022-03-31 15:47:32.815979, 0.0295s, 169B]
 /v1/top5Dieseases?continent=South%20America [GET, 200, 127.0.0.1, 2022-03-31 15:47:37.669713, 0.0136s, 228B]
 /v1/top5Dieseases?continent=Africa [GET, 200, 127.0.0.1, 2022-03-31 15:50:07.548625, 0.1168s, 138B]
+/v1/top5Dieseases?continent=Oceania [GET, 200, 127.0.0.1, 2022-03-31 15:51:21.192837, 0.1152s, 189B]
