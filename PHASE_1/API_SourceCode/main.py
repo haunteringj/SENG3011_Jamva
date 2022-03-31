@@ -2,6 +2,7 @@ from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from fastapi.middleware.cors import CORSMiddleware
 # import requests
 import time
 import datetime
@@ -11,6 +12,7 @@ try:
   from diseasesEndpoints import *
   from articleEndPoints import *
   from userEndPoints import *
+  from frontendPoints import *
   # connect to real database
   cred = credentials.Certificate("../dataBasePrivateKey.json")
   firebase_admin.initialize_app(cred, {'projectId': "jamva-real",})
@@ -19,6 +21,7 @@ except:
   from .diseaseData import globalData, countryData
   from .articleEndPoints import *
   from .userEndPoints import *
+  from .frontendPoints import *
   # connect to test database
   cred = credentials.Certificate("../testDataBasePrivateKey.json")
   firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
@@ -40,6 +43,15 @@ class userIdModel(BaseModel):
 db = firestore.client()
 
 app = FastAPI()
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def getApp():
@@ -116,6 +128,10 @@ def fetchByDis(disease):
 @app.get("/v1/articles/search/date")
 def fetchByDate(startDate, endDate=""):
     return fetchByDateArticle(db, startDate, endDate)
+
+@app.get("/v1/top5Dieseases")
+def fetchTopDieseasesContinent(continent):
+    return fetchTopDieseases(db, continent)
 
 
 # logger (keeps track of API performance) Runs for each request of the api
@@ -196,3 +212,4 @@ def ipToLocation(ip):
     result = json.loads(result)
 
     return result["country_name"] + ", " + result["city"]
+

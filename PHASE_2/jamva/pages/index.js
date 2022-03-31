@@ -1,28 +1,13 @@
-import dynamic from 'next/dynamic';
 import styles from '../styles/Home.module.scss'
-import Alerts from '../components/users/alerts';
-import { useState, useEffect, useRef, useCallback } from 'react';
-import Earth from '../components/earth';
-import CountryData from '../components/country_data';
+import Earth from '../components/home/earth';
 
-
-export default function Home({ cData }) {
- 
+export default function Home() {
   return (
-    <div className={styles.main}>
-      <Earth />
+    <div>
+      <div>
+        <Earth />
+      </div>
     </div>
   )
 }
 
-// export async function getServerSideProps(context) {
-//   // get all the required covid data
-//   // and other data
-
-//   return {
-//     props: {
-//       cData: { 'test': true },
-//       // countries: countries
-//     }
-//   };
-// }
