@@ -1,11 +1,12 @@
-
 import { useState, useEffect, useRef, useCallback  } from 'react';
-import dynamic from 'next/dynamic';
-
-// pass in the pointdata as props
+// import dynamic from 'next/dynamic';
 
 export default function Earth () {
-  const Globe = dynamic(import('react-globe.gl'), { ssr: false });
+  
+  let Globe = () => null;
+  if (typeof window != 'undefined') {
+    Globe = require('react-globe.gl').default;
+  }
 
   const redirectToTop5Page = useCallback((polygon, { lat: endLat, lng: endLng }) => {
     // get the contient the clicked on country is on

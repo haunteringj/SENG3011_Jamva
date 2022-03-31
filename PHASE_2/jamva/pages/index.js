@@ -10,27 +10,19 @@ export default function Home({ cData }) {
  
   return (
     <div className={styles.main}>
-      
-      <div className={styles.earth}>
       <Earth />
-
-      </div>
-      <div className={styles.sidebar}> <CountryData countryData={"COuntry"}/> </div>
-      
-      
-      {/* <Alerts /> */}
     </div>
   )
 }
 
-export async function getServerSideProps(context) {
-  // get all the required covid data
-  // and other data
+// export async function getServerSideProps(context) {
+//   // get all the required covid data
+//   // and other data
 
-  return {
-    props: {
-      cData: { 'test': true },
-      // countries: countries
-    }
-  };
-}
+//   return {
+//     props: {
+//       cData: { 'test': true },
+//       // countries: countries
+//     }
+//   };
+// }
