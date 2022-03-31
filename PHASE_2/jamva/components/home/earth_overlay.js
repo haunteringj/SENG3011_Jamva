@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import Link from "next/link"
+import styles from '../../styles/Home.module.scss'
+
 // receives a continent and a list of dieseases and prints then out
 const TopDiseases = (props) => {
 
@@ -20,20 +23,29 @@ const TopDiseases = (props) => {
     }, [props.continent]);
 
     // format the data into a string
-    const toplimit = 3
-    var body = ""
-    for(var key in data) {
-        if (key <= toplimit){
-            var value = data[key];
-            body = body + key + ". " + value + "\n"
-        }
-    }
+    const D1 = data[1] + "\n"
+    const D2 = data[2] + "\n"
+    const D3 = data[3] + "\n"
 
     // return component
     return (
         <div>
-            <h> {props.continent}'s Top Dieseases</h>
-            <body>{body}</body>
+            <h> <b>{props.continent}'s Top Dieseases</b></h>
+            <body>
+            <div className={styles.diseaseList}>
+                <ol>
+                    <li>
+                    <Link href="/user">{D1}</Link>
+                    </li>
+                    <li>
+                    <Link href="/user">{D2}</Link>
+                    </li>
+                    <li>
+                    <Link href="/user">{D3}</Link>
+                    </li>
+                </ol>
+                </div>
+            </body>
         </div>
     )
 }

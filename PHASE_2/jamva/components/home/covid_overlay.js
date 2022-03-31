@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import styles from '../../styles/Home.module.scss'
 
 // Display continent covid data
 const ContinentCovidData = (props) => {
@@ -26,14 +27,20 @@ const ContinentCovidData = (props) => {
     var body = "Cases: " + data["cases"] + "\n" +
         "Today Cases: " + data["todayCases"] + "\n" +
         "Deaths: " + data["deaths"] + "\n" +
-        "Today Deaths" + data["todayDeaths"] + "\n" +
-        "Tests" + data["tests"]
+        "Today Deaths: " + data["todayDeaths"] + "\n" +
+        "Tests: " + data["tests"]
 
     // return component
     return (
         <div>
-            <h> {props.continent}'s Covid-19</h>
-            <body>{body}</body>
+            <h><b>{props.continent}'s Covid-19</b></h>
+            <body>
+                <b>Cases: </b>{data["cases"]}{"\n"}
+                <b>Today Cases: </b>{data["todayCases"]}{"\n"}
+                <b>Deaths: </b>{data["deaths"]}{"\n"}
+                <b>Today Deaths: </b>{data["todayDeaths"]}{"\n"}
+                <b>Tests: </b>{data["tests"]}
+            </body>
         </div>
     )
 }
