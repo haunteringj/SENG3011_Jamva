@@ -25,15 +25,15 @@ const ContinentCovidData = (props) => {
 
     // return component
     return (
-        <div>
-            <h><b>{props.continent}'s Covid-19</b></h>
-            <body>
+        <div className={styles.sidebar}>
+            <b>{props.continent}'s Covid-19{"\n"}</b>
+            <p>
                 <b>Cases: </b>{data["cases"]}{"\n"}
                 <b>Today Cases: </b>{data["todayCases"]}{"\n"}
                 <b>Deaths: </b>{data["deaths"]}{"\n"}
                 <b>Today Deaths: </b>{data["todayDeaths"]}{"\n"}
                 <b>Tests: </b>{data["tests"]}
-            </body>
+            </p>
         </div>
     )
 }
