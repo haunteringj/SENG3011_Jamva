@@ -9,7 +9,12 @@ function Earth () {
     const [latestContinent, setLatestContinent]= useState("World");
     const [latestCountry, setLatestCountry]= useState("World");
     // import basic globe
-    const Globe = dynamic(import('react-globe.gl'), { ssr: false });
+    // const Globe = dynamic(import('react-globe.gl'), { ssr: false });
+    let Globe = () => null;
+    if (typeof window != 'undefined') {
+        Globe = require('react-globe.gl').default;
+    }
+    const globeEl = useRef()
 
     // Hooks for loading countries onto globe
     const [countries, setCountries] = useState({ features: []});
@@ -24,26 +29,22 @@ function Earth () {
 
     // Click on Country Event
     const showOverlay = useCallback((polygon, { lat: endLat, lng: endLng }) => {
-        // get the contient the clicked on country is on
-        // console.log(polygon.properties.CONTINENT)
-    
         // Move camera to center in on that country
         
-        // Update/Create overlay of top 3 dieseases
-        // ignore Antarctica
-        if (polygon.properties.CONTINENT != "Antarctica"){
+        // Update overlays based on the clicked continent (ignore Antarctica, small islands)
+        if (polygon.properties.CONTINENT != "Antarctica" && polygon.properties.CONTINENT != "Seven seas (open ocean)" ){
             setLatestContinent(polygon.properties.CONTINENT)
             setLatestCountry(polygon.properties.NAME)
         }
-        console.log("clicked on ")
-        console.log(polygon.properties)
       }, []);
 
 
     // return Earth 
     return (
-        <div>
+        <div className={styles.earth}>
             <Globe
+            ref={globeEl}
+            onPolygonClick={showOverlay}
             globeImageUrl="/images/earth-blue-marble.jpg"
             backgroundImageUrl='/images/night-sky.png'
             backgroundColor="rgba(0,0,0,0)"
@@ -54,7 +55,6 @@ function Earth () {
                 <b>${d.ADMIN} (${d.ISO_A2})</b> <br />
                 Population: <i>${Math.round(+d.POP_EST / 1e4) / 1e2}M</i>
             `}
-            onPolygonClick={showOverlay}
             />;
             <div className={styles.overlay}>
                 <TopDiseases continent={latestContinent}/>
