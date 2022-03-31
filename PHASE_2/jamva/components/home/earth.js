@@ -1,16 +1,14 @@
 import CountryData from './covid_overlay';
 import TopDiseases from './earth_overlay';
-import { useState, useEffect, useRef, useCallback } from 'react';  
+import { useState, useEffect, useRef, useCallback, forwardRef } from 'react';  
 import styles from '../../styles/Home.module.scss'
+import dynamic from 'next/dynamic';
+
   
 // Earth 
 function Earth () {
     const [latestContinent, setLatestContinent]= useState("World");
-    // import basic globe
-    let Globe = () => null;
-    if (typeof window != 'undefined') {
-        Globe = require('react-globe.gl').default;
-    }
+
     const globeEl = useRef()
 
     // Hooks for loading countries onto globe
@@ -65,5 +63,14 @@ function Earth () {
         </div>
     )
 };
+
+// import basic globe
+const GlobeTmpl = dynamic(() => import("./globe"), {
+    ssr: false,
+  });
+  
+const Globe = forwardRef((props, ref) => (
+<GlobeTmpl {...props} forwardRef={ref} />
+));
 
 export default Earth;
