@@ -11,6 +11,7 @@ const INITIAL_USER_STATE = {
   age: "",
   state: "",
   country: "",
+  userId: "",
 }
 
 export function UserWrapper({ children }) {

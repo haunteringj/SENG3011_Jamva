@@ -1,5 +1,6 @@
 html,
 body {
+  background-color: #f6f5f7;
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
@@ -13,4 +14,118 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.inner-form {
+  width: 380px;
+  margin-top: 50%;
+  padding: 20px;
+  padding-top: 40px;
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid white;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+
+  .submit-button {
+    position: relative;
+    width: 60%;
+    border-radius: 28px;
+    border: 1px solid #FF4B2B;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: "Arial";
+    height: 40px;
+    background-color: #FF4B2B;
+  }
+
+  .input-select {
+    position: relative;
+    border: 1px solid #eee;
+    border-radius: 1.75rem;
+    width: 100%;
+    padding: 6px 1.5rem 6px;
+    margin-bottom: 32px;
+    background-color: #eee;
+  }
+}
+
+.input {
+  border-radius: 28px;
+  font-size: 16px;
+  margin-bottom: 32px;
+  position: relative;
+  display: table;
+  transition: 0.1s ease-in-out;
+  width: 100%;
+
+  &__label {
+    color: black;
+    font-size: inherit;
+    pointer-events: none;
+    position: absolute;
+    top: 16px;
+    // left: rem(16);
+    left: 24px;
+    transition: 0.1s ease-in-out;
+  }
+
+  &__field {
+    border: 1px solid #eee;
+    // border-radius: rem(8);
+    border-radius: 28px;
+    color: black;
+    font-size: inherit;
+    line-height: 1.5em;
+    // padding: rem(22) rem(16) rem(8);
+    padding: 22px 24px 8px;
+    transition: 0.1s ease-in-out;
+    width: 100%;
+    background-color: #eee;
+
+    &:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 56px #e8f2f6 inset;
+    }
+
+    &::placeholder {
+      opacity: 0;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: none;
+      pointer-events: initial;
+      transition: 0.1s ease-in-out;
+      // @include focus-box-shadow($brand-secondary);
+    }
+  }
+
+  &--has-value,
+  &:focus-within {
+    .input__field {
+      border-color: #eee;
+    }
+
+    .input__label {
+      pointer-events: initial;
+      transform-origin: left bottom;
+      transform: translate3d(0, -16px, 0) scale3d(0.75, 0.75, 1);
+    }
+  }
+
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
 }
