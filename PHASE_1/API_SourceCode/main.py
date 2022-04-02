@@ -2,27 +2,29 @@ from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from fastapi.encoders import jsonable_encoder
+
+from fastapi.middleware.cors import CORSMiddleware
+
 # import requests
 import time
 import datetime
-try:
-    from diseasesEndpoints import *
-except:  
-  from .diseasesEndpoints import *
-  
+
 try:
   from diseaseData import *
-  #from diseasesEndpoints import *
+  from diseasesEndpoints import *
   from articleEndPoints import *
   from userEndPoints import *
+  from quizEndpoints import *
   # connect to real database
   cred = credentials.Certificate("../dataBasePrivateKey.json")
   firebase_admin.initialize_app(cred, {'projectId': "jamva-real",})
 except:
-  #from .diseasesEndpoints import *
+  from .diseasesEndpoints import *
   from .diseaseData import *
   from .articleEndPoints import *
   from .userEndPoints import *
+  from .quizEndpoints import *
   # connect to test database
   cred = credentials.Certificate("../testDataBasePrivateKey.json")
   firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
@@ -45,6 +47,15 @@ db = firestore.client()
 
 app = FastAPI()
 
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def getApp():
     return app
@@ -76,12 +87,12 @@ def getUser(uid: str):
 
 
 # Disease endpoints
-@app.get("/v1/diseases/search")
+@app.get("/v1/diseases/{search}")
 def fetchDiseaseName(disease):
     return fetchDiseaseByName(db, disease)
 
 
-@app.get("/v1/diseases/search/location")
+@app.get("/v1/diseases/searchs/{location}")
 def fetchDiseaseLocation(location):
     return fetchDiseaseByLocation(db, location)
 
@@ -121,6 +132,9 @@ def fetchByDis(disease):
 def fetchByDate(startDate, endDate=""):
     return fetchByDateArticle(db, startDate, endDate)
 
+@app.get("/v1/hangman/{id}")
+async def getWords(id):
+    return fetchWords(db,id)
 
 # logger (keeps track of API performance) Runs for each request of the api
 @app.middleware("http")
