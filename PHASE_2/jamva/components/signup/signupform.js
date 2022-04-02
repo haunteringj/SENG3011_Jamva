@@ -14,6 +14,7 @@ const SignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [stateClicked, setStateClicked] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = e => {
     setUserValues(prevState => ({
@@ -80,7 +81,23 @@ const SignupForm = () => {
   };
 
   const validationCheck = () => {
+    const ageRegex = new RegExp(/[0-9]*$/);
 
+    if (
+      userValues.email == "" ||
+      userValues.age == "" ||
+      password == "" ||
+      userValues.country == "" ||
+      userValues.username == ""
+    ) {
+      setError("missingFields");
+      return false;
+    }
+    if (!ageRegex.test(userValues.age)) {
+      setError("invalidAge");
+      return false;
+    }
+    return true;
   }
 
   const DropdownIcon = () => {
@@ -103,8 +120,12 @@ const SignupForm = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-
-  }
+    if (validationCheck()) {
+      console.log("gello")
+    } else {
+      return;
+    }
+  } 
 
   const handleCountrySelect = e => {
     setUserValues(prevState => ({
@@ -186,6 +207,16 @@ const SignupForm = () => {
             />
             <label className="input__label">Age</label>
           </div>
+          {error == "missingFields" && (
+            <p className="error">
+              You're missing some fields
+            </p>
+          )}
+          {error == "invalidAge" && (
+            <p className="error">
+              Invalid age input
+            </p>
+          )}
           <input type="submit" value="Create Account" className="submit-button" />
         </div>
       </form>
