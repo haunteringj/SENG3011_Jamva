@@ -5,18 +5,22 @@ from firebase_admin import firestore
 # import requests
 import time
 import datetime
-
 try:
-  from diseaseData import globalData, countryData
-  from diseasesEndpoints import *
+    from diseasesEndpoints import *
+except:  
+  from .diseasesEndpoints import *
+  
+try:
+  from diseaseData import *
+  #from diseasesEndpoints import *
   from articleEndPoints import *
   from userEndPoints import *
   # connect to real database
   cred = credentials.Certificate("../dataBasePrivateKey.json")
   firebase_admin.initialize_app(cred, {'projectId': "jamva-real",})
 except:
-  from .diseasesEndpoints import *
-  from .diseaseData import globalData, countryData
+  #from .diseasesEndpoints import *
+  from .diseaseData import *
   from .articleEndPoints import *
   from .userEndPoints import *
   # connect to test database
