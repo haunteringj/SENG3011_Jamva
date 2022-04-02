@@ -27,12 +27,8 @@ def reorderFields(queryResult):
     return {k: queryResult.to_dict()[k] for k in orderOfFields}
 
 
-def toJsonResponse(statusCode, content):
-    return JSONResponse(
-        status_code=statusCode,
-        # "default=str" to convert datetimewithnanoseconds to string
-        content=json.dumps(content, default=str),
-    )
+def toJsonResponse(statusCode, body):
+    return JSONResponse(status_code=statusCode, content=body)
 
 
 def createUserEntry(db, userInfo: userCreationModel):
@@ -55,7 +51,7 @@ def createUserEntry(db, userInfo: userCreationModel):
                 user.uid).set(createUserDetail)
             return successResponse
         except:
-            return toJsonResponse(409, {"status": "failed_userDetailExists", "uid": 0})
+            return JSONResponse(409, {"status": "failed_userDetailExists", "uid": 0})
     except exceptions.FirebaseError:
         failedReponse = {"status": "failed_userExists", "uid": 0}
         return toJsonResponse(409, failedReponse)

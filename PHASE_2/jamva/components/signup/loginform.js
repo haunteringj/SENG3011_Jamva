@@ -44,8 +44,9 @@ const LoginForm = () => {
         await auth.signInWithEmailAndPassword(userValues.email, password);
         const user = auth.currentUser;
         const userId = user.uid;
-        const uriPath = `user/deatils/${userId}`
+        const uriPath = `users/details/${userId}`
         const userDetails = await getRecord(uriPath)
+        console.log(userDetails)
         const data = userDetails.data
         setUserValues({
           alerts: data.alerts,
