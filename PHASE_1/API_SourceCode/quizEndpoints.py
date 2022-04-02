@@ -65,3 +65,33 @@ def fetchAnswer(db,id):
         return toJsonResponse(200, query)
     except:
         return toJsonResponse(500, "Unable to fetch from database")
+
+def fetchWords(db,id):
+    try:
+        query = db.collection("hangman").document(id).get().to_dict()
+
+        return toJsonResponse(200, query)
+    except:
+        return toJsonResponse(500, "Unable to fetch from database")
+
+
+def fetchCrossword(db,disease,id):
+    try:
+        query = db.collection("crosswords").document(disease).collection("crosswords").document(id).get().to_dict()
+
+        return toJsonResponse(200, query)
+    except:
+        return toJsonResponse(500, "Unable to fetch from database")
+
+def fetchCrosswords(db,id):
+    try:
+        query = db.collection("crosswords").document(id).collection("crosswords").get()
+        crosswords = []
+        for quiz in query:
+            dictionary = quiz.to_dict()
+            dictionary["id"] = quiz.id
+            crosswords.append(dictionary)
+
+        return toJsonResponse(200, crosswords)
+    except:
+        return toJsonResponse(500, "Unable to fetch from database")

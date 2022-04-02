@@ -201,6 +201,19 @@ async def createAnswer(id, questiondata: answerModel):
 @app.get("/v1/answer/{id}")
 async def getQuiz(id):
     return fetchAnswer(db,id)
+
+@app.get("/v1/hangman/{id}")
+async def getWords(id):
+    return fetchWords(db,id)
+
+@app.get("/v1/crosswords/{id}/getAll")
+async def getCrosswords( id):
+    return fetchCrosswords(db,id)
+
+@app.get("/v1/crosswords/{disease}/{id}")
+async def getCrossword(disease, id):
+    return fetchCrossword(db,disease, id)
+
 # logger (keeps track of API performance) Runs for each request of the api
 @app.middleware("http")
 async def Logger(request: Request, call_next):
