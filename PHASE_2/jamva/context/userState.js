@@ -10,7 +10,6 @@ const INITIAL_USER_STATE = {
   country: "",
   age: "",
   state: "",
-  country: "",
   userId: "",
 }
 

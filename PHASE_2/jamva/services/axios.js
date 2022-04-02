@@ -1,7 +1,7 @@
 import Axios from "axios";
 
 const API = Axios.create({
-  baseURL: "https://3.106.142.227/v1/",
+  baseURL: "http://localhost:8000/v1/",
   timeout: 30000,
 })
 
@@ -81,7 +81,6 @@ export const postRecord = async (relativeUri, data) => {
     data: "",
   };
   try {
-    authorizationProvider();
     let response = await API.post(relativeUri, data)
       .then(response => {
         responseContent = {
@@ -107,7 +106,6 @@ export const getRecord = async relativeUri => {
     data: "",
   };
   try {
-    authorizationProvider();
     let response = await API.get(relativeUri)
       .then(response => {
         responseContent = {

@@ -3,6 +3,8 @@ import { useContext, useState } from "react";
 import { userContext } from "../../context/userState";
 import Select, { components } from "react-select";
 import { COUNTRY_LIST } from "../../public/CountryNames";
+import { postRecord } from "../../services/axios";
+import { useRouter } from "next/router";
 
 const arrowStyle = {
   transform: "rotate(180deg) scale(1)",
@@ -10,6 +12,7 @@ const arrowStyle = {
 
 
 const SignupForm = () => {
+  const router = useRouter();
   const { userValues, setUserValues } = useContext(userContext);
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
@@ -118,10 +121,41 @@ const SignupForm = () => {
     );
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     if (validationCheck()) {
-      console.log("gello")
+      try {
+        const postData = {
+          username: userValues.username,
+          email: userValues.email,
+          country: userValues.country,
+          password: password,
+          city: "",
+          state: "",
+          age: Number(userValues.age),
+        }
+        console.log(postData);
+        const uriValue = "users/create"
+        const res = await postRecord(uriValue, postData);
+        console.log(res);
+        const userData = res.data
+        if (userData.status == "success") {
+          setUserValues(prevState => ({
+            ...prevState,
+            userId: userData.uid
+          }));
+          router.push("/");
+        }
+        if (userData.status == "failed_userExists") {
+          setError("userExists")
+        }
+        else {
+          setError("somethingWrong")
+        }
+      } catch (err) {
+        console.log("hell3");
+        setError("somethingWrong")
+      }
     } else {
       return;
     }
@@ -215,6 +249,16 @@ const SignupForm = () => {
           {error == "invalidAge" && (
             <p className="error">
               Invalid age input
+            </p>
+          )}
+          {error == "somethingWrong" && (
+            <p className="error">
+              Something went wrong, please contact us!
+            </p>
+          )}
+          {error == "userExists" && (
+            <p className="error">
+              Email is already being used, use another!
             </p>
           )}
           <input type="submit" value="Create Account" className="submit-button" />

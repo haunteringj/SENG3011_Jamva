@@ -2,33 +2,37 @@ from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from fastapi.encoders import jsonable_encoder
+
+from fastapi.middleware.cors import CORSMiddleware
+
 # import requests
 import time
 import datetime
 
 try:
-  from diseaseData import globalData, countryData
-  from diseasesEndpoints import *
-  from articleEndPoints import *
-  from userEndPoints import *
-  # connect to real database
-  cred = credentials.Certificate("../dataBasePrivateKey.json")
-  firebase_admin.initialize_app(cred, {'projectId': "jamva-real",})
+    from diseaseData import globalData, countryData
+    from diseasesEndpoints import *
+    from articleEndPoints import *
+    from userEndPoints import *
+    # connect to real database
+    cred = credentials.Certificate("../testDataBasePrivateKey.json")
+    firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e", })
 except:
-  from .diseasesEndpoints import *
-  from .diseaseData import globalData, countryData
-  from .articleEndPoints import *
-  from .userEndPoints import *
-  # connect to test database
-  cred = credentials.Certificate("../testDataBasePrivateKey.json")
-  firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
+    from .diseasesEndpoints import *
+    from .diseaseData import globalData, countryData
+    from .articleEndPoints import *
+    from .userEndPoints import *
+    # connect to test database
+    cred = credentials.Certificate("../testDataBasePrivateKey.json")
+    firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e", })
 
 
 class userCreationModel(BaseModel):
     email: str
     country: str
     username: str
-    state: str
+    state: str = None
     city: str = None
     password: str
     age: int = None
@@ -37,9 +41,20 @@ class userCreationModel(BaseModel):
 class userIdModel(BaseModel):
     uid: str
 
+
 db = firestore.client()
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def getApp():
