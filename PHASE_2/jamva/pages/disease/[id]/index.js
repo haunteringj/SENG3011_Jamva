@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-
+import { Center, ChakraProvider, Heading } from "@chakra-ui/react";
+import Link from "next/link";
 
 export default function disease_info(data) {
 
@@ -16,27 +16,56 @@ export default function disease_info(data) {
 
   return (
     <div>
-    <h1> {name} </h1>
-      <div> 
-        <h2>Overview</h2>
-        <b1>Something about the disease and how it spreads </b1>
-        <ul>{definition}</ul>
+      <div class="centered">
+        <div class="align-right">
+          <Link href={`/disease/${name}/games`}>
+            <button class="button"><span>Play a Game!</span></button>
+          </Link>
+        </div>
+      <h1>{name}</h1>
+         
+
       </div>
-      <div> 
+
+      <div class="row">
+        <div class="column middle">            
+          <div class="left">
+              <h2>Overview</h2>
+              <p>What is {name}?</p>
+              <p><small>{definition}</small></p>
+            </div>
+          </div>
+        <div class="column side">
+          <img class="image"/>
+        </div>
+      </div>
+
+
+      <div class="centered">
         <h2>Syndromes</h2>
-        <b1>List of syndromes</b1>
-        <ul>{syndromes}</ul>
+        <p>What are the symptoms of {name}?</p>
+        <p><small>{syndromes}</small></p>
       </div>
-      <div> 
-        <h2>Diagnosis and Treatments</h2>
-        <b1>How to diagnose</b1>
-        <ul>{diagnosis}</ul>
-        <b1>List of possible treatments</b1>
-        <ul>{treatments}</ul>
-        <b1>How to prevent</b1>
-        <ul>{prevention}</ul>
+
+      <div class="row">
+        <div class="column side">            
+          <div class="left">
+            <h2>How should we diagnose and treat {name}?</h2>
+            <p>To diagnose, look out for...</p>
+            <p><small>{diagnosis}</small></p>
+            <p>How we treat patients with {name}</p>
+            <p><small>{treatments}</small></p>
+            </div>
+          </div>
+        <div class="column side">
+          <h2>What can we do to prevent {name}?</h2>
+          <p><small>{prevention}</small></p>
+        </div>
       </div>
-  </div>
+
+
+
+    </div>
   );
 }
 
@@ -52,11 +81,11 @@ export async function getServerSideProps(context) {
   }
 
   let name = snapshot.data["diseaseName"];
-  let def = snapshot.data["definition"] 
-  let syn = snapshot.data["syndromes"] 
-  let treat = snapshot.data["treatment"] 
-  let diag = snapshot.data["diagnosis"] 
-  let prevent = snapshot.data["prevention"] 
+  let def = snapshot.data["definition"];
+  let syn = snapshot.data["syndromes"];
+  let treat = snapshot.data["treatment"]; 
+  let diag = snapshot.data["diagnosis"]; 
+  let prevent = snapshot.data["prevention"]; 
 
 
   console.log(name);

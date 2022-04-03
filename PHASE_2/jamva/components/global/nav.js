@@ -11,9 +11,6 @@ const Nav = () => {
         <li>
           <Link href="/user">Account</Link>
         </li>
-        <li>
-          <Link href="/disease_info">Disease_TEMP</Link>
-        </li>
       </ul>
     </nav>
   )
