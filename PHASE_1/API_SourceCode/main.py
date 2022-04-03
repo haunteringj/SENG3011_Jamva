@@ -2,15 +2,20 @@ from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+<<<<<<< HEAD
 from fastapi.encoders import jsonable_encoder
 
 from fastapi.middleware.cors import CORSMiddleware
 
+=======
+from fastapi.middleware.cors import CORSMiddleware
+>>>>>>> frontend_home_new
 # import requests
 import time
 import datetime
 
 try:
+<<<<<<< HEAD
     from diseaseData import globalData, countryData
     from diseasesEndpoints import *
     from articleEndPoints import *
@@ -26,6 +31,25 @@ except:
     # connect to test database
     cred = credentials.Certificate("../testDataBasePrivateKey.json")
     firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e", })
+=======
+  from diseaseData import globalData, countryData
+  from diseasesEndpoints import *
+  from articleEndPoints import *
+  from userEndPoints import *
+  from frontendPoints import *
+  # connect to real database
+  cred = credentials.Certificate("../dataBasePrivateKey.json")
+  firebase_admin.initialize_app(cred, {'projectId': "jamva-real",})
+except:
+  from .diseasesEndpoints import *
+  from .diseaseData import globalData, countryData
+  from .articleEndPoints import *
+  from .userEndPoints import *
+  from .frontendPoints import *
+  # connect to test database
+  cred = credentials.Certificate("../testDataBasePrivateKey.json")
+  firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
+>>>>>>> frontend_home_new
 
 
 class userCreationModel(BaseModel):
@@ -45,6 +69,15 @@ class userIdModel(BaseModel):
 db = firestore.client()
 
 app = FastAPI()
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 origins = ["*"]
 
@@ -132,6 +165,10 @@ def fetchByDis(disease):
 def fetchByDate(startDate, endDate=""):
     return fetchByDateArticle(db, startDate, endDate)
 
+@app.get("/v1/top5Dieseases")
+def fetchTopDieseasesContinent(continent):
+    return fetchTopDieseases(db, continent)
+
 
 # logger (keeps track of API performance) Runs for each request of the api
 @app.middleware("http")
@@ -211,3 +248,4 @@ def ipToLocation(ip):
     result = json.loads(result)
 
     return result["country_name"] + ", " + result["city"]
+
