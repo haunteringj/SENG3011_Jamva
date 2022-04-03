@@ -18,7 +18,7 @@ a {
 
 .inner-form {
   width: 380px;
-  margin-top: 50%;
+  margin-top: 20%;
   padding: 20px;
   padding-top: 40px;
   border-radius: 28px;
@@ -51,6 +51,28 @@ a {
     padding: 6px 1.5rem 6px;
     margin-bottom: 32px;
     background-color: #eee;
+  }
+}
+
+.alerts-popup {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+
+  .arrow-container {
+    margin-left: 100px;
+    border-radius: 50%;
+    background-color: red;
+    width: 26px;
+    height: 26px;
+
+    .dropdown-arrow {
+      //margin-left: -20px;
+      
+      svg {
+        //margin-bottom: 20px;
+      }
+    }
   }
 }
 

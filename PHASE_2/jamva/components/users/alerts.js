@@ -1,17 +1,18 @@
 import { useContext } from "react";
 import { userContext } from "../../context/userState";
+import UpArrowButton from "../alerts/upArrowButton";
 
 const Alerts = () => {
   const { userValues, setUserValues } = useContext(userContext);
-  console.log(userValues)
-
-  if (userContext.alerts == []) {
-    return;
-  }
+  console.log({userValues})
 
   return (
-    <div className="alerts-popup">
-      hello
+    <div>
+      {userValues.alerts.length == 0 && (
+        <div className="alerts-popup">
+          <UpArrowButton />
+        </div>
+      )}
     </div>
   );
 }
