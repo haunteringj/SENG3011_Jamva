@@ -4,12 +4,13 @@ import { useState, useEffect, useRef, useCallback, createRef, forwardRef } from 
 import axios from 'axios';
 import styles from '../../styles/Home.module.scss'
 import ReportOverlay from './report_overlay';
+import dynamic from 'next/dynamic'
 
 
 function Earth() {
 
   //hooks
-  const globeRef = createRef();
+  const globeRef = useRef();
 
   //state variables
   const [latestContinent, setLatestContinent] = useState("World");
@@ -47,18 +48,15 @@ function Earth() {
 
         setReportData(result);
       });
-
-
-
-
-
   }, []);
 
-  // Click on Country Event
-  const showOverlay = useCallback((polygon, { lat: endLat, lng: endLng }) => {
-    // Move camera to center in on that country
-    const clickLocation = { lat: lat, lng: lng, altitude: 2};
-    globeEl.current.pointOfView(clickLocation, 900);
+    // Click on Country Event
+    const showOverlay = useCallback((polygon, event, { lat, lng, altitude }) => {
+      // Move camera to center in on that country
+      // globeEl.current.controls().autoRotate = true; 
+      // globeEl.current.controls().autoRotateSpeed = 0.1;
+      const clickLocation = { lat: lat, lng: lng, altitude: 2};
+      globeRef.current.pointOfView(clickLocation, 900);
 
     // Update overlays based on the clicked continent (ignore Antarctica, small islands)
     if (polygon.properties.CONTINENT != "Antarctica" && polygon.properties.CONTINENT != "Seven seas (open ocean)") {
