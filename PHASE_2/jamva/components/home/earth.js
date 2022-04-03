@@ -89,8 +89,8 @@ function Earth() {
           hexBinPointWeight="numReports"
           hexAltitude={d => d.sumWeight * 6e-8 * 1000000}
           hexBinResolution={3}
-          hexTopColor={d => '#FF0000'}
-          hexSideColor={d => '#FFA500'}
+          hexTopColor={d => '#FFA500'}
+          hexSideColor={d => '#FF0000'}
 
         />;
         <div className={styles.overlay}>
