@@ -68,12 +68,6 @@ function Earth() {
     }
   }, []);
 
-  console.log(reportData)
-  var myc= 'australia'
-  if (c[myc] !== []) {
-    console.log(c[myc]);
-  }
-  
   // return Earth 
   return (
     reportData === [] ? <> Loading Globe </> :
@@ -102,14 +96,15 @@ function Earth() {
         <div className={styles.overlay}>
           <TopDiseases continent={latestContinent} />
         </div>
-        {/* <div className={styles.sidebar}>
-          <CountryData continent={latestContinent} />
-        </div> */}
-
         <div className={styles.sidebar}>
-          {/* <div>{test[`${latestCountry}`]}</div> */}
-        {latestCountry !== "World" ? <ReportOverlay report={c[latestCountry][0]}/> : null}
+          <CountryData continent={latestContinent} />
         </div>
+
+        {latestCountry !== "World" && latestCountry in c ? 
+          <div className={styles.reportOverlay}> 
+            <ReportOverlay report={c[latestCountry][0]} /> 
+          </div> : null}
+
 
       </div>
   )

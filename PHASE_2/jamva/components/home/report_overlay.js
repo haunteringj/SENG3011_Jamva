@@ -20,6 +20,7 @@ export default function ReportOverlay({ report }) {
             <div className={styles.diseaseList}>
                 <ol>
                     <li>
+                    
                     {report["headline"]}
                     hello
                     </li>
