@@ -18,13 +18,24 @@ const index = (props) => {
   const disease = props.diseaseName;
   const generateQuizCard = (singleQuiz) => {
     return (
-      <Box m={3} borderWidth="1px" borderRadius="lg" p={6} boxShadow="xl">
-        <Heading as="h3" size="lg">
+      <Box
+        m={3}
+        width={500}
+        height={180}
+        className="selectionBox"
+        borderWidth="1px"
+        borderRadius="lg"
+        p={6}
+        boxShadow="xl"
+      >
+        <Heading color="white" as="h3" size="lg">
           {singleQuiz.title}
         </Heading>
 
         <Divider mt={3} mb={3} />
-        <Text noOfLines={[1, 2, 3]}>{singleQuiz.description}</Text>
+        <Text color="white" noOfLines={[1, 2, 3]}>
+          {singleQuiz.description}
+        </Text>
       </Box>
     );
   };
@@ -44,7 +55,16 @@ const index = (props) => {
       </div>
     </ChakraProvider>
   ) : (
-    <Box>
+    <ChakraProvider>
+      <div className="selectionHeader">
+        <button
+          className="backButton custom-btn"
+          onClick={() => router.push(`/disease/${disease}/games`)}
+        >
+          Back
+        </button>
+        <Heading color="white">Crosswords about {disease}</Heading>
+      </div>
       <main>
         <header>
           <nav />
@@ -61,7 +81,6 @@ const index = (props) => {
                     }
                     as="button"
                     textAlign="start"
-                    m={2}
                   >
                     {generateQuizCard(singleQuiz)}
                   </Box>
@@ -72,7 +91,7 @@ const index = (props) => {
         </header>
       </main>
       <footer></footer>
-    </Box>
+    </ChakraProvider>
   );
 };
 

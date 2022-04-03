@@ -71,38 +71,47 @@ export default function Hangman(data) {
       </div>
     </ChakraProvider>
   ) : (
-    <ChakraProvider>
-      <div className="hangman-container">
-        <div className="selectionHeader">
-          <button
-            className="backButton custom-btn"
-            onClick={() => router.push(`/disease/${disease}/games`)}
-          >
-            Back
-          </button>
-          <Center>
-            <h1>Hangman</h1>
-          </Center>
-          <Center>
-            <p>Find the hidden word - Enter a letter</p>
-          </Center>
-        </div>
+    <div>
+      <ChakraProvider>
+        <div className="hangman-container">
+          <div className="selectionHeader">
+            <button
+              className="backButton custom-btn"
+              onClick={() => router.push(`/disease/${disease}/games`)}
+            >
+              Back
+            </button>
+            <Center>
+              <h1>Hangman</h1>
+            </Center>
+            <Center>
+              <p>Find the hidden word - Enter a letter</p>
+            </Center>
+          </div>
 
-        <div className="game-container">
-          <Figure wrongLetters={wrongLetters} />
-          <WrongLetters wrongLetters={wrongLetters} />
-          <Word selectedWord={selectedWord} correctLetters={correctLetters} />
+          <div className="game-container">
+            <div>
+              <Figure wrongLetters={wrongLetters} />
+              <WrongLetters wrongLetters={wrongLetters} />
+              <Word
+                selectedWord={selectedWord}
+                correctLetters={correctLetters}
+              />
+            </div>
+            <Popup
+              correctLetters={correctLetters}
+              wrongLetters={wrongLetters}
+              selectedWord={selectedWord}
+              setPlayable={setPlayable}
+              playAgain={playAgain}
+            />
+            <Center>
+              <Notification showNotification={showNotification} />
+            </Center>
+          </div>
         </div>
-        <Popup
-          correctLetters={correctLetters}
-          wrongLetters={wrongLetters}
-          selectedWord={selectedWord}
-          setPlayable={setPlayable}
-          playAgain={playAgain}
-        />
-        <Notification showNotification={showNotification} />
-      </div>
-    </ChakraProvider>
+      </ChakraProvider>
+    </div>
   );
 }
 export async function getServerSideProps(context) {
