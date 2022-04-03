@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic';
 import CountryData from './covid_overlay';
 import TopDiseases from './earth_overlay';
 import { useState, useEffect, useRef, useCallback, createRef, forwardRef } from 'react';
@@ -58,6 +57,8 @@ function Earth() {
   // Click on Country Event
   const showOverlay = useCallback((polygon, { lat: endLat, lng: endLng }) => {
     // Move camera to center in on that country
+    const clickLocation = { lat: lat, lng: lng, altitude: 2};
+    globeEl.current.pointOfView(clickLocation, 900);
 
     // Update overlays based on the clicked continent (ignore Antarctica, small islands)
     if (polygon.properties.CONTINENT != "Antarctica" && polygon.properties.CONTINENT != "Seven seas (open ocean)") {

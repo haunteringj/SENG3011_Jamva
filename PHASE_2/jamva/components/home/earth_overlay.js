@@ -29,9 +29,8 @@ const TopDiseases = (props) => {
 
     // return component
     return (
-        <div>
-            <h> <b>{props.continent}'s Top Dieseases</b></h>
-            <body>
+        <div className={styles.overlay}>
+            <b>{props.continent}'s Top Dieseases</b>
             <div className={styles.diseaseList}>
                 <ol>
                     <li>
@@ -45,7 +44,6 @@ const TopDiseases = (props) => {
                     </li>
                 </ol>
                 </div>
-            </body>
         </div>
     )
 }
