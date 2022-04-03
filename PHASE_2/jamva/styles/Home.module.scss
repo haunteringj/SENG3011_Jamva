@@ -30,6 +30,23 @@
   text-align: center;
 }
 
+.reportOverlay {
+  width: 25%;
+  z-index: 1;
+  border-width: 2px;
+  border-radius: 10px;
+  border-style: solid;
+  border-color: whitesmoke;
+  background-color: white;
+  opacity: 50%;
+  top: 25%;
+  right: 5%;
+  position:absolute;
+  word-wrap: break-word;
+
+  
+}
+
 .diseaseList {
   display: block;
   align-items: left;
@@ -160,6 +177,7 @@
   font-size: 1.25rem;
   line-height: 1.5;
 }
+
 
 .logo {
   height: 1em;
