@@ -8,13 +8,14 @@ import {
   Heading,
   SimpleGrid,
   Text,
+  ChakraProvider,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 const index = (props) => {
   const quiz = JSON.parse(props.quiz);
   const router = useRouter();
-
+  const disease = props.diseaseName;
   const generateQuizCard = (singleQuiz) => {
     return (
       <Box m={3} borderWidth="1px" borderRadius="lg" p={6} boxShadow="xl">
@@ -27,13 +28,23 @@ const index = (props) => {
       </Box>
     );
   };
-
-  return (
+  return quiz.length == 0 ? (
+    <ChakraProvider>
+      <div className="selectionHeader">
+        <button
+          className="backButton custom-btn"
+          onClick={() => router.push(`/disease/${disease}/games`)}
+        >
+          Back
+        </button>
+        <Heading color="white">
+          There are currently no crosswords for {disease}
+        </Heading>
+        <Heading color="white">Check back later!</Heading>
+      </div>
+    </ChakraProvider>
+  ) : (
     <Box>
-      <Head>
-        <title>QuizApp</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <main>
         <header>
           <nav />
@@ -71,6 +82,8 @@ export async function getServerSideProps(context) {
   const snapshot = await axios.get(
     `${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/getAll`
   );
-  return { props: { quiz: JSON.stringify(snapshot.data) } };
+  return {
+    props: { quiz: JSON.stringify(snapshot.data), diseaseName: disease },
+  };
 }
 export default index;

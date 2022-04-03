@@ -1,6 +1,7 @@
 import {
   Box,
   Center,
+  ChakraProvider,
   Container,
   Divider,
   Heading,
@@ -12,20 +13,30 @@ import {
 import axios from "axios";
 import { NextPageContext } from "next";
 import React from "react";
-import Nav from "../../../../components/global/nav";
-import { getAnswer, getSingleQuiz } from "../../../../utils/db";
-
+import { getAnswer, getSingleQuiz } from "../../../../../utils/db";
+import { useRouter } from "next/router";
 const answer = (props) => {
   const quiz = JSON.parse(props.quiz);
   const answer = JSON.parse(props.answer);
-
+  const diseaseName = props.disease;
+  const router = useRouter();
   return (
-    <>
+    <ChakraProvider>
+      <div className="selectionHeader">
+        <button
+          className="backButton custom-btn"
+          onClick={() => router.push(`/quizzes/${diseaseName}`)}
+        >
+          Back
+        </button>
+      </div>
       {quiz && answer && (
-        <Container maxW="3xl" mt={5}>
+        <Container maxW="3xl">
           <Center flexDirection="column">
-            <Heading>Correct Answer for {quiz.title}</Heading>
-            <Text mt={4}>{quiz.description}</Text>
+            <Heading color="white">Correct Answers for {quiz.title}</Heading>
+            <Text color="white" mt={4}>
+              {quiz.description}
+            </Text>
           </Center>
           <Divider
             mt={4}
@@ -84,15 +95,16 @@ const answer = (props) => {
           })}
         </Container>
       )}
-    </>
+    </ChakraProvider>
   );
 };
 
 export async function getServerSideProps(context) {
   const quizId = context.query.id;
+  const diseaseName = context.query.disease;
   const answerId = context.query.answerId;
   const quizData = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${quizId}`
+    `${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${diseaseName}/${quizId}`
   );
   const answerData = await axios.get(
     `${process.env.NEXT_PUBLIC_API_URL}/v1/answer/${answerId}`
@@ -102,6 +114,7 @@ export async function getServerSideProps(context) {
     props: {
       answer: JSON.stringify(answerData.data),
       quiz: JSON.stringify(quizData.data),
+      disease: diseaseName,
     },
   };
 }

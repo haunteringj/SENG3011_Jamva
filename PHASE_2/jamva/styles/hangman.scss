@@ -8,12 +8,13 @@
     margin: auto;
     height: 350px;
     width: 450px;
+    color: white;
     
   }
   
   .figure-container {
     fill: transparent;
-    stroke: rgb(0, 0, 0);
+    stroke: rgb(255, 255, 255);
     stroke-width: 4px;
     stroke-linecap: round;
   }
@@ -59,7 +60,7 @@
   }
   
   .popup-container {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(29, 29, 29, 0.816);
     position: fixed;
     top: 0;
     bottom: 0;
@@ -70,7 +71,9 @@
     align-items: center;
     justify-content: center;
   }
-  
+  .hangman-container{
+    color:white;
+  }
   .popup {
     background: #2980b9;
     border-radius: 5px;
@@ -98,7 +101,7 @@
   }
   
   .notification-container {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.3);
     border-radius: 10px 10px 0 0;
     padding: 15px 20px;
     position: absolute;

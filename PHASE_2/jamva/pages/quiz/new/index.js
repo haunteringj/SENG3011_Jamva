@@ -1,8 +1,10 @@
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
+import axios from "axios";
 import {
   Box,
   Button,
   Center,
+  ChakraProvider,
   Container,
   Divider,
   Flex,
@@ -14,15 +16,15 @@ import {
   SimpleGrid,
   Text,
   Textarea,
+  Heading,
 } from "@chakra-ui/react";
-import { Field, FieldArray, Form, Formik, getIn } from "formik";
+import { Field, FieldArray, Form, Formik, getIn, Select } from "formik";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import nav from "../../../components/global/nav";
 import * as yup from "yup";
 import { addQuizApi } from "../../../utils/service";
-
 const optionData = [
   {
     label: "Option A:",
@@ -57,9 +59,10 @@ const answerOption = [
   },
 ];
 
-const Index = () => {
+const Index = (data) => {
   const router = useRouter();
-
+  const diseases = data["diseases"];
+  console.log(diseases);
   const questionsData = {
     title: "",
     options: [{ title: "" }, { title: "" }, { title: "" }, { title: "" }],
@@ -69,12 +72,14 @@ const Index = () => {
   const initialValues = {
     title: "",
     description: "",
+    disease: "",
     questions: [questionsData],
   };
 
   const validationSchema = yup.object().shape({
     title: yup.string().required("Required"),
     description: yup.string().required("Required"),
+    disease: yup.string().required("Required"),
     questions: yup
       .array()
       .of(
@@ -106,7 +111,7 @@ const Index = () => {
           };
         }),
       };
-      console.log("HERE");
+      console.log(values);
       await addQuizApi(values);
     } catch (error) {
       console.log("error", error);
@@ -114,10 +119,14 @@ const Index = () => {
       actions.setSubmitting(false);
     }
   };
-
   return (
-    <>
-      <nav />
+    <ChakraProvider>
+      <div className="selectionHeader">
+        <button className="backButton custom-btn" onClick={() => router.back()}>
+          Back
+        </button>
+        <Heading color="white">Create a New Quiz</Heading>
+      </div>
       <Container
         maxW="3xl"
         mt={5}
@@ -125,6 +134,7 @@ const Index = () => {
         borderWidth="1px"
         borderRadius="lg"
         p={6}
+        color="white"
         boxShadow="xl"
       >
         <Formik
@@ -163,6 +173,22 @@ const Index = () => {
                     </FormErrorMessage>
                   </FormControl>
                 )}
+              </Field>
+              <Text mb="8px">Disease:</Text>
+              <Field
+                component="select"
+                name="disease"
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  color: "black",
+                }}
+              >
+                {diseases.map((value) => (
+                  <option key={value} value={value}>
+                    {value}
+                  </option>
+                ))}
               </Field>
               <Field name="questions">
                 {({ field }) => (
@@ -249,6 +275,7 @@ const Index = () => {
                                         style={{
                                           width: "100%",
                                           padding: "10px",
+                                          color: "black",
                                         }}
                                       >
                                         {answerOption.map((value, key) => (
@@ -321,8 +348,14 @@ const Index = () => {
           )}
         </Formik>
       </Container>
-    </>
+    </ChakraProvider>
   );
 };
-
+export async function getServerSideProps(context) {
+  const disease = context.query.disease;
+  const snapshot = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/v1/listDiseases`
+  );
+  return { props: { diseases: snapshot.data } };
+}
 export default Index;

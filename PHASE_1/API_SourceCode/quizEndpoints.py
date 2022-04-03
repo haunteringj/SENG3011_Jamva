@@ -1,5 +1,7 @@
 from ast import excepthandler
 from datetime import datetime
+from dis import dis
+from firebase_admin import firestore
 from fastapi.responses import JSONResponse
 
 try:
@@ -21,31 +23,39 @@ def toJsonResponse(statusCode, content):
 
 
 def newQuiz(db, quiz):
+    
     try:
-        query = db.collection("quizzes").add(quiz)
-        print(query)
+        query = db.collection("quizzes").document(quiz["disease"]).get()
+        
+        if query.exists:
+            
+            query = db.collection("quizzes").document(quiz["disease"])
+            query.update({"quizzes": firestore.ArrayUnion([quiz])})
+        else:
+            db.collection("quizzes").document(quiz["disease"]).set({"quizzes":[quiz]})
         return toJsonResponse(200, "Success")
     except:
         return toJsonResponse(500, "Unable to fetch from database")
 
 
-def fetchQuizzes(db):
+def fetchQuizzes(db,disease):
+    print(disease)
     try:
-        query = db.collection("quizzes").get()
+        query = db.collection("quizzes").document(disease).get()
         quizzes = []
-        for quiz in query:
-            dictionary = quiz.to_dict()
-            dictionary["id"] = quiz.id
-            quizzes.append(dictionary)
-
+        if query.exists:
+            quizzes = query.to_dict()["quizzes"]
+        
         return toJsonResponse(200, quizzes)
     except:
         return toJsonResponse(500, "Unable to fetch from database")
 
-def fetchQuiz(db,id):
+def fetchQuiz(db,disease,id):
     try:
-        query = db.collection("quizzes").document(id).get().to_dict()
-
+        
+        query = db.collection("quizzes").document(disease).get().to_dict()
+        print(query)
+        query = query["quizzes"][int(id)]
         return toJsonResponse(200, query)
     except:
         return toJsonResponse(500, "Unable to fetch from database")

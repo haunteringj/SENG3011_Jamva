@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Header from "../../../components/hangman/Header";
 import Figure from "../../../components/hangman/Figure";
 import WrongLetters from "../../../components/hangman/WrongLetters";
 import Word from "../../../components/hangman/Word";
 import Popup from "../../../components/hangman/Popup";
 import Notification from "../../../components/hangman/Notification";
+import { Center, ChakraProvider, Heading } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { showNotification as show, checkWin } from "./helpers/helpers";
-
+var selectedWord = "";
 export default function Hangman(data) {
   const [playable, setPlayable] = useState(true);
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
-  let selectedWord = data["word"];
+  const router = useRouter();
   let words = data["wordList"];
+  let disease = data.diseaseName;
   console.log(words);
   useEffect(() => {
     const handleKeydown = (event) => {
@@ -43,31 +45,64 @@ export default function Hangman(data) {
 
   function playAgain() {
     setPlayable(true);
-
-    // Empty Arrays
     setCorrectLetters([]);
     setWrongLetters([]);
     console.log(words);
     const random = Math.floor(Math.random() * words.length);
+    console.log("random", random);
     selectedWord = words[random];
   }
-  return (
-    <div className="hangman-container">
-      <Header />
-      <div className="game-container">
-        <Figure wrongLetters={wrongLetters} />
-        <WrongLetters wrongLetters={wrongLetters} />
-        <Word selectedWord={selectedWord} correctLetters={correctLetters} />
+  if (selectedWord == "") {
+    selectedWord = data.word;
+  }
+  return selectedWord == "" ? (
+    <ChakraProvider>
+      <div className="selectionHeader">
+        <button
+          className="backButton custom-btn"
+          onClick={() => router.push(`/disease/${disease}/games`)}
+        >
+          Back
+        </button>
+        <Heading color="white">
+          There are currently no words for this hangman!
+        </Heading>
+        <Heading color="white">Check back later!</Heading>
       </div>
-      <Popup
-        correctLetters={correctLetters}
-        wrongLetters={wrongLetters}
-        selectedWord={selectedWord}
-        setPlayable={setPlayable}
-        playAgain={playAgain}
-      />
-      <Notification showNotification={showNotification} />
-    </div>
+    </ChakraProvider>
+  ) : (
+    <ChakraProvider>
+      <div className="hangman-container">
+        <div className="selectionHeader">
+          <button
+            className="backButton custom-btn"
+            onClick={() => router.push(`/disease/${disease}/games`)}
+          >
+            Back
+          </button>
+          <Center>
+            <h1>Hangman</h1>
+          </Center>
+          <Center>
+            <p>Find the hidden word - Enter a letter</p>
+          </Center>
+        </div>
+
+        <div className="game-container">
+          <Figure wrongLetters={wrongLetters} />
+          <WrongLetters wrongLetters={wrongLetters} />
+          <Word selectedWord={selectedWord} correctLetters={correctLetters} />
+        </div>
+        <Popup
+          correctLetters={correctLetters}
+          wrongLetters={wrongLetters}
+          selectedWord={selectedWord}
+          setPlayable={setPlayable}
+          playAgain={playAgain}
+        />
+        <Notification showNotification={showNotification} />
+      </div>
+    </ChakraProvider>
   );
 }
 export async function getServerSideProps(context) {
@@ -75,8 +110,19 @@ export async function getServerSideProps(context) {
   const snapshot = await axios.get(
     `${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/${hangmanId}`
   );
-  let allwords = snapshot.data["words"];
-  console.log(allwords);
-  let selectedWord = allwords[Math.floor(Math.random() * allwords.length)];
-  return { props: { word: selectedWord, wordList: allwords } };
+  let allwords = [];
+  if (snapshot.data != null) {
+    allwords = snapshot.data["words"];
+  }
+  var selectedWord = allwords[Math.floor(Math.random() * allwords.length)];
+
+  return selectedWord == undefined
+    ? { props: { word: "", wordList: allwords, diseaseName: hangmanId } }
+    : {
+        props: {
+          word: selectedWord,
+          wordList: allwords,
+          diseaseName: hangmanId,
+        },
+      };
 }

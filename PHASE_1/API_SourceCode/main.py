@@ -16,7 +16,7 @@ import time
 import datetime
 
 try:
-    from diseaseData import globalData, countryData
+    from diseaseData import *
     from diseasesEndpoints import *
     from articleEndPoints import *
     from userEndPoints import *
@@ -32,7 +32,7 @@ try:
     )
 except:
     from .diseasesEndpoints import *
-    from .diseaseData import globalData, countryData
+    from .diseaseData import *
     from .articleEndPoints import *
     from .userEndPoints import *
     from .quizEndpoints import *
@@ -80,6 +80,7 @@ class questionModel(BaseModel):
 class quizModel(BaseModel):
     title: str
     description: str
+    disease: str
     questions: List[questionModel]
     createdAt: datetime
     updatedAt: datetime
@@ -186,13 +187,13 @@ async def postNewQuiz(quizData: quizModel):
     return newQuiz(db, jsonable_encoder(quizData))
 
 
-@app.get("/v1/quiz/getAll")
-async def getQuizzes():
-    return fetchQuizzes(db)
+@app.get("/v1/quizzes/{disease}/getAll")
+async def getQuizzes(disease):
+    return fetchQuizzes(db,disease)
 
-@app.get("/v1/quiz/{id}")
-async def getQuiz(id):
-    return fetchQuiz(db,id)
+@app.get("/v1/quiz/{disease}/{id}")
+async def getQuiz(disease,id):
+    return fetchQuiz(db,disease,id)
 
 @app.post("/v1/quiz/{id}/answer")
 async def createAnswer(id, questiondata: answerModel):
@@ -213,6 +214,11 @@ async def getCrosswords( id):
 @app.get("/v1/crosswords/{disease}/{id}")
 async def getCrossword(disease, id):
     return fetchCrossword(db,disease, id)
+
+@app.get("/v1/listDiseases")
+async def getAllDiseases():
+    return getDiseases(db)
+
 
 # logger (keeps track of API performance) Runs for each request of the api
 @app.middleware("http")
