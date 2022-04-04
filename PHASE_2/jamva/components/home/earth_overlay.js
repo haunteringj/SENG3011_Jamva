@@ -45,17 +45,17 @@ const TopDiseases = (props) => {
             <Box textAlign="start"
             >
                     <li>
-                    <Link color='blue' href='/user'>
+                    <Link color='blue' href={`/disease/${D1}`}>
                         {D1}
                     </Link>
                     </li>
                     <li>
-                    <Link color='blue' href='/user'>
+                    <Link color='blue' href={`/disease/${D2}`}>
                         {D2}
                     </Link>
                     </li>
                     <li>
-                    <Link color='blue' href='/user'>
+                    <Link color='blue' href={`/disease/${D3}`}>
                         {D3}
                     </Link>
                     </li>
