@@ -35,12 +35,18 @@ const Alerts = () => {
             bg="red.400"
             rounded="md"
             shadow="md"
+            paddingLeft="5px"
+            paddingRight="5px"
+            maxHeight="200px"
+            overflowY="auto"
+            overflowX="auto"
+            className="alert-box"
           >
             {console.log(userValues.alerts)}
             {userValues.alerts.map(alert => (
-              <div className="alert-links" key={alert.article}>
+              <div className="alert-links" key={alert.article} width="100%">
                 <TableContainer>
-                  <Table size="sm">
+                  <Table size="sm" width="100%">
                     <Thead>
                       <Tr>
                         <Th>Diseases</Th>
