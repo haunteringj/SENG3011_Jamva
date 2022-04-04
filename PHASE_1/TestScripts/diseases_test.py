@@ -21,26 +21,16 @@ def test_is_alive():
 
 
 def test_search_success():
-    response = client.get("/v1/diseases/search?disease=fakeDiseaseTest")
+    response = client.get("/v1/diseases/search?disease=fakediseasetest")
     assert response.status_code == 200
     assert response.json() == {
-        "reports": [
-            {
-                "article": {
-                    "main_text": "Bird flu is spreading in Iowa, with the AVIAN INFLUENZA...",
-                    "date_of_publication": "2022-03-08T03:16:48",
-                    "id": 8701648,
-                    "url": "http://english.news.cn/europe/20220312/2be89619e7a24eceb1413aeb5489368b/c.html",
-                    "headline": "AVIAN INFLUENZA (62): AMERICAS (USA) POULTRY",
-                },
-                "cases": 23,
-                "locations": [{"countryName": "testcountry", "id": "AAA"}],
-                "event_date": "2022-03-01T13:00:00",
-            }
+        "syndromes": [
+            "Haemorrhagic Fever",
+            "Acute Flacid Paralysis"
         ],
-        "syndromes": ["Haemorrhagic Fever", "Acute Flacid Paralysis"],
         "diseaseName": "fakediseasetest",
         "id": 123124,
+        "reports": []
     }
 
 
@@ -65,55 +55,74 @@ def test_search_failure():
 
 
 def test_search_location_success():
-    response = client.get("/v1/diseases/search/location?location=AAA")
+    response = client.get("/v1/diseases/searchs/AAA")
     assert response.json() == [
-        {
-            "cases": 23,
-            "locations": [{"countryName": "testcountry", "id": "AAA"}],
-            "event_date": "2022-03-01T13:00:00",
-            "article": {
-                "date_of_publication": "2022-03-08T03:16:48",
-                "headline": "AVIAN INFLUENZA (62): AMERICAS (USA) POULTRY",
-                "url": "http://english.news.cn/europe/20220312/2be89619e7a24eceb1413aeb5489368b/c.html",
-                "id": 8701648,
-                "main_text": "Bird flu is spreading in Iowa, with the AVIAN INFLUENZA...",
-            },
-        },
-        {
-            "article": {
-                "date_of_publication": "2022-03-08T13:00:00",
-                "headline": " COVID-19 update (67): Hong Kong, China, new normal, social determ. health, WHO",
-                "url": "https://promedmail.org/",
-                "id": 123,
-                "main_text": "yeah nah it's covid-19 ya",
-            },
-            "locations": [
-                {"countryName": "australia", "id": "AU"},
-                {"countryName": "testcountry", "id": "AAA"},
-            ],
-            "event_date": "2022-03-06T13:00:00",
-            "cases": 42,
-        },
-        {
-            "locations": [
-                {"id": "AAA", "countryName": "testcountry"},
-                {"countryName": "australia", "id": "AU"},
-            ],
-            "cases": 43,
-            "event_date": "2022-03-02T13:00:00",
-            "article": {
-                "date_of_publication": "2022-03-10T13:00:00",
-                "headline": "Poliomyelitis update (10): Israel (JM) VDPV, RFI",
-                "url": "https://www.foodsafetynews.com/2022/03/cheese-recalled-because-of-link-to-listeria-infections/",
-                "id": 952,
-                "main_text": "yeah nah Poliomyelitis",
-            },
-        },
+  {
+    "cases": 23,
+    "article": {
+      "id": 8701648,
+      "url": "http://english.news.cn/europe/20220312/2be89619e7a24eceb1413aeb5489368b/c.html",
+      "main_text": "Bird flu is spreading in Iowa, with the AVIAN INFLUENZA...",
+      "headline": "AVIAN INFLUENZA (62): AMERICAS (USA) POULTRY",
+      "date_of_publication": "2022-03-08T03:16:48"
+    },
+    "locations": [
+      {
+        "countryName": "testcountry",
+        "id": "AAA"
+      }
+    ],
+    "event_date": "2022-03-01T13:00:00"
+  },
+  {
+    "cases": 42,
+    "event_date": "2022-03-06T13:00:00",
+    "article": {
+      "main_text": "yeah nah it's covid-19 ya",
+      "headline": " COVID-19 update (67): Hong Kong, China, new normal, social determ. health, WHO",
+      "id": 123,
+      "url": "https://promedmail.org/",
+      "date_of_publication": "2022-03-08T13:00:00"
+    },
+    "locations": [
+      {
+        "id": "AU",
+        "countryName": "australia",
+        "users": []
+      },
+      {
+        "countryName": "testcountry",
+        "id": "AAA"
+      }
     ]
+  },
+  {
+    "locations": [
+      {
+        "countryName": "testcountry",
+        "id": "AAA"
+      },
+      {
+        "countryName": "australia",
+        "users": [],
+        "id": "AU"
+      }
+    ],
+    "cases": 43,
+    "article": {
+      "date_of_publication": "2022-03-10T13:00:00",
+      "main_text": "yeah nah Poliomyelitis",
+      "url": "https://www.foodsafetynews.com/2022/03/cheese-recalled-because-of-link-to-listeria-infections/",
+      "id": 952,
+      "headline": "Poliomyelitis update (10): Israel (JM) VDPV, RFI"
+    },
+    "event_date": "2022-03-02T13:00:00"
+  }
+]
 
 
 def test_search_outbreaks_false_input():
-    response = client.get("/v1/diseases/search/location?location=123")
+    response = client.get("/v1/diseases/searchs/123")
     assert response.status_code == 400
     assert (
         response.json()
@@ -122,7 +131,7 @@ def test_search_outbreaks_false_input():
 
 
 def test_search_outbreaks_no_location():
-    response = client.get("/v1/diseases/search/location?location=fabio")
+    response = client.get("/v1/diseases/searchs/fabio")
     assert response.status_code == 404
     assert (
         response.json() == "no diseases was found in that location. You entered:fabio"
