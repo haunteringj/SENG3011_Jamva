@@ -6,15 +6,13 @@ import "../styles/disease.scss";
 import "../styles/hangman.scss";
 function MyApp({ Component, pageProps }) {
   return (
-    <ChakraProvider>
-      <UserWrapper>
-        <div className="main-wrapper">
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </div>
-      </UserWrapper>
-    </ChakraProvider>
+    <UserWrapper>
+      <div className="main-wrapper">
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </div>
+    </UserWrapper>
   );
 }
 
