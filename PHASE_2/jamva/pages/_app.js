@@ -1,3 +1,4 @@
+import { ChakraProvider } from '@chakra-ui/react'
 import Layout from '../components/global/layout'
 import { UserWrapper } from '../context/userState'
 import '../styles/globals.scss'
@@ -6,13 +7,15 @@ import { ChakraProvider } from '@chakra-ui/react'
 function MyApp({ Component, pageProps }) {
   return (
     <ChakraProvider>
-    <UserWrapper>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </UserWrapper>
+      <UserWrapper>
+        <div className="main-wrapper">
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </div>
+      </UserWrapper>
     </ChakraProvider>
   )
 }
 
-export default MyApp
+export default MyApp;

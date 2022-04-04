@@ -1,9 +1,15 @@
 html,
 body {
+  background-color: white;
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  height: 100%;
+}
+
+.chakra-ui-light {
+  background-color: white ;
 }
 
 a {
@@ -11,6 +17,340 @@ a {
   text-decoration: none;
 }
 
+.crosswordContainer {
+  padding-top: 1vh;
+  color:white;
+}
 * {
   box-sizing: border-box;
+}
+
+.main-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.scene-container {
+  width: 100% !important;
+  height: 100% !important;
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.alert-button {
+  position: fixed !important;
+  bottom: 30px;
+  right: 30px;
+  width: 350px !important;
+
+  .button-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+.collapse-alert {
+  width: 350px !important;
+  position: fixed !important;
+  bottom: 80px;
+  right: 30px;
+}
+
+.inner-form {
+  width: 380px;
+  margin-top: 20%;
+  padding: 20px;
+  padding-top: 40px;
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid rgb(33, 33, 33);
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(33, 33, 33);
+
+  .submit-button {
+    position: relative;
+    width: 60%;
+    border-radius: 28px;
+    border: 1px solid #FF4B2B;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: "Arial";
+    height: 40px;
+    background-color: #FF4B2B;
+  }
+
+  .input-select {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border: 1px solid #eee;
+    border-radius: 1.75rem;
+    width: 100%;
+    height: 56px !important;
+    padding: 6px 1.5rem 6px;
+    margin-bottom: 32px;
+    background-color: #eee;
+  }
+
+  .password-input {
+    position: relative;
+
+    .chakra-icon {
+      position: absolute;
+      right: 15px;
+      top: 16px;
+      width: 26px;
+      height: 26px;
+    }
+  }
+}
+
+.alerts-popup {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+
+  .arrow-container {
+    margin-left: 100px;
+    border-radius: 50%;
+    background-color: red;
+    width: 26px;
+    height: 26px;
+
+    .dropdown-arrow {
+      //margin-left: -20px;
+      
+      svg {
+        //margin-bottom: 20px;
+      }
+    }
+  }
+}
+
+.input {
+  border-radius: 28px;
+  font-size: 16px;
+  margin-bottom: 32px;
+  position: relative;
+  display: table;
+  transition: 0.1s ease-in-out;
+  width: 100%;
+
+  &__label {
+    color: black;
+    font-size: inherit;
+    pointer-events: none;
+    position: absolute;
+    top: 16px;
+    // left: rem(16);
+    left: 24px;
+    transition: 0.1s ease-in-out;
+  }
+
+  &__field {
+    border: 1px solid #eee;
+    // border-radius: rem(8);
+    border-radius: 28px;
+    color: black;
+    font-size: inherit;
+    line-height: 1.5em;
+    // padding: rem(22) rem(16) rem(8);
+    padding: 22px 24px 8px;
+    transition: 0.1s ease-in-out;
+    width: 100%;
+    background-color: #eee;
+
+    &:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 56px #e8f2f6 inset;
+    }
+
+    &::placeholder {
+      opacity: 0;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: none;
+      pointer-events: initial;
+      transition: 0.1s ease-in-out;
+      // @include focus-box-shadow($brand-secondary);
+    }
+  }
+
+  &--has-value,
+  &:focus-within {
+    .input__field {
+      border-color: #eee;
+    }
+
+    .input__label {
+      pointer-events: initial;
+      transform-origin: left bottom;
+      transform: translate3d(0, -16px, 0) scale3d(0.75, 0.75, 1);
+    }
+  }
+
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+}
+
+button {
+  margin: 20px;
+  outline: none;
+}
+.custom-btn {
+  
+  padding: 10px 25px;
+  border: 2px solid #2c2c2c;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  background-color: #2c2c2c;
+  color: white;
+}
+
+.selectionBox{
+  background-color: #2c2c2c;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+.selectionBox:hover,
+.selectionBox:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em #c1c1c1;
+  transform: translateY(-0.25em);
+}
+.newItem {
+  width: 25vh;
+  height: 10vh;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  font-size: 100%;
+}
+.btn-games {
+  width: 30vw;
+  height: 30vw;
+  z-index: 2;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  
+  font-size: 200%;
+  
+}
+
+.btn-games:hover,
+.btn-games:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em #c1c1c1;
+  transform: translateY(-0.25em);
+}
+
+.selectionHeader {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 50px;
+  text-align: center;
+  width: 99vw;
+}
+
+.gameHeader{
+  color: white;
+  padding: 30px;
+  width: 99vw;
+}
+
+.buttonIcon {
+  -webkit-filter: invert(1);
+  filter: invert(1);
+  width: 50%;
+}
+.title {
+  font-size: 40px;
+}
+
+.buttonAdd{
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.buttonAdd:after {
+  content: '+';
+  position: absolute;
+  opacity: 0;  
+  top: 12px;
+  right: -10px;
+  color: white;
+  font-size: 90px;
+  transition: 0.5s;
+}
+
+.buttonAdd:hover{
+  padding-right: 30px;
+  padding-left:8px;
+}
+
+.buttonAdd:hover:after {
+  opacity: 1;
+  right: 15px;
+}
+
+.backButton {
+  background-color: #2c2c2c78;
+  width: 5em;
+  height: 3em;
+  border: 1px solid white;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.backButton:after {
+  content: '<<';
+  position: absolute;
+  opacity: 0;  
+  top: 0.7em;
+  left: -5px;
+  color: white;
+  font-size: 1em;
+  transition: 0.5s;
+}
+
+.backButton:hover{
+  padding-right: 8px;
+  padding-left:40px;
+}
+
+.backButton:hover:after {
+  opacity: 1;
+  left: 10px;
+}
+
+.backButton:hover,
+.backButton:focus {
+  box-shadow: 0.5em 0em 1em -0.4em #c1c1c1;
 }

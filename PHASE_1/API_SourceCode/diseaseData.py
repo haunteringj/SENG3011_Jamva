@@ -100,3 +100,13 @@ def countryData(db, countryId):
     country["articles"] = formListOfArticles(country)
 
     return toJsonResponse(200, country)
+
+def getDiseases(db):
+    try:
+        query = db.collection("diseases").get()
+        diseases = []
+        for disease in query:
+            diseases.append(disease.id)
+        return toJsonResponse(200, diseases)
+    except:
+        return toJsonResponse(500, "Unable to fetch from database")

@@ -9,7 +9,6 @@ export default function ReportOverlay({ reports, country }) {
 
   const [visible, setVisible] = react.useState(true)
 
-  console.log(reports);
   
   // react.useEffect(() => {
   //   if (reports !== []) setVisible(true);
@@ -53,10 +52,6 @@ export default function ReportOverlay({ reports, country }) {
         ))}
         </Box>
 
-
-
-
-
         {/* <Box>
               DATE
               <Box as='span' color='gray.600' fontSize='sm'>
@@ -67,8 +62,4 @@ export default function ReportOverlay({ reports, country }) {
       </Box>
     </Box> : null
   )
-
-
-
-
 }

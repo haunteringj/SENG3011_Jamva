@@ -13,7 +13,4 @@ export default function ReportBox({ title, date, id }) {
       </Box>
     </Box>
   );
-
-
-
 }
