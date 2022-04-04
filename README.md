@@ -21,7 +21,7 @@ https://app.swaggerhub.com/apis/Jam35/JamvaReal/1.0.0
 
 ## Run the Project
 To install required libraries:
-1. pip install -r requirement.txt
+1. pip install -r requirements.txt
 
 To run locally:
 1. go into API_SourceCode folder
