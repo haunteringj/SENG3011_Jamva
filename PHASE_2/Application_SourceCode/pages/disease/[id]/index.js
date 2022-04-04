@@ -84,12 +84,12 @@ export async function getServerSideProps(context) {
     `${process.env.NEXT_PUBLIC_API_URL}/v1/diseases/search?disease=${disease_name}`
   );
 
+  let name = snapshot.data["diseaseName"];
   // for elements in API which are incomplete for empty
   if (snapshot.data["syndromes"].length == 0) {
-    return { props: {} };
+    return { props: {diseaseName: name} };
   }
 
-  let name = snapshot.data["diseaseName"];
   let defin = snapshot.data["definition"];
   let synd = snapshot.data["syndromes"];
   let treatmen = snapshot.data["treatment"];
