@@ -22,10 +22,9 @@ export default function disease_info(data) {
             <button class="button"><span>Play a Game!</span></button>
           </Link>
         </div>
-      <h1>{name}</h1>
-         
-
+        <h1>{name}</h1>
       </div>
+      <div class="title"></div>
 
       <div class="row">
         <div class="column middle">            
@@ -46,25 +45,29 @@ export default function disease_info(data) {
         <p>What are the symptoms of {name}?</p>
         <p><small>{syndromes}</small></p>
       </div>
+      <div class="title"></div>
+
 
       <div class="row">
         <div class="column side">            
           <div class="left">
-            <h2>How should we diagnose and treat {name}?</h2>
-            <p>To diagnose, look out for...</p>
-            <p><small>{diagnosis}</small></p>
-            <p>How we treat patients with {name}</p>
-            <p><small>{treatments}</small></p>
+            <div class="spacing">
+
+              <h2>How should we diagnose and treat {name}?</h2>
+              <p>To diagnose, look out for...</p>
+              <p><small>{diagnosis}</small></p>
+              <p>How we treat patients with {name}</p>
+              <p><small>{treatments}</small></p>
             </div>
           </div>
+        </div>
         <div class="column side">
-          <h2>What can we do to prevent {name}?</h2>
-          <p><small>{prevention}</small></p>
+          <div class="spacing">
+            <h2>What can we do to prevent {name}?</h2>
+            <p><small>{prevention}</small></p>
+          </div>
         </div>
       </div>
-
-
-
     </div>
   );
 }
@@ -81,12 +84,17 @@ export async function getServerSideProps(context) {
   }
 
   let name = snapshot.data["diseaseName"];
-  let def = snapshot.data["definition"];
-  let syn = snapshot.data["syndromes"];
-  let treat = snapshot.data["treatment"]; 
-  let diag = snapshot.data["diagnosis"]; 
-  let prevent = snapshot.data["prevention"]; 
+  let defin = snapshot.data["definition"];
+  let synd = snapshot.data["syndromes"];
+  let treatmen = snapshot.data["treatment"]; 
+  let diagnose = snapshot.data["diagnosis"]; 
+  let preventing = snapshot.data["prevention"]; 
 
+  let def = defin.join(". ");
+  let syn = synd.join(". ");
+  let treat = treatmen.join(". ");
+  let diag = diagnose.join(". ");
+  let prevent = preventing.join(". ");
 
   console.log(name);
   return { props: { 
