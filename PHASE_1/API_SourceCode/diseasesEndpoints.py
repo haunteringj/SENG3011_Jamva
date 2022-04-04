@@ -17,7 +17,7 @@ def fetchDiseaseByName(db, disease):
 
     query = []
     try:
-        query = db.collection("diseases").where("diseaseName", "==", disease.lower())
+        query = db.collection("diseases").where("diseaseName", "==", disease)
     except:
         return toJsonResponse(500, "Unable to fetch from database")
 
@@ -26,7 +26,11 @@ def fetchDiseaseByName(db, disease):
             404, f"no diseases was found with that name. You entered:{disease}"
         )
     diseases_info = query.get()[0].to_dict()
-    diseases_info["reports"] = dereferenceReports(diseases_info["reports"])
+    try:
+        diseases_info["reports"].pop()
+    except:
+        print(":)")
+    #diseases_info["reports"] = dereferenceReports(diseases_info["reports"])
     return toJsonResponse(200, diseases_info)
 
 

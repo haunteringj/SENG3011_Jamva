@@ -44,13 +44,10 @@ export default function disease_info(data) {
         <p><small>{syndromes}</small></p>
       </div>
       <div className="title"></div>
-
-
       <div className="row">
         <div className="column side">            
           <div className="left">
             <div className="spacing">
-
               <h2>How should we diagnose and treat {name}?</h2>
               <p>To diagnose, look out for...</p>
               <p><small>{diagnosis}</small></p>
@@ -93,7 +90,6 @@ export async function getServerSideProps(context) {
   let treat = treatmen.join(". ");
   let diag = diagnose.join(". ");
   let prevent = preventing.join(". ");
-
   return { props: { 
     diseaseName: name, 
     definition: def, 

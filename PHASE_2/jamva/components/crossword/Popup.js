@@ -33,4 +33,5 @@ Popup.getInitialProps = async function () {
   console.log(data);
   return { data: data };
 };
+
 export default Popup;
