@@ -1,27 +1,50 @@
+from array import array
+from typing import List
+from datetime import date, datetime
+from tkinter.messagebox import QUESTION
+
 from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from fastapi.encoders import jsonable_encoder
+
+from fastapi.middleware.cors import CORSMiddleware
+
 # import requests
 import time
 import datetime
 
 try:
-  from diseaseData import globalData, countryData
-  from diseasesEndpoints import *
-  from articleEndPoints import *
-  from userEndPoints import *
-  # connect to real database
-  cred = credentials.Certificate("../dataBasePrivateKey.json")
-  firebase_admin.initialize_app(cred, {'projectId': "jamva-real",})
+    from diseaseData import *
+    from diseasesEndpoints import *
+    from articleEndPoints import *
+    from userEndPoints import *
+    from quizEndpoints import *
+
+    # connect to real database
+    cred = credentials.Certificate("../dataBasePrivateKey.json")
+    firebase_admin.initialize_app(
+        cred,
+        {
+            "projectId": "jamva-real",
+        },
+    )
 except:
-  from .diseasesEndpoints import *
-  from .diseaseData import globalData, countryData
-  from .articleEndPoints import *
-  from .userEndPoints import *
-  # connect to test database
-  cred = credentials.Certificate("../testDataBasePrivateKey.json")
-  firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
+    from .diseasesEndpoints import *
+    from .diseaseData import *
+    from .articleEndPoints import *
+    from .userEndPoints import *
+    from .quizEndpoints import *
+
+    # connect to test database
+    cred = credentials.Certificate("../testDataBasePrivateKey.json")
+    firebase_admin.initialize_app(
+        cred,
+        {
+            "projectId": "jamva-4e82e",
+        },
+    )
 
 
 class userCreationModel(BaseModel):
@@ -37,9 +60,50 @@ class userCreationModel(BaseModel):
 class userIdModel(BaseModel):
     uid: str
 
+
+class optionsModel(BaseModel):
+    title: str
+    optionId: str
+
+
+class basicModel(BaseModel):
+    title: str
+
+
+class questionModel(BaseModel):
+    title: str
+    answer: str
+    options: List[optionsModel]
+    questionId: str
+
+
+class quizModel(BaseModel):
+    title: str
+    description: str
+    disease: str
+    questions: List[questionModel]
+    createdAt: datetime
+    updatedAt: datetime
+class keyvalueQuestionModel(BaseModel):
+    questionId: str
+    answerId: str
+class answerModel(BaseModel):
+    questions: List[keyvalueQuestionModel]
+    createdAt: datetime
+    updatedAt: datetime
 db = firestore.client()
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def getApp():
@@ -116,6 +180,44 @@ def fetchByDis(disease):
 @app.get("/v1/articles/search/date")
 def fetchByDate(startDate, endDate=""):
     return fetchByDateArticle(db, startDate, endDate)
+
+
+@app.post("/v1/quiz/create", status_code=status.HTTP_201_CREATED)
+async def postNewQuiz(quizData: quizModel):
+    return newQuiz(db, jsonable_encoder(quizData))
+
+
+@app.get("/v1/quizzes/{disease}/getAll")
+async def getQuizzes(disease):
+    return fetchQuizzes(db,disease)
+
+@app.get("/v1/quiz/{disease}/{id}")
+async def getQuiz(disease,id):
+    return fetchQuiz(db,disease,id)
+
+@app.post("/v1/quiz/{id}/answer")
+async def createAnswer(id, questiondata: answerModel):
+    return addAnswer(db,id, jsonable_encoder(questiondata))
+
+@app.get("/v1/answer/{id}")
+async def getQuiz(id):
+    return fetchAnswer(db,id)
+
+@app.get("/v1/hangman/{id}")
+async def getWords(id):
+    return fetchWords(db,id)
+
+@app.get("/v1/crosswords/{id}/getAll")
+async def getCrosswords( id):
+    return fetchCrosswords(db,id)
+
+@app.get("/v1/crosswords/{disease}/{id}")
+async def getCrossword(disease, id):
+    return fetchCrossword(db,disease, id)
+
+@app.get("/v1/listDiseases")
+async def getAllDiseases():
+    return getDiseases(db)
 
 
 # logger (keeps track of API performance) Runs for each request of the api

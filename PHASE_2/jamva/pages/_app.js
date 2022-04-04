@@ -1,7 +1,7 @@
-import Layout from '../components/global/layout'
-import { UserWrapper } from '../context/userState'
-import '../styles/globals.scss'
-
+import Layout from "../components/global/layout";
+import { UserWrapper } from "../context/userState";
+import "../styles/globals.scss";
+import "../styles/hangman.scss";
 function MyApp({ Component, pageProps }) {
   return (
     <UserWrapper>
@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }) {
         <Component {...pageProps} />
       </Layout>
     </UserWrapper>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;
