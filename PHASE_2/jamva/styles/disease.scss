@@ -28,7 +28,7 @@
   .row {
     display: -webkit-flex;
     display: flex;
-    background-color: 	rgba(245, 239, 239, 0.374);
+    background-color: 	#00285a84;
     padding-left: 5%;
 
 
@@ -106,6 +106,17 @@
 
   h1 {
     margin: 0;
+    color: white;
+  }
+
+  h2 {
+    color: white;
+
+  }
+
+  p {
+    color: white;
+
   }
 
   .title {
@@ -114,4 +125,14 @@
 
   .spacing {
         text-align: center;
+  }
+
+  .colour {
+    background-color: #ffffff;
+
+  }
+
+  .scroll {
+    overflow-x: hidden;
+    width: 100%;
   }

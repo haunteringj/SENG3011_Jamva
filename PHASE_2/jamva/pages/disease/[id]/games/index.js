@@ -6,7 +6,7 @@ const index = () => {
   const router = useRouter();
   const { id } = router.query;
   return (
-    <ChakraProvider>
+    <ChakraProvider className="scroll">
       <div>
         <div className="gameHeader">
           <button
