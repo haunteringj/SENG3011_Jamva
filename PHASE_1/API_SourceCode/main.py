@@ -16,6 +16,7 @@ import time
 import datetime
 
 try:
+
     from diseaseData import *
     from diseasesEndpoints import *
     from articleEndPoints import *
@@ -45,7 +46,6 @@ except:
             "projectId": "jamva-4e82e",
         },
     )
-
 
 class userCreationModel(BaseModel):
     email: str
@@ -136,12 +136,12 @@ def getUser(uid: str):
 
 
 # Disease endpoints
-@app.get("/v1/diseases/search")
+@app.get("/v1/diseases/{search}")
 def fetchDiseaseName(disease):
     return fetchDiseaseByName(db, disease)
 
 
-@app.get("/v1/diseases/search/location")
+@app.get("/v1/diseases/searchs/{location}")
 def fetchDiseaseLocation(location):
     return fetchDiseaseByLocation(db, location)
 
@@ -181,6 +181,9 @@ def fetchByDis(disease):
 def fetchByDate(startDate, endDate=""):
     return fetchByDateArticle(db, startDate, endDate)
 
+@app.get("/v1/hangman/{id}")
+async def getWords(id):
+    return fetchWords(db,id)
 
 @app.post("/v1/quiz/create", status_code=status.HTTP_201_CREATED)
 async def postNewQuiz(quizData: quizModel):

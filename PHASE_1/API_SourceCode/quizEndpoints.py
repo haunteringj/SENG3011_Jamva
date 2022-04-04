@@ -33,6 +33,7 @@ def newQuiz(db, quiz):
             query.update({"quizzes": firestore.ArrayUnion([quiz])})
         else:
             db.collection("quizzes").document(quiz["disease"]).set({"quizzes":[quiz]})
+
         return toJsonResponse(200, "Success")
     except:
         return toJsonResponse(500, "Unable to fetch from database")
@@ -104,4 +105,5 @@ def fetchCrosswords(db,id):
 
         return toJsonResponse(200, crosswords)
     except:
+
         return toJsonResponse(500, "Unable to fetch from database")
