@@ -11,6 +11,151 @@ a {
   text-decoration: none;
 }
 
+.crosswordContainer {
+  padding-top: 1vh;
+  color:white;
+}
 * {
   box-sizing: border-box;
+}
+button {
+  margin: 20px;
+  outline: none;
+}
+.custom-btn {
+  
+  padding: 10px 25px;
+  border: 2px solid #2c2c2c;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  background-color: #2c2c2c;
+  color: white;
+}
+
+.selectionBox{
+  background-color: #2c2c2c;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+.selectionBox:hover,
+.selectionBox:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em #c1c1c1;
+  transform: translateY(-0.25em);
+}
+.newItem {
+  width: 25vh;
+  height: 10vh;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  font-size: 100%;
+}
+.btn-games {
+  width: 30vw;
+  height: 30vw;
+  z-index: 2;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  
+  font-size: 200%;
+  
+}
+
+.btn-games:hover,
+.btn-games:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em #c1c1c1;
+  transform: translateY(-0.25em);
+}
+
+.selectionHeader {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 50px;
+  text-align: center;
+  width: 99vw;
+}
+
+.gameHeader{
+  color: white;
+  padding: 30px;
+  width: 99vw;
+}
+
+.buttonIcon {
+  -webkit-filter: invert(1);
+  filter: invert(1);
+  width: 50%;
+}
+.title {
+  font-size: 40px;
+}
+
+.buttonAdd{
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.buttonAdd:after {
+  content: '+';
+  position: absolute;
+  opacity: 0;  
+  top: 12px;
+  right: -10px;
+  color: white;
+  font-size: 90px;
+  transition: 0.5s;
+}
+
+.buttonAdd:hover{
+  padding-right: 30px;
+  padding-left:8px;
+}
+
+.buttonAdd:hover:after {
+  opacity: 1;
+  right: 15px;
+}
+
+.backButton {
+  background-color: #2c2c2c78;
+  width: 5em;
+  height: 3em;
+  border: 1px solid white;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.backButton:after {
+  content: '<<';
+  position: absolute;
+  opacity: 0;  
+  top: 0.7em;
+  left: -5px;
+  color: white;
+  font-size: 1em;
+  transition: 0.5s;
+}
+
+.backButton:hover{
+  padding-right: 8px;
+  padding-left:40px;
+}
+
+.backButton:hover:after {
+  opacity: 1;
+  left: 10px;
+}
+
+.backButton:hover,
+.backButton:focus {
+  box-shadow: 0.5em 0em 1em -0.4em #c1c1c1;
 }

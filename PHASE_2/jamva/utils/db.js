@@ -13,4 +13,5 @@ export const getSingleQuiz = async (quizId) => {
     .get();
   const quizData = snapshot.exists ? JSON.stringify(snapshot.data()) : null;
   return quizData;
+
 };
