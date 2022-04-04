@@ -31,8 +31,6 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.8",
-    "eslint": "8.11.0",
-    "eslint-config-next": "12.1.0"
+    "@babel/core": "^7.17.8"
   }
 }

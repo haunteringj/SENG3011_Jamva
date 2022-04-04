@@ -9,7 +9,7 @@ export const addQuizApi = async (values) => {
       };
   
       const resp = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/`,
+        `https://3.106.142.227/v1/quiz/`,
         requestOptions
       );
       return resp;

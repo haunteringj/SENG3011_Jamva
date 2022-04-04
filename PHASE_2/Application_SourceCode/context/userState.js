@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export const userContext = createContext(null);
 
-const INITIAL_USER_STATE = {
+export const INITIAL_USER_STATE = {
   alerts: [],
   username: "",
   email: "",

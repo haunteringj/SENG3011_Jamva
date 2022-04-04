@@ -8,7 +8,7 @@ const TopDiseases = (props) => {
   const [data, setData] = useState([]);
   // load from backend api the top dieseases in the continent
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/v1/top5Dieseases?continent=" + props.continent)
+    fetch("https://3.106.142.227/v1/top5Dieseases?continent=" + props.continent)
       .then((result) => result.json())
       .then((json) => {
         setData(json);

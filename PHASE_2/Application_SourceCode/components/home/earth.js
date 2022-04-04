@@ -5,7 +5,8 @@ import axios from 'axios';
 import styles from '../../styles/Home.module.scss'
 import ReportOverlay from './report_overlay';
 import dynamic from 'next/dynamic'
-import { Box } from '@chakra-ui/react';
+import { Alert, Box } from '@chakra-ui/react';
+import Alerts from '../users/alerts';
 
 
 
@@ -109,7 +110,7 @@ function Earth() {
             <ReportOverlay reports={c[latestCountry]} country={latestCountry.toUpperCase()} />
           </div>
           : null}
-
+        <Alerts />
       </div>
   )
 };

@@ -1,10 +1,19 @@
 import Link from "next/link"
 import navStyles from "../../styles/Nav.module.scss"
 import { useContext } from "react";
-import { userContext } from "../../context/userState";
+import { userContext, INITIAL_USER_STATE } from "../../context/userState";
+import { useRouter } from "next/router";
+import app, { auth } from "../../services/firebase";
 
 const Nav = () => {
   const { userValues, setUserValues } = useContext(userContext);
+  const router = useRouter();
+
+  const signOutUser = async () => {
+    await auth.signOut();
+    setUserValues(INITIAL_USER_STATE)
+    router.push("/");
+  }
 
   return (
     <nav className={navStyles.nav}>
@@ -14,9 +23,21 @@ const Nav = () => {
         </li>
 
         {(userValues.userId != "") ? (
-        <li>
-            <Link href="/user">Account</Link>
-        </li>
+        <>
+          <li>
+            <div
+              className="signout-button"
+              onClick={() => {
+                signOutUser();
+              }}
+            >
+                Signout
+            </div>
+          </li>
+          <li>
+              <Link href="/user">Account</Link>
+          </li>
+        </>
         ) : (
         <>
           <li>

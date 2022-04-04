@@ -14,7 +14,7 @@ const Word = ({ selectedWord, correctLetters }) => {
   );
 };
 Word.getInitialProps = async function () {
-  const res = await fetch("http://localhost:3000/hangman");
+  const res = await fetch("https://jamva-front.vercel.app/hangman");
   const data = await res.json();
   console.log(data);
   return { data: data };

@@ -133,7 +133,7 @@ export async function getServerSideProps(context) {
   const quizId = context.query.id;
   const diseaseName = context.query.disease;
   const snapshot = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${diseaseName}/${quizId}`
+    `https://3.106.142.227/v1/quiz/${diseaseName}/${quizId}`
   );
   return {
     props: {

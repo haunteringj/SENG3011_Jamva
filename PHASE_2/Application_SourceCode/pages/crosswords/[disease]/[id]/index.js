@@ -6,9 +6,12 @@ import Popup from "../../../../components/crossword/Popup";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Center } from "@chakra-ui/react";
 import { ThemeProvider } from "styled-components";
+import { useRouter } from "next/router";
 const index = (passed) => {
+  const router = useRouter();
   const data = passed["crossword"];
   const [done, setDone] = useState(false);
+  const disease = passed.diseaseName;
 
   function finished() {
     console.log("DONE");
@@ -52,8 +55,8 @@ export async function getServerSideProps(context) {
   const crosswordId = context.query.id;
 
   const snapshot = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/${crosswordId}`
+    `https://3.106.142.227/v1/crosswords/${disease}/${crosswordId}`
   );
-  return { props: { crossword: snapshot.data } };
+  return { props: { crossword: snapshot.data, diseaseName: disease } };
 }
 export default index;

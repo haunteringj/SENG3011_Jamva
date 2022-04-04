@@ -99,7 +99,7 @@ export async function getServerSideProps(context) {
   const disease = context.query.disease;
   console.log(disease);
   const snapshot = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/getAll`
+    `https://3.106.142.227/v1/crosswords/${disease}/getAll`
   );
   return {
     props: { quiz: JSON.stringify(snapshot.data), diseaseName: disease },

@@ -81,7 +81,7 @@ export default function disease_info(data) {
 export async function getServerSideProps(context) {
   const disease_name = context.query.id;
   const snapshot = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/diseases/search?disease=${disease_name}`
+    `https://3.106.142.227/v1/diseases/search?disease=${disease_name}`
   );
 
   let name = snapshot.data["diseaseName"];

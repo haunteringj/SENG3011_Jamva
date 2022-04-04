@@ -104,10 +104,10 @@ export async function getServerSideProps(context) {
   const diseaseName = context.query.disease;
   const answerId = context.query.answerId;
   const quizData = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${diseaseName}/${quizId}`
+    `https://3.106.142.227/v1/quiz/${diseaseName}/${quizId}`
   );
   const answerData = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/answer/${answerId}`
+    `https://3.106.142.227/v1/answer/${answerId}`
   );
   console.log(answerData.data);
   return {

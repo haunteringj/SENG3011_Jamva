@@ -3,7 +3,7 @@ export const addQuizApi = async (values) => {
   try {
     console.log(values);
     const resp = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/create`,
+      `https://3.106.142.227/v1/quiz/create`,
       values
     );
     console.log(resp);
@@ -20,7 +20,7 @@ export const addAnswerApi = async (quizId, values) => {
     };
     console.log("ADDED", values);
     const resp = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${quizId}/answer`,
+      `https://3.106.142.227/v1/quiz/${quizId}/answer`,
       {
         questions: values,
         createdAt: new Date(),

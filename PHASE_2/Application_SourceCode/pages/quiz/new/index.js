@@ -354,7 +354,7 @@ const Index = (data) => {
 export async function getServerSideProps(context) {
   const disease = context.query.disease;
   const snapshot = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/listDiseases`
+    `https://3.106.142.227/v1/listDiseases`
   );
   return { props: { diseases: snapshot.data } };
 }

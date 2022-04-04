@@ -7,7 +7,7 @@ import Popup from "../../../components/hangman/Popup";
 import Notification from "../../../components/hangman/Notification";
 import { Center, ChakraProvider, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { showNotification as show, checkWin } from "./helpers/helpers";
+import { showNotification as show, checkWin } from "../../../utils/helpers/helpers";
 var selectedWord = "";
 export default function Hangman(data) {
   const [playable, setPlayable] = useState(true);
@@ -117,7 +117,7 @@ export default function Hangman(data) {
 export async function getServerSideProps(context) {
   const hangmanId = context.query.id;
   const snapshot = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/${hangmanId}`
+    `https://3.106.142.227/v1/hangman/${hangmanId}`
   );
   let allwords = [];
   if (snapshot.data != null) {

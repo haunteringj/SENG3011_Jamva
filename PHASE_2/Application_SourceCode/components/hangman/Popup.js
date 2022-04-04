@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { checkWin } from "../../pages/hangman/[id]/helpers/helpers";
+import { checkWin } from "../../utils/helpers/helpers";
 
 const Popup = ({
   correctLetters,
@@ -39,7 +39,7 @@ const Popup = ({
   );
 };
 Popup.getInitialProps = async function () {
-  const res = await fetch("http://localhost:3000/hangman");
+  const res = await fetch("https://jamva-front.vercel.app/hangman");
   const data = await res.json();
   console.log(data);
   return { data: data };
