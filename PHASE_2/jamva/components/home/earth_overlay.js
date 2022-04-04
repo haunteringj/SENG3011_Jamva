@@ -1,18 +1,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link"
 import styles from '../../styles/Home.module.scss'
+import { Box } from "@chakra-ui/react";
 
 // receives a continent and a list of dieseases and prints then out
 const TopDiseases = (props) => {
 
     const [data, setData] = useState([]);
-
-    // process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-    // const https = require("https");
-    // const agent = new https.Agent({
-    // rejectUnauthorized: false
-    // })
-
     // load from backend api the top dieseases in the continent
     useEffect(() => {
         fetch("http://127.0.0.1:8000/v1/top5Dieseases?continent=" + props.continent)
@@ -29,13 +23,28 @@ const TopDiseases = (props) => {
 
     // return component
     return (
-        <div>
-            <h> <b>{props.continent}'s Top Dieseases</b></h>
-            <body>
-            <div className={styles.diseaseList}>
-                <ol>
+        <Box display="flex" padding={"5px"} flexDir="column" w="200px" h="230px" borderWidth='1px' borderRadius='lg' opacity={0.7} backgroundColor={'whitesmoke'} >
+            <Box
+                mt='1'
+                fontWeight='Bold'
+                fontSize={20}
+                as='h1'
+                lineHeight='tight'
+                isTruncated
+                textAlign="center"
+            >
+                {props.continent}
+            </Box>
+            <Box textAlign={'center'}
+                fontWeight='Bold'
+                fontSize={20}
+                as='h1'
+                lineHeight='tight'
+            >
+                Top Diseases
+            <Box textAlign="start">
                     <li>
-                    <Link href="/user">{D1}</Link>
+                    <Link  href="/user">{D1}</Link>
                     </li>
                     <li>
                     <Link href="/user">{D2}</Link>
@@ -43,10 +52,9 @@ const TopDiseases = (props) => {
                     <li>
                     <Link href="/user">{D3}</Link>
                     </li>
-                </ol>
-                </div>
-            </body>
-        </div>
+                </Box>
+            </Box>
+        </Box>
     )
 }
 

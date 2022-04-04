@@ -1,0 +1,137 @@
+.split {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  
+  /* Control the left side */
+  .left {
+    text-align: left;  
+}
+  
+  /* Control the right side */
+  .right {
+    text-align: left;  
+  }
+  
+  /* If you want the content centered horizontally and vertically */
+  .centered {
+    text-align: center;
+  }
+
+
+  .row {
+    display: -webkit-flex;
+    display: flex;
+    background-color: 	rgba(24, 52, 97, 0.567);
+    padding-left: 5%;
+
+
+
+  }
+  /* Create three unequal columns that sits next to each other */
+.column {
+    padding: 10px;
+  }
+  
+  /* Left and right column */
+  .column.side {
+     -webkit-flex: 1;
+     -ms-flex: 1;
+     flex: 1;
+     
+  }
+  
+  /* Middle column */
+  .column.middle {
+    -webkit-flex: 2;
+    -ms-flex: 2;
+    flex: 2;
+  }
+
+  .image{
+	content:url("https://media.springernature.com/w580h326/nature-cms/uploads/collections/Microbiology_and_infectious_diseases-58db67bcc665cc7d52151b5713608a54.jpg");
+}
+
+.button {
+    display: inline-block;
+    border-radius: 4px;
+    background-color: 	rgba(40, 102, 126, 0.574);
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 28px;
+    padding: 20px;
+    width: 300px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+
+  }
+  
+  .button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+  .button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+  
+  .button:hover span {
+    padding-right: 25px;
+  }
+  
+  .button:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
+
+  .align-right {
+    text-align: right;
+    border: 0;
+  }
+
+  h1 {
+    margin: 0;
+    color: white;
+  }
+
+  h2 {
+    color: white;
+
+  }
+
+  p {
+    color: white;
+
+  }
+
+  .title {
+    padding: 20px;
+  }
+
+  .spacing {
+        text-align: center;
+  }
+
+  .colour {
+    background-color: #ffffff;
+
+  }
+
+  .scroll {
+    overflow-x: hidden;
+    width: 100%;
+  }

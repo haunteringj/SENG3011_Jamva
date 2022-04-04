@@ -11,36 +11,34 @@
 }
 
 .earth {
-  z-index: 0;
-  position: relative;
   width: 100%;
   height: 100%;
 }
 
 .overlay {
-  width: 22%;
+  display: flex;
   z-index: 1;
-  border-width: 2px;
-  border-radius: 10px;
-  border-style: solid;
-  border-color: whitesmoke;
-  background-color: white;
-  opacity: 50%;
   top: 10%;
-  left: 5%;
+  right: 5%;
   position:absolute;
-  text-align: center;
+}
+
+.reportOverlay {
+  z-index: 1;
+  bottom: 20%;
+  right: 5%;
+  position:absolute;
 }
 
 .diseaseList {
-  display: block;
+  display: flex;
   align-items: left;
 }
 
 .diseaseList ol {
   display:block;
   float:left;
-  justify-content: left;
+  justify-content: right;
   text-decoration: underline;
   align-items: left;
   text-align: left;
@@ -52,25 +50,12 @@
 }
 
 .sidebar {
-  max-width: 20%;
   z-index: 1;
-  border-width: 2px;
-  border-radius: 10px;
-  border-style: solid;
-  border-color: whitesmoke;
-  background-color: white;
-  opacity: 50%;
   top: 10%;
   right: 5%;
   position:absolute;
-  text-align: center;
 }
 
-.sidebar body {
-  text-align: left;
-  font-size: large;
-  white-space: pre;
-}
 
 .footer {
   display: flex;
@@ -162,6 +147,7 @@
   font-size: 1.25rem;
   line-height: 1.5;
 }
+
 
 .logo {
   height: 1em;

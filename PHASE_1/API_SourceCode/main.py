@@ -14,8 +14,8 @@ try:
   from userEndPoints import *
   from frontendPoints import *
   # connect to real database
-  cred = credentials.Certificate("../testDataBasePrivateKey.json")
-  firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
+  cred = credentials.Certificate("../dataBasePrivateKey.json")
+  firebase_admin.initialize_app(cred, {'projectId': "jamva-real",})
 except:
   from .diseasesEndpoints import *
   from .diseaseData import globalData, countryData
