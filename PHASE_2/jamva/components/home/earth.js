@@ -107,7 +107,7 @@ function Earth() {
 
         {latestCountry !== "World" && latestCountry in c ?
           <div className={styles.reportOverlay}>           
-            <ReportOverlay reports={c[latestCountry]} />
+            <ReportOverlay reports={c[latestCountry]} country={latestCountry.toUpperCase()} />
           </div>
           : null}
 
