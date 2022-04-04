@@ -4,13 +4,58 @@
 
 .main {
   min-height: 100vh;
-  padding: 4rem 0;
+  // padding: 4rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
+
+.earth {
+  width: 100%;
+  height: 100%;
+}
+
+.overlay {
+  display: flex;
+  z-index: 1;
+  top: 10%;
+  right: 5%;
+  position:absolute;
+}
+
+.reportOverlay {
+  z-index: 1;
+  bottom: 20%;
+  right: 5%;
+  position:absolute;
+}
+
+.diseaseList {
+  display: flex;
+  align-items: left;
+}
+
+.diseaseList ol {
+  display:block;
+  float:left;
+  justify-content: right;
+  text-decoration: underline;
+  align-items: left;
+  text-align: left;
+}
+
+.diseaseList ol li a {
+  margin: 5px 15px;
+  color: blue
+}
+
+.sidebar {
+  z-index: 1;
+  top: 10%;
+  right: 5%;
+  position:absolute;
+}
+
 
 .footer {
   display: flex;
@@ -102,6 +147,7 @@
   font-size: 1.25rem;
   line-height: 1.5;
 }
+
 
 .logo {
   height: 1em;

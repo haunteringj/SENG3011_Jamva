@@ -21,4 +21,6 @@ WrongLetters.getInitialProps = async function () {
   const data = await res.json();
   return { wrongLetters: data };
 };
+
 export default WrongLetters;
+

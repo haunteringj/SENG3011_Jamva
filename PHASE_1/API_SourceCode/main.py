@@ -7,6 +7,7 @@ from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+
 from fastapi.encoders import jsonable_encoder
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,7 +17,6 @@ import time
 import datetime
 
 try:
-
     from diseaseData import *
     from diseasesEndpoints import *
     from articleEndPoints import *
@@ -51,7 +51,7 @@ class userCreationModel(BaseModel):
     email: str
     country: str
     username: str
-    state: str
+    state: str = None
     city: str = None
     password: str
     age: int = None
@@ -59,7 +59,6 @@ class userCreationModel(BaseModel):
 
 class userIdModel(BaseModel):
     uid: str
-
 
 class optionsModel(BaseModel):
     title: str
@@ -91,9 +90,29 @@ class answerModel(BaseModel):
     questions: List[keyvalueQuestionModel]
     createdAt: datetime
     updatedAt: datetime
+
 db = firestore.client()
 
 app = FastAPI()
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 origins = ["*"]
 
@@ -122,6 +141,7 @@ def searchDiseaseReport(startDate, endDate, location, keyTerm=""):
 
 @app.post("/v1/users/create", status_code=status.HTTP_201_CREATED)
 def createUser(user: userCreationModel):
+    print("hello")
     return createUserEntry(db, user)
 
 
@@ -181,6 +201,10 @@ def fetchByDis(disease):
 def fetchByDate(startDate, endDate=""):
     return fetchByDateArticle(db, startDate, endDate)
 
+@app.get("/v1/top5Dieseases")
+def fetchTopDieseasesContinent(continent):
+    return fetchTopDieseases(db, continent)
+
 @app.get("/v1/hangman/{id}")
 async def getWords(id):
     return fetchWords(db,id)
@@ -188,7 +212,6 @@ async def getWords(id):
 @app.post("/v1/quiz/create", status_code=status.HTTP_201_CREATED)
 async def postNewQuiz(quizData: quizModel):
     return newQuiz(db, jsonable_encoder(quizData))
-
 
 @app.get("/v1/quizzes/{disease}/getAll")
 async def getQuizzes(disease):
@@ -221,7 +244,6 @@ async def getCrossword(disease, id):
 @app.get("/v1/listDiseases")
 async def getAllDiseases():
     return getDiseases(db)
-
 
 # logger (keeps track of API performance) Runs for each request of the api
 @app.middleware("http")
@@ -301,3 +323,4 @@ def ipToLocation(ip):
     result = json.loads(result)
 
     return result["country_name"] + ", " + result["city"]
+

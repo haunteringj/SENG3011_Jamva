@@ -12,47 +12,42 @@ export default function disease_info(data) {
   let diagnosis = data["diagnosis"];
   let prevention = data["prevention"]
 
-  console.log(name);
-
   return (
     <div>
-      <div class="centered">
-        <div class="align-right">
+      <div className="centered">
+        <div className="align-right">
           <Link href={`/disease/${name}/games`}>
-            <button class="button"><span>Play a Game!</span></button>
+            <button className="button"><span>Play a Game!</span></button>
           </Link>
         </div>
         <h1>{name}</h1>
       </div>
-      <div class="title"></div>
+      <div className="title"></div>
 
-      <div class="row">
-        <div class="column middle">            
-          <div class="left">
+      <div className="row">
+        <div className="column middle">            
+          <div className="left">
               <h2>Overview</h2>
               <p>What is {name}?</p>
               <p><small>{definition}</small></p>
             </div>
           </div>
-        <div class="column side">
-          <img class="image"/>
+        <div className="column side">
+          <img className="image"/>
         </div>
       </div>
 
 
-      <div class="centered">
+      <div className="centered">
         <h2>Syndromes</h2>
         <p>What are the symptoms of {name}?</p>
         <p><small>{syndromes}</small></p>
       </div>
-      <div class="title"></div>
-
-
-      <div class="row">
-        <div class="column side">            
-          <div class="left">
-            <div class="spacing">
-
+      <div className="title"></div>
+      <div className="row">
+        <div className="column side">            
+          <div className="left">
+            <div className="spacing">
               <h2>How should we diagnose and treat {name}?</h2>
               <p>To diagnose, look out for...</p>
               <p><small>{diagnosis}</small></p>
@@ -61,8 +56,8 @@ export default function disease_info(data) {
             </div>
           </div>
         </div>
-        <div class="column side">
-          <div class="spacing">
+        <div className="column side">
+          <div className="spacing">
             <h2>What can we do to prevent {name}?</h2>
             <p><small>{prevention}</small></p>
           </div>
@@ -95,8 +90,6 @@ export async function getServerSideProps(context) {
   let treat = treatmen.join(". ");
   let diag = diagnose.join(". ");
   let prevent = preventing.join(". ");
-
-  console.log(name);
   return { props: { 
     diseaseName: name, 
     definition: def, 

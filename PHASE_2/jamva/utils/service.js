@@ -33,3 +33,4 @@ export const addAnswerApi = async (quizId, values) => {
     throw error;
   }
 };
+
