@@ -32,13 +32,11 @@ def toJsonResponse(statusCode, body):
 
 
 def createUserEntry(db, userInfo: userCreationModel):
-    print("hello2")
     try:
         user = auth.create_user(
             email=userInfo.email,
             password=userInfo.password
         )
-        print("hello4")
         successResponse = {"status": "success", "uid": user.uid}
         createUserDetail = {
             "username": userInfo.username,
