@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Center, ChakraProvider, Heading } from "@chakra-ui/react";
 import Link from "next/link";
-import "../../../styles/disease.css";
 export default function disease_info(data) {
   let name = data["diseaseName"];
   let definition = data["definition"];
@@ -21,16 +20,16 @@ export default function disease_info(data) {
             </button>
           </Link>
         </div>
-        <h1>{name}</h1>
+        <h1 className="white">{name}</h1>
       </div>
       <div className="title"></div>
 
       <div className="row">
         <div className="column middle">
           <div className="left">
-            <h2>Overview</h2>
-            <p>What is {name}?</p>
-            <p>
+            <h2 className="white">Overview</h2>
+            <p className="white">What is {name}?</p>
+            <p className="white">
               <small>{definition}</small>
             </p>
           </div>
@@ -41,9 +40,9 @@ export default function disease_info(data) {
       </div>
 
       <div className="centered">
-        <h2>Syndromes</h2>
-        <p>What are the symptoms of {name}?</p>
-        <p>
+        <h2 className="white">Syndromes</h2>
+        <p className="white">What are the symptoms of {name}?</p>
+        <p className="white">
           <small>{syndromes}</small>
         </p>
       </div>
@@ -52,13 +51,15 @@ export default function disease_info(data) {
         <div className="column side">
           <div className="left">
             <div className="spacing">
-              <h2>How should we diagnose and treat {name}?</h2>
-              <p>To diagnose, look out for...</p>
-              <p>
+              <h2 className="white">
+                How should we diagnose and treat {name}?
+              </h2>
+              <p className="white">To diagnose, look out for...</p>
+              <p className="white">
                 <small>{diagnosis}</small>
               </p>
-              <p>How we treat patients with {name}</p>
-              <p>
+              <p className="white">How we treat patients with {name}</p>
+              <p className="white">
                 <small>{treatments}</small>
               </p>
             </div>
@@ -66,8 +67,8 @@ export default function disease_info(data) {
         </div>
         <div className="column side">
           <div className="spacing">
-            <h2>What can we do to prevent {name}?</h2>
-            <p>
+            <h2 className="white">What can we do to prevent {name}?</h2>
+            <p className="white">
               <small>{prevention}</small>
             </p>
           </div>
