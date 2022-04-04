@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import Link from "next/link"
+// import Link from "next/link"
 import styles from '../../styles/Home.module.scss'
-import { Box } from "@chakra-ui/react";
+import { Box, Link  } from "@chakra-ui/react";
 
 // receives a continent and a list of dieseases and prints then out
 const TopDiseases = (props) => {
@@ -42,15 +42,22 @@ const TopDiseases = (props) => {
                 lineHeight='tight'
             >
                 Top Diseases
-            <Box textAlign="start">
+            <Box textAlign="start"
+            >
                     <li>
-                    <Link  href="/user">{D1}</Link>
+                    <Link color='blue' href='/user'>
+                        {D1}
+                    </Link>
                     </li>
                     <li>
-                    <Link href="/user">{D2}</Link>
+                    <Link color='blue' href='/user'>
+                        {D2}
+                    </Link>
                     </li>
                     <li>
-                    <Link href="/user">{D3}</Link>
+                    <Link color='blue' href='/user'>
+                        {D3}
+                    </Link>
                     </li>
                 </Box>
             </Box>

@@ -202,8 +202,12 @@ def fetchByDate(startDate, endDate=""):
     return fetchByDateArticle(db, startDate, endDate)
 
 @app.get("/v1/top5Dieseases")
-def fetchTopDieseasesContinent(continent):
-    return fetchTopDieseases(db, continent)
+def fetchTopDiseasesContinent(continent):
+    return fetchTopDiseases(db, continent)
+
+@app.get("/v1/latestReports")
+def getLatestReps():
+    return getLatestReports(db)
 
 @app.get("/v1/hangman/{id}")
 async def getWords(id):
