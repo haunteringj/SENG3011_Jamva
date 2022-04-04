@@ -20,7 +20,7 @@ export default function ReportOverlay({ reports, country }) {
 
   return (visible ?
 
-    <Box display="flex" flexDir="column" overflowY="scroll" w='sm' h='sm' borderWidth='1px' borderRadius='lg' opacity={0.5} overflow='hidden' backgroundColor={'whitesmoke'}>
+    <Box display="flex" flexDir="column" overflowY="scroll" w='sm' h='sm' borderWidth='1px' borderRadius='lg' opacity={0.7} overflow='hidden' backgroundColor={'whitesmoke'}>
       <Box p='3'>
         <Box
           mt='1'
