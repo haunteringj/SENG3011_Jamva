@@ -1,7 +1,6 @@
 from array import array
 from typing import List
 from datetime import date, datetime
-from tkinter.messagebox import QUESTION
 
 from fastapi import FastAPI, status, Request
 import firebase_admin
@@ -22,7 +21,7 @@ try:
     from articleEndPoints import *
     from userEndPoints import *
     from quizEndpoints import *
-
+    from frontendPoints import *
     # connect to real database
     cred = credentials.Certificate("../dataBasePrivateKey.json")
     firebase_admin.initialize_app(
@@ -32,6 +31,7 @@ try:
         },
     )
 except:
+    from .frontendPoints import *
     from .diseasesEndpoints import *
     from .diseaseData import *
     from .articleEndPoints import *
