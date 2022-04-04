@@ -23,7 +23,7 @@ const TopDiseases = (props) => {
 
     // return component
     return (
-        <Box display="flex" padding={"5px"} flexDir="column" w="200px" h="230px" borderWidth='1px' borderRadius='lg' opacity={0.5} backgroundColor={'whitesmoke'} >
+        <Box display="flex" padding={"5px"} flexDir="column" w="200px" h="230px" borderWidth='1px' borderRadius='lg' opacity={0.7} backgroundColor={'whitesmoke'} >
             <Box
                 mt='1'
                 fontWeight='Bold'
@@ -42,11 +42,9 @@ const TopDiseases = (props) => {
                 lineHeight='tight'
             >
                 Top Diseases
-            <div className={styles.diseaseList}>
-            {/* <Box > */}
-                <ol>
+            <Box textAlign="start">
                     <li>
-                    <Link href="/user">{D1}</Link>
+                    <Link  href="/user">{D1}</Link>
                     </li>
                     <li>
                     <Link href="/user">{D2}</Link>
@@ -54,9 +52,7 @@ const TopDiseases = (props) => {
                     <li>
                     <Link href="/user">{D3}</Link>
                     </li>
-                </ol>
-                </div>
-                {/* </Box> */}
+                </Box>
             </Box>
         </Box>
     )

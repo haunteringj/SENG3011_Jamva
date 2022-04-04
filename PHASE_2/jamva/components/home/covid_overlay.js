@@ -26,7 +26,7 @@ const ContinentCovidData = (props) => {
 
     // return component
     return (
-        <Box display="flex" padding={"5px"} flexDir="column" w="200px" h="230px" borderWidth='1px' borderRadius='lg' opacity={0.5} backgroundColor={'whitesmoke'} >
+        <Box display="flex" padding={"5px"} flexDir="column" w="200px" h="230px" borderWidth='1px' borderRadius='lg' opacity={0.7} backgroundColor={'whitesmoke'} >
             <Box
                 mt='1'
                 fontWeight='Bold'
@@ -45,12 +45,12 @@ const ContinentCovidData = (props) => {
             >
                 Covid-19
             </Box>
-            <Box as="p" p={"3px"}>
-                <b>Cases: </b>{data["cases"]}{"\n"}
-                <b>Today Cases: </b>{data["todayCases"]}{"\n"}
-                <b>Deaths: </b>{data["deaths"]}{"\n"}
-                <b>Today Deaths: </b>{data["todayDeaths"]}{"\n"}
-                <b>Tests: </b>{data["tests"]}
+            <Box as="p" p={"3px"} display="flex" flexDir="column" fontSize={17}>
+                <span> <b>Total Cases: </b> {data["cases"]} </span>
+                <span><b>Today Cases: </b>{data["todayCases"]}</span>
+                <span><b>Deaths: </b>{data["deaths"]}</span>
+                <span><b>Today Deaths: </b>{data["todayDeaths"]}</span>
+                <span><b>Tests: </b>{data["tests"]}</span>
             </Box>
         </Box>
     )
