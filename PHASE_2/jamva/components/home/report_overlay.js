@@ -5,11 +5,10 @@ import { Box } from '@chakra-ui/react'
 import ReportBox from "./report_box";
 
 
-export default function ReportOverlay({ reports }) {
+export default function ReportOverlay({ reports, country }) {
 
   const [visible, setVisible] = react.useState(true)
 
-  // console.log(reports);
   
   // react.useEffect(() => {
   //   if (reports !== []) setVisible(true);
@@ -32,7 +31,7 @@ export default function ReportOverlay({ reports }) {
           isTruncated
           textAlign="center"
         >
-          Reports
+          Reports in {country}
         </Box>
         {/* <Box display='flex' alignItems='baseline'>
              
@@ -52,10 +51,6 @@ export default function ReportOverlay({ reports }) {
           <ReportBox key={i} title={r['headline']} id={r['id']} date={r['date']} />
         ))}
         </Box>
-
-
-
-
 
         {/* <Box>
               DATE

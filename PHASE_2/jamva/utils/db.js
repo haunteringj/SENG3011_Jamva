@@ -5,6 +5,7 @@ export const getAllQuiz = async () => {
   const quiz = snapshot.docs.map((doc) => doc.data());
   return quiz;
 };
+
 export const getSingleQuiz = async (quizId) => {
   const snapshot = await firebase
     .firestore()

@@ -5,3 +5,4 @@ const Globe = ({ forwardRef, ...otherProps }) => (
 );
 
 export default Globe;
+

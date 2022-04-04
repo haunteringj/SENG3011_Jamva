@@ -2,6 +2,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import Layout from '../components/global/layout'
 import { UserWrapper } from '../context/userState'
 import '../styles/globals.scss'
+import { ChakraProvider } from '@chakra-ui/react'
 
 function MyApp({ Component, pageProps }) {
   return (
