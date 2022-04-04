@@ -3081,3 +3081,4 @@
 /v1/top5Dieseases?continent=World [GET, 200, 127.0.0.1, 2022-04-04 14:03:03.678452, 0.1321s, 187B]
 /v1/diseases/search?disease=Influenza [GET, 404, 127.0.0.1, 2022-04-04 14:08:45.571033, 0.2833s, 61B]
 /v1/diseases/search?disease=Influenza [GET, 404, 127.0.0.1, 2022-04-04 14:08:46.026447, 0.037s, 61B]
+/v1/top5Dieseases?continent=World [GET, 200, 127.0.0.1, 2022-04-04 14:09:24.812416, 0.055s, 187B]
