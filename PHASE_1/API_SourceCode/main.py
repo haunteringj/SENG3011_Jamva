@@ -2,44 +2,20 @@ from fastapi import FastAPI, status, Request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-<<<<<<< HEAD
-from fastapi.encoders import jsonable_encoder
-
 from fastapi.middleware.cors import CORSMiddleware
-
-=======
-from fastapi.middleware.cors import CORSMiddleware
->>>>>>> frontend_home_new
 # import requests
 import time
 import datetime
 
 try:
-<<<<<<< HEAD
-    from diseaseData import globalData, countryData
-    from diseasesEndpoints import *
-    from articleEndPoints import *
-    from userEndPoints import *
-    # connect to real database
-    cred = credentials.Certificate("../testDataBasePrivateKey.json")
-    firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e", })
-except:
-    from .diseasesEndpoints import *
-    from .diseaseData import globalData, countryData
-    from .articleEndPoints import *
-    from .userEndPoints import *
-    # connect to test database
-    cred = credentials.Certificate("../testDataBasePrivateKey.json")
-    firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e", })
-=======
   from diseaseData import globalData, countryData
   from diseasesEndpoints import *
   from articleEndPoints import *
   from userEndPoints import *
   from frontendPoints import *
   # connect to real database
-  cred = credentials.Certificate("../dataBasePrivateKey.json")
-  firebase_admin.initialize_app(cred, {'projectId': "jamva-real",})
+  cred = credentials.Certificate("../testDataBasePrivateKey.json")
+  firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
 except:
   from .diseasesEndpoints import *
   from .diseaseData import globalData, countryData
@@ -49,7 +25,6 @@ except:
   # connect to test database
   cred = credentials.Certificate("../testDataBasePrivateKey.json")
   firebase_admin.initialize_app(cred, {'projectId': "jamva-4e82e",})
->>>>>>> frontend_home_new
 
 
 class userCreationModel(BaseModel):
@@ -106,6 +81,7 @@ def searchDiseaseReport(startDate, endDate, location, keyTerm=""):
 
 @app.post("/v1/users/create", status_code=status.HTTP_201_CREATED)
 def createUser(user: userCreationModel):
+    print("hello")
     return createUserEntry(db, user)
 
 

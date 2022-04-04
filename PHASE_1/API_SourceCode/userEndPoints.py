@@ -32,11 +32,13 @@ def toJsonResponse(statusCode, body):
 
 
 def createUserEntry(db, userInfo: userCreationModel):
+    print("hello2")
     try:
         user = auth.create_user(
             email=userInfo.email,
             password=userInfo.password
         )
+        print("hello4")
         successResponse = {"status": "success", "uid": user.uid}
         createUserDetail = {
             "username": userInfo.username,
@@ -51,7 +53,7 @@ def createUserEntry(db, userInfo: userCreationModel):
                 user.uid).set(createUserDetail)
             return successResponse
         except:
-            return JSONResponse(409, {"status": "failed_userDetailExists", "uid": 0})
+            return toJsonResponse(409, {"status": "failed_userDetailExists", "uid": 0})
     except exceptions.FirebaseError:
         failedReponse = {"status": "failed_userExists", "uid": 0}
         return toJsonResponse(409, failedReponse)

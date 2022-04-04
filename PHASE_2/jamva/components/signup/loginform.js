@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import { userContext } from "../../context/userState";
 import { getRecord } from "../../services/axios";
 import app, { auth } from "../../services/firebase";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 
 const arrowStyle = {
@@ -82,7 +83,7 @@ const LoginForm = () => {
             />
             <label className="input__label">Email</label>
           </div>
-          <div className={password == "" ? "input" : "input input--has-value"}>
+          <div className={password == "" ? "input password-input" : "input input--has-value password-input"}>
             <input 
               className="input__field"
               name="password"
@@ -94,6 +95,18 @@ const LoginForm = () => {
               value={password}
             />
             <label className="input__label">Password</label>
+            {showPassword ? 
+            <ViewIcon 
+              onClick={() => {
+                setShowPassword(false)
+              }}
+            /> 
+            : 
+            <ViewOffIcon 
+              onClick={() => {
+                setShowPassword(true)
+              }}
+            />}
           </div>
           {error == "missingFields" && (
             <p className="error">

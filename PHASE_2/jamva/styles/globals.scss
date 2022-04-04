@@ -1,10 +1,15 @@
 html,
 body {
-  background-color: #f6f5f7;
+  background-color: black;
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  height: 100%;
+}
+
+.chakra-ui-light {
+  background-color: black ;
 }
 
 a {
@@ -61,11 +66,10 @@ a {
   border-radius: 28px;
   display: flex;
   flex-direction: column;
-  border: 2px solid white;
+  border: 2px solid rgb(33, 33, 33);
   justify-content: center;
   align-items: center;
-  background-color: white;
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  background-color: rgb(33, 33, 33);
 
   .submit-button {
     position: relative;
@@ -81,13 +85,29 @@ a {
   }
 
   .input-select {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
     border: 1px solid #eee;
     border-radius: 1.75rem;
     width: 100%;
+    height: 56px !important;
     padding: 6px 1.5rem 6px;
     margin-bottom: 32px;
     background-color: #eee;
+  }
+
+  .password-input {
+    position: relative;
+
+    .chakra-icon {
+      position: absolute;
+      right: 15px;
+      top: 16px;
+      width: 26px;
+      height: 26px;
+    }
   }
 }
 

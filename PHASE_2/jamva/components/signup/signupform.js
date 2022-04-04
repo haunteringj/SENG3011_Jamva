@@ -5,6 +5,7 @@ import Select, { components } from "react-select";
 import { COUNTRY_LIST } from "../../public/CountryNames";
 import { postRecord } from "../../services/axios";
 import { useRouter } from "next/router";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 const arrowStyle = {
   transform: "rotate(180deg) scale(1)",
@@ -184,7 +185,7 @@ const SignupForm = () => {
             />
             <label className="input__label">Email</label>
           </div>
-          <div className={password == "" ? "input" : "input input--has-value"}>
+          <div className={password == "" ? "input password-input" : "input input--has-value password-input"}>
             <input 
               className="input__field"
               name="password"
@@ -196,6 +197,18 @@ const SignupForm = () => {
               value={password}
             />
             <label className="input__label">Password</label>
+            {showPassword ? 
+            <ViewIcon 
+              onClick={() => {
+                setShowPassword(false)
+              }}
+            /> 
+            : 
+            <ViewOffIcon 
+              onClick={() => {
+                setShowPassword(true)
+              }}
+            />}
           </div>
           <div className={userValues.username == "" ? "input" : "input input--has-value"}>
             <input 
