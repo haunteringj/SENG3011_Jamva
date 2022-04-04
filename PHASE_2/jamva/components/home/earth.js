@@ -99,14 +99,13 @@ function Earth() {
 
         />;
         <div className={styles.overlay}>
-          <TopDiseases continent={latestContinent} />
+          <Box display="flex" flexDir="row" w="md" justifyContent="space-between">
+            <TopDiseases continent={latestContinent} />
+            <CountryData continent={latestContinent} />
+          </Box>
         </div>
-        <div className={styles.sidebar}>
-          <CountryData continent={latestContinent} />
-        </div>
-
         {latestCountry !== "World" && latestCountry in c ?
-          <div className={styles.reportOverlay}>           
+          <div className={styles.reportOverlay}>
             <ReportOverlay reports={c[latestCountry]} country={latestCountry.toUpperCase()} />
           </div>
           : null}
