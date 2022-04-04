@@ -64,6 +64,10 @@ function Earth() {
     if (polygon.properties.CONTINENT != "Antarctica" && polygon.properties.CONTINENT != "Seven seas (open ocean)") {
       setLatestContinent(polygon.properties.CONTINENT);
       setLatestCountry(polygon.properties.NAME.toString().toLowerCase());
+      if (polygon.properties.NAME == "United States of America") {
+        setLatestCountry("united states");
+      }
+      console.log(polygon.properties.NAME);
 
 
     }
