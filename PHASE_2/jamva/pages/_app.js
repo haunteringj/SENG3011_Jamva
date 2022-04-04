@@ -2,7 +2,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Layout from "../components/global/layout";
 import { UserWrapper } from "../context/userState";
 import "../styles/globals.scss";
-import "../styles/disease.scss";
+
 import "../styles/hangman.scss";
 function MyApp({ Component, pageProps }) {
   return (
