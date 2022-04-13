@@ -1,5 +1,6 @@
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import axios from "axios";
+import https from "https";
 import {
   Box,
   Button,
@@ -117,6 +118,7 @@ const Index = (data) => {
       console.log("error", error);
     } finally {
       actions.setSubmitting(false);
+      router.back();
     }
   };
   return (
@@ -353,8 +355,10 @@ const Index = (data) => {
 };
 export async function getServerSideProps(context) {
   const disease = context.query.disease;
+  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const snapshot = await axios.get(
-    `https://3.106.142.227/v1/listDiseases`
+    `https://3.106.142.227/v1/listDiseases`,
+    { httpsAgent }
   );
   return { props: { diseases: snapshot.data } };
 }

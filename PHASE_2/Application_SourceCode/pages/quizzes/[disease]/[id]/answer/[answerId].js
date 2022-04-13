@@ -15,6 +15,8 @@ import { NextPageContext } from "next";
 import React from "react";
 import { getAnswer, getSingleQuiz } from "../../../../../utils/db";
 import { useRouter } from "next/router";
+import https from "https";
+
 const answer = (props) => {
   const quiz = JSON.parse(props.quiz);
   const answer = JSON.parse(props.answer);
@@ -103,11 +105,14 @@ export async function getServerSideProps(context) {
   const quizId = context.query.id;
   const diseaseName = context.query.disease;
   const answerId = context.query.answerId;
+  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const quizData = await axios.get(
-    `https://3.106.142.227/v1/quiz/${diseaseName}/${quizId}`
+    `https://3.106.142.227/v1/quiz/${diseaseName}/${quizId}`,
+    { httpsAgent }
   );
   const answerData = await axios.get(
-    `https://3.106.142.227/v1/answer/${answerId}`
+    `https://3.106.142.227/v1/answer/${answerId}`,
+    { httpsAgent }
   );
   console.log(answerData.data);
   return {

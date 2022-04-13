@@ -8,6 +8,8 @@ import Notification from "../../../components/hangman/Notification";
 import { Center, ChakraProvider, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { showNotification as show, checkWin } from "../../../utils/helpers/helpers";
+import https from "https";
+
 var selectedWord = "";
 export default function Hangman(data) {
   const [playable, setPlayable] = useState(true);
@@ -116,8 +118,10 @@ export default function Hangman(data) {
 }
 export async function getServerSideProps(context) {
   const hangmanId = context.query.id;
+  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const snapshot = await axios.get(
-    `https://3.106.142.227/v1/hangman/${hangmanId}`
+    `https://3.106.142.227/v1/hangman/${hangmanId}`,
+    { httpsAgent }
   );
   let allwords = [];
   if (snapshot.data != null) {

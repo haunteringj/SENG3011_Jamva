@@ -14,6 +14,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import React from "react";
+import https from "https";
 
 const Home = (props) => {
   const quiz = JSON.parse(props.quiz);
@@ -146,8 +147,10 @@ const Home = (props) => {
 
 export async function getServerSideProps(context) {
   const disease = context.query.disease;
+  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const snapshot = await axios.get(
-    `https://3.106.142.227/v1/quizzes/${disease}/getAll`
+    `https://3.106.142.227/v1/quizzes/${disease}/getAll`,
+    { httpsAgent }
   );
   return {
     props: { quiz: JSON.stringify(snapshot.data), diseaseName: disease },

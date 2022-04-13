@@ -7,6 +7,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { Center } from "@chakra-ui/react";
 import { ThemeProvider } from "styled-components";
 import { useRouter } from "next/router";
+import https from "https";
+
 const index = (passed) => {
   const router = useRouter();
   const data = passed["crossword"];
@@ -53,9 +55,10 @@ const index = (passed) => {
 export async function getServerSideProps(context) {
   const disease = context.query.disease;
   const crosswordId = context.query.id;
-
+  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const snapshot = await axios.get(
-    `https://3.106.142.227/v1/crosswords/${disease}/${crosswordId}`
+    `https://3.106.142.227/v1/crosswords/${disease}/${crosswordId}`,
+    { httpsAgent }
   );
   return { props: { crossword: snapshot.data, diseaseName: disease } };
 }

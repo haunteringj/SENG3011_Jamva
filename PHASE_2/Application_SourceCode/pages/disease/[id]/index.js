@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Center, ChakraProvider, Heading } from "@chakra-ui/react";
 import Link from "next/link";
+import https from "https";
+
+
 export default function disease_info(data) {
   let name = data["diseaseName"];
   let definition = data["definition"];
@@ -80,10 +83,12 @@ export default function disease_info(data) {
 
 export async function getServerSideProps(context) {
   const disease_name = context.query.id;
+  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const snapshot = await axios.get(
-    `https://3.106.142.227/v1/diseases/search?disease=${disease_name}`
+    `https://3.106.142.227/v1/diseases/search?disease=${disease_name}`,
+    { httpsAgent }
   );
-
+  console.log("not here")
   let name = snapshot.data["diseaseName"];
   // for elements in API which are incomplete for empty
   if (snapshot.data["syndromes"].length == 0) {

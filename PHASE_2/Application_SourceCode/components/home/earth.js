@@ -35,7 +35,7 @@ function Earth() {
         setCountries(countries);
       });
 
-    axios.get("http://127.0.0.1:8000/v1/latestReports")
+    axios.get("https://3.106.142.227/v1/latestReports")
       .then((resp) => {
         const countries = resp.data
     const result = []

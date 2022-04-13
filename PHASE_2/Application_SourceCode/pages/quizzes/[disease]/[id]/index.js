@@ -18,6 +18,7 @@ import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { addAnswerApi } from "../../../../utils/service";
+import https from "https";
 
 const ShowQuiz = (quiz, onSubmit, disease) => {
   const router = useRouter();
@@ -132,8 +133,10 @@ const SingleQuiz = (props) => {
 export async function getServerSideProps(context) {
   const quizId = context.query.id;
   const diseaseName = context.query.disease;
+  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const snapshot = await axios.get(
-    `https://3.106.142.227/v1/quiz/${diseaseName}/${quizId}`
+    `https://3.106.142.227/v1/quiz/${diseaseName}/${quizId}`,
+    { httpsAgent }
   );
   return {
     props: {

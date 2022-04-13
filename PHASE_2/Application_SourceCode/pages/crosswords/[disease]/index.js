@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import https from "https";
 import {
   Box,
   Container,
@@ -97,9 +98,10 @@ const index = (props) => {
 
 export async function getServerSideProps(context) {
   const disease = context.query.disease;
-  console.log(disease);
+  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const snapshot = await axios.get(
-    `https://3.106.142.227/v1/crosswords/${disease}/getAll`
+    `https://3.106.142.227/v1/crosswords/${disease}/getAll`,
+    { httpsAgent }
   );
   return {
     props: { quiz: JSON.stringify(snapshot.data), diseaseName: disease },
