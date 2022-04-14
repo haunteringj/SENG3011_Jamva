@@ -1,0 +1,41 @@
+.dashboard_container {
+    width: 85vw;
+    color: blue;
+    padding-top: 3vh;
+}
+.progress_box {
+    height: 30vh;
+}
+
+.first_half {
+    height: 50vh;
+}
+.profile {
+    padding: 10;
+    
+}
+.top_profile{
+    height: 32vh;
+}
+.bottom_profile {
+    height: 13vh;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table td {
+    padding: 5px;
+}
+
+.rank-header {
+  color: blue;
+  font-size: 20px;
+  font-weight: bold;
+}
+.data:first-child {
+  font-size: 18px;
+  font-weight: bold;
+}
+

@@ -154,6 +154,9 @@ def deleteUser(uid: str):
 def getUser(uid: str):
     return getUserDetail(db, uid)
 
+@app.get("/v1/users/topDiseases/{uid}", status_code=status.HTTP_200_OK)
+def getUser(uid: str):
+    return getTopDiseases(db, uid)
 
 # Disease endpoints
 @app.get("/v1/diseases/{search}")

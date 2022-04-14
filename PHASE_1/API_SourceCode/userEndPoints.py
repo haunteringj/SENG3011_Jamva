@@ -1,3 +1,4 @@
+from csv import Dialect
 from fastapi import status, HTTPException
 from fastapi.responses import JSONResponse
 from firebase_admin import auth
@@ -23,7 +24,7 @@ class userIdModel(BaseModel):
 
 
 def reorderFields(queryResult):
-    orderOfFields = ["username", "city", "state", "age", "alerts", "country"]
+    orderOfFields = ["username", "city", "state", "age", "alerts", "country","badges","completed","score"]
     return {k: queryResult.to_dict()[k] for k in orderOfFields}
 
 
@@ -45,6 +46,10 @@ def createUserEntry(db, userInfo: userCreationModel):
             "city": userInfo.city,
             "age": userInfo.age,
             "alerts": [],
+            "completed":{},
+            "badges":[],
+            "score":0,
+
         }
         try:
             db.collection("userDetails").document(
@@ -78,3 +83,31 @@ def getUserDetail(db, uid: str):
         return toJsonResponse(500, "User id doesnt exist")
     queryDict = reorderFields(query)
     return toJsonResponse(200, queryDict)
+
+def getTotalActivities(disease,db):
+    try:
+        hangman = db.collection("hangman").document(disease).get().to_dict()
+        quizzes = db.collection("quizzes").document(disease).get().to_dict()
+        crosswords = db.collection("crosswords").document(disease).collection("crosswords").get()
+    except:
+        return -1
+    return len(hangman["words"]) + len(quizzes["quizzes"]) + len(crosswords)
+
+def getTopDiseases(db, uid:str):
+    try:
+        query = db.collection("userDetails").document(uid).get().to_dict()
+    except:
+        return toJsonResponse(500, "User id doesnt exist")
+    print(query["completed"])
+    return_dict = {}
+    allDiseases = query["completed"]
+    for disease in allDiseases.keys():
+        totalActivities = getTotalActivities(disease,db)
+        if totalActivities == -1:
+            return toJsonResponse(500, "Error Collecting activities")
+        specificDisease = allDiseases[disease]
+        completedActivities = len(specificDisease["hangman"]) + len(specificDisease["quizzes"]) + len(specificDisease["crosswords"])
+        percentage = completedActivities/totalActivities
+        return_dict[disease] = int(percentage*100)
+    return return_dict
+    

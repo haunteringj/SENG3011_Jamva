@@ -1,15 +1,12 @@
 import react from "react";
-import Link from "next/link"
-import styles from '../../styles/Home.module.scss'
-import { Box } from '@chakra-ui/react'
+import Link from "next/link";
+import styles from "../../styles/Explore.module.scss";
+import { Box } from "@chakra-ui/react";
 import ReportBox from "./report_box";
 
-
 export default function ReportOverlay({ reports, country }) {
+  const [visible, setVisible] = react.useState(true);
 
-  const [visible, setVisible] = react.useState(true)
-
-  
   // react.useEffect(() => {
   //   if (reports !== []) setVisible(true);
   //   else setVisible(false);
@@ -17,17 +14,26 @@ export default function ReportOverlay({ reports, country }) {
   //   console.log(reports)
   // }, [reports]);
 
-
-  return (visible ?
-
-    <Box display="flex" flexDir="column" overflowY="scroll" w='sm' h='sm' borderWidth='1px' borderRadius='lg' opacity={0.7} overflow='hidden' backgroundColor={'whitesmoke'}>
-      <Box p='3'>
+  return visible ? (
+    <Box
+      display="flex"
+      flexDir="column"
+      overflowY="scroll"
+      w="sm"
+      h="sm"
+      borderWidth="1px"
+      borderRadius="lg"
+      opacity={0.7}
+      overflow="hidden"
+      backgroundColor={"whitesmoke"}
+    >
+      <Box p="3">
         <Box
-          mt='1'
-          fontWeight='Bold'
+          mt="1"
+          fontWeight="Bold"
           fontSize={25}
-          as='h1'
-          lineHeight='tight'
+          as="h1"
+          lineHeight="tight"
           isTruncated
           textAlign="center"
         >
@@ -46,10 +52,15 @@ export default function ReportOverlay({ reports, country }) {
                 Some other text
               </Box>
             </Box> */}
-          <Box>
-        {reports.map((r, i) => (
-          <ReportBox key={i} title={r['headline']} id={r['id']} date={r['date']} />
-        ))}
+        <Box>
+          {reports.map((r, i) => (
+            <ReportBox
+              key={i}
+              title={r["headline"]}
+              id={r["id"]}
+              date={r["date"]}
+            />
+          ))}
         </Box>
 
         {/* <Box>
@@ -58,8 +69,7 @@ export default function ReportOverlay({ reports, country }) {
                 / wk
               </Box>
             </Box> */}
-
       </Box>
-    </Box> : null
-  )
+    </Box>
+  ) : null;
 }
