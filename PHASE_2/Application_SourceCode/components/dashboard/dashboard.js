@@ -6,27 +6,12 @@ import https from "https";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-
+import Carousel from "react-elastic-carousel";
+import Link from "next/link";
 import { CardContent, CardMedia } from "@mui/material";
-const columns = [
-  { field: "name", width: 90 },
-  { field: "score", width: 90 },
-];
 const Dashboard = ({ data }) => {
   console.log("HERE", data);
-  const leaders = [
-    { id: 1, name: "string", score: 0 },
-    { id: 2, name: "string", score: 0 },
-    { id: 3, name: "string", score: 0 },
-    { id: 4, name: "string", score: 0 },
-    { id: 5, name: "string", score: 0 },
-    { id: 6, name: "string", score: 0 },
-    { id: 7, name: "string", score: 0 },
-    { id: 8, name: "string", score: 0 },
-    { id: 9, name: "string", score: 0 },
-    { id: 10, name: "string", score: 0 },
-    { id: 11, name: "string", score: 0 },
-  ];
+  const leaders = data.leaders;
   return (
     <div className="dashboard_container">
       <Grid container spacing={2}>
@@ -68,7 +53,20 @@ const Dashboard = ({ data }) => {
               <div style={{ height: 400, width: "100%" }}>
                 <DataGrid
                   rows={leaders}
-                  columns={columns}
+                  columns={[
+                    {
+                      field: "Name",
+                      width: "165",
+                      align: "center",
+                      headerAlign: "center",
+                    },
+                    {
+                      field: "Points",
+                      width: "165",
+                      align: "center",
+                      headerAlign: "center",
+                    },
+                  ]}
                   pageSize={100}
                   rowsPerPageOptions={[5]}
                   sx={{
@@ -78,6 +76,7 @@ const Dashboard = ({ data }) => {
                     "& .MuiDataGrid-cell:hover": {
                       color: "primary.main",
                     },
+                    width: "100%",
                   }}
                   hideFooter
                 />
@@ -88,35 +87,52 @@ const Dashboard = ({ data }) => {
         <Grid item xs={6}>
           <Card className="progress_box">
             <CardContent>Diseases In Progress</CardContent>
-            <div
-              style={{
-                width: 180,
-                height: 180,
-                justifyContent: "center",
-                textAlign: "center",
-                marginLeft: 20,
-              }}
-            >
-              <CircularProgressbar value={20} text={`20%`} />
-              Influenza
-            </div>
+            <Carousel itemsToShow={3}>
+              {Object.keys(data.diseaseProg).map((disease) => (
+                <Link href={`disease/${disease}`}>
+                  <div
+                    style={{
+                      width: 130,
+                      height: 160,
+                      justifyContent: "center",
+                      textAlign: "center",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <CircularProgressbar
+                      value={data.diseaseProg[disease]}
+                      text={`${data.diseaseProg[disease]}%`}
+                    />
+
+                    {disease}
+                  </div>
+                </Link>
+              ))}
+            </Carousel>
           </Card>
         </Grid>
         <Grid item xs={6}>
           <Card className="progress_box">
             <CardContent>Look at Next</CardContent>
-            <div
-              style={{
-                width: 180,
-                height: 180,
-                justifyContent: "center",
-                textAlign: "center",
-                marginLeft: 20,
-              }}
-            >
-              <CircularProgressbar value={0} text={`0%`} />
-              Covid
-            </div>
+            <Carousel itemsToShow={3} itemsToScroll={3}>
+              {data.diseaseUnprog.map((disease) => (
+                <Link href={`disease/${disease}`}>
+                  <div
+                    style={{
+                      width: 130,
+                      height: 160,
+                      justifyContent: "center",
+                      textAlign: "center",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <CircularProgressbar value={0} text={`0%`} />
+
+                    {disease}
+                  </div>
+                </Link>
+              ))}
+            </Carousel>
           </Card>
         </Grid>
       </Grid>

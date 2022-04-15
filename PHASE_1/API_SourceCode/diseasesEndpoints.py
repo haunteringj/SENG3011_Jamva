@@ -27,7 +27,7 @@ def fetchDiseaseByName(db, disease):
         )
     diseases_info = query.get()[0].to_dict()
     try:
-        diseases_info["reports"].pop()
+        del diseases_info["reports"]
     except:
         print(":)")
     #diseases_info["reports"] = dereferenceReports(diseases_info["reports"])

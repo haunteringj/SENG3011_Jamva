@@ -8,12 +8,30 @@ const index = (props) => {
 
 export async function getServerSideProps(context) {
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-  const snapshot = await axios.get(
+  const profleData = await axios.get(
     `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/details/f3BNKAJFnlZuLZVuX1Zpk77TCsr2`,
     { httpsAgent }
   );
+  const diseaseProgress = await axios.get(
+    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/progressDiseases/f3BNKAJFnlZuLZVuX1Zpk77TCsr2`,
+    { httpsAgent }
+  );
+
+  const unProgressed = await axios.get(
+    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/unProgressedDiseases/f3BNKAJFnlZuLZVuX1Zpk77TCsr2`,
+    { httpsAgent }
+  );
+  const leaderboard = await axios.get(
+    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/getLeaderboard`,
+    { httpsAgent }
+  );
   return {
-    props: { profile: snapshot.data },
+    props: {
+      profile: profleData.data,
+      diseaseProg: diseaseProgress.data,
+      diseaseUnprog: unProgressed.data,
+      leaders: leaderboard.data,
+    },
   };
 }
 export default index;

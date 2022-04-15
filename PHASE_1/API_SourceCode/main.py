@@ -154,12 +154,20 @@ def deleteUser(uid: str):
 def getUser(uid: str):
     return getUserDetail(db, uid)
 
-@app.get("/v1/users/topDiseases/{uid}", status_code=status.HTTP_200_OK)
-def getUser(uid: str):
-    return getTopDiseases(db, uid)
+@app.get("/v1/users/progressDiseases/{uid}", status_code=status.HTTP_200_OK)
+def getProgress(uid: str):
+    return getProgressDiseases(db, uid)
+
+@app.get("/v1/users/unProgressedDiseases/{uid}", status_code=status.HTTP_200_OK)
+def getUnprogress(uid: str):
+    return getUnprogressedDiseases(db, uid)
+
+@app.get("/v1/users/getLeaderboard", status_code=status.HTTP_200_OK)
+def getLeaderboard():
+    return getLeaders(db)
 
 # Disease endpoints
-@app.get("/v1/diseases/{search}")
+@app.get("/v1/diseases/{disease}")
 def fetchDiseaseName(disease):
     return fetchDiseaseByName(db, disease)
 

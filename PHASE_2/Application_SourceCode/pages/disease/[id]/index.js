@@ -4,7 +4,6 @@ import { Center, ChakraProvider, Heading } from "@chakra-ui/react";
 import Link from "next/link";
 import https from "https";
 
-
 export default function disease_info(data) {
   let name = data["diseaseName"];
   let definition = data["definition"];
@@ -85,14 +84,13 @@ export async function getServerSideProps(context) {
   const disease_name = context.query.id;
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const snapshot = await axios.get(
-    `https://3.106.142.227/v1/diseases/search?disease=${disease_name}`,
+    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/diseases/${disease_name}`,
     { httpsAgent }
   );
-  console.log("not here")
-  let name = snapshot.data["diseaseName"];
+  let name = snapshot.data.diseaseName;
   // for elements in API which are incomplete for empty
   if (snapshot.data["syndromes"].length == 0) {
-    return { props: {diseaseName: name} };
+    return { props: { diseaseName: name } };
   }
 
   let defin = snapshot.data["definition"];
@@ -100,7 +98,7 @@ export async function getServerSideProps(context) {
   let treatmen = snapshot.data["treatment"];
   let diagnose = snapshot.data["diagnosis"];
   let preventing = snapshot.data["prevention"];
-
+  console.log(snapshot.data);
   let def = defin.join(". ");
   let syn = synd.join(". ");
   let treat = treatmen.join(". ");

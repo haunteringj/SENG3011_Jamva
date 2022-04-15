@@ -1,4 +1,5 @@
 from csv import Dialect
+from tracemalloc import start
 from fastapi import status, HTTPException
 from fastapi.responses import JSONResponse
 from firebase_admin import auth
@@ -93,12 +94,11 @@ def getTotalActivities(disease,db):
         return -1
     return len(hangman["words"]) + len(quizzes["quizzes"]) + len(crosswords)
 
-def getTopDiseases(db, uid:str):
+def getProgressDiseases(db, uid:str):
     try:
         query = db.collection("userDetails").document(uid).get().to_dict()
     except:
         return toJsonResponse(500, "User id doesnt exist")
-    print(query["completed"])
     return_dict = {}
     allDiseases = query["completed"]
     for disease in allDiseases.keys():
@@ -110,4 +110,46 @@ def getTopDiseases(db, uid:str):
         percentage = completedActivities/totalActivities
         return_dict[disease] = int(percentage*100)
     return return_dict
+
+def getUnprogressedDiseases(db,uid:str):
+    try:
+        query = db.collection("userDetails").document(uid).get().to_dict()
+    except:
+        return toJsonResponse(500, "User id doesnt exist")
+    startedDiseases = query["completed"].keys()
+    try:
+        query = db.collection("diseases").get()
+    except:
+        return toJsonResponse(500, "User id doesnt exist")
+    totalDiseases = []
+    for disease in query:
+        totalDiseases.append(disease.id)
+    return list(totalDiseases - startedDiseases)
+
+
+def getLeaders(db):
     
+    try:
+        query = db.collection("userDetails").get()
+    except:
+        return toJsonResponse(500, "error with database")
+    usersArray = []
+    for user in query:
+        usersdict = {}
+        
+        
+        try:
+            indiv = user.to_dict()
+            
+            usersdict["Name"] = indiv["username"]
+            usersdict["Points"] = indiv["score"]
+            usersArray.append(usersdict)
+        except:
+            return toJsonResponse(500, "Issue getting users")
+    
+    finalList = sorted(usersArray, key=lambda e:e['Points'],reverse=True)
+    count = 1
+    for dict in finalList:
+        dict["id"] = count
+        count+=1
+    return finalList
