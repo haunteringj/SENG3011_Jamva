@@ -1,31 +1,26 @@
 import react from "react";
 import Link from "next/link";
-import styles from "../../styles/Explore.module.scss";
 import { Box } from "@chakra-ui/react";
 import ReportBox from "./report_box";
 
 export default function ReportOverlay({ reports, country }) {
   const [visible, setVisible] = react.useState(true);
 
-  // react.useEffect(() => {
-  //   if (reports !== []) setVisible(true);
-  //   else setVisible(false);
-
-  //   console.log(reports)
-  // }, [reports]);
-
   return visible ? (
     <Box
       display="flex"
       flexDir="column"
       overflowY="scroll"
-      w="sm"
+      width="400px"
       h="sm"
       borderWidth="1px"
       borderRadius="lg"
       opacity={0.7}
       overflow="hidden"
       backgroundColor={"whitesmoke"}
+      alignItems="center"
+
+      // width="100%"
     >
       <Box p="3">
         <Box
@@ -39,19 +34,6 @@ export default function ReportOverlay({ reports, country }) {
         >
           Reports in {country}
         </Box>
-        {/* <Box display='flex' alignItems='baseline'>
-             
-              <Box
-                color='gray.500'
-                fontWeight='semibold'
-                letterSpacing='wide'
-                fontSize='xs'
-                textTransform='uppercase'
-                ml='2'
-              >
-                Some other text
-              </Box>
-            </Box> */}
         <Box>
           {reports.map((r, i) => (
             <ReportBox
@@ -62,13 +44,6 @@ export default function ReportOverlay({ reports, country }) {
             />
           ))}
         </Box>
-
-        {/* <Box>
-              DATE
-              <Box as='span' color='gray.600' fontSize='sm'>
-                / wk
-              </Box>
-            </Box> */}
       </Box>
     </Box>
   ) : null;

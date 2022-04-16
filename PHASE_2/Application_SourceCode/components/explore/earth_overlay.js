@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-// import Link from "next/link"
-import styles from "../../styles/Explore.module.scss";
 import { Box, Link } from "@chakra-ui/react";
 import axios from "axios";
 
@@ -15,10 +13,10 @@ const TopDiseases = (props) => {
         `http://${process.env.NEXT_PUBLIC_API_URL}/v1/top5Dieseases?continent=` +
           props.continent
       )
-      .then((result) => result.json())
-      .then((json) => {
-        setData(json);
-      });
+      .then((result) => {
+        setData(result);
+        
+      }).catch((err) => alert(err));
   }, [props.continent]);
 
   // format the data into a string

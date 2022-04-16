@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import styles from "../../styles/Explore.module.scss";
 import { Box } from "@chakra-ui/react";
-
 // Display continent covid data
 const ContinentCovidData = (props) => {
   const [data, setData] = useState([]);
