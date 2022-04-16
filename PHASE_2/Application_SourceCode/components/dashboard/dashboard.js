@@ -60,19 +60,19 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
           <Card className="first_half">
             <CardContent>
               Leaderboard
-              <div style={{ height: 400, width: "100%" }}>
+              <div style={{ height: "43vh", width: "100%" }}>
                 <DataGrid
                   rows={leaders}
                   columns={[
                     {
                       field: "Name",
-                      width: "165",
+                      flex: 1,
                       align: "center",
                       headerAlign: "center",
                     },
                     {
                       field: "Points",
-                      width: "165",
+                      flex: 1,
                       align: "center",
                       headerAlign: "center",
                     },
@@ -102,8 +102,8 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
                 <Link href={`disease/${disease}/games`}>
                   <div
                     style={{
-                      width: 130,
-                      height: 160,
+                      width: "7.5vw",
+                      height: "18vh",
                       justifyContent: "center",
                       textAlign: "center",
                       cursor: "pointer",
@@ -129,8 +129,8 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
                 <Link href={`disease/${disease}`}>
                   <div
                     style={{
-                      width: 130,
-                      height: 160,
+                      width: "7.5vw",
+                      height: "18vh",
                       justifyContent: "center",
                       textAlign: "center",
                       cursor: "pointer",

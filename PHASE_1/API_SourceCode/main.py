@@ -22,6 +22,7 @@ try:
     from userEndPoints import *
     from quizEndpoints import *
     from frontendPoints import *
+
     # connect to real database
     cred = credentials.Certificate("../dataBasePrivateKey.json")
     firebase_admin.initialize_app(
@@ -30,7 +31,8 @@ try:
             "projectId": "jamva-real",
         },
     )
-except:
+except Exception as e:
+    print("Error", e)
     from .frontendPoints import *
     from .diseasesEndpoints import *
     from .diseaseData import *
@@ -47,6 +49,7 @@ except:
         },
     )
 
+
 class userCreationModel(BaseModel):
     email: str
     country: str
@@ -59,6 +62,7 @@ class userCreationModel(BaseModel):
 
 class userIdModel(BaseModel):
     uid: str
+
 
 class optionsModel(BaseModel):
     title: str
@@ -83,13 +87,18 @@ class quizModel(BaseModel):
     questions: List[questionModel]
     createdAt: datetime
     updatedAt: datetime
+
+
 class keyvalueQuestionModel(BaseModel):
     questionId: str
     answerId: str
+
+
 class answerModel(BaseModel):
     questions: List[keyvalueQuestionModel]
     createdAt: datetime
     updatedAt: datetime
+
 
 db = firestore.client()
 
@@ -154,17 +163,21 @@ def deleteUser(uid: str):
 def getUser(uid: str):
     return getUserDetail(db, uid)
 
+
 @app.get("/v1/users/progressDiseases/{uid}", status_code=status.HTTP_200_OK)
 def getProgress(uid: str):
     return getProgressDiseases(db, uid)
+
 
 @app.get("/v1/users/unProgressedDiseases/{uid}", status_code=status.HTTP_200_OK)
 def getUnprogress(uid: str):
     return getUnprogressedDiseases(db, uid)
 
+
 @app.get("/v1/users/getLeaderboard", status_code=status.HTTP_200_OK)
 def getLeaderboard():
     return getLeaders(db)
+
 
 # Disease endpoints
 @app.get("/v1/diseases/{disease}")
@@ -212,71 +225,91 @@ def fetchByDis(disease):
 def fetchByDate(startDate, endDate=""):
     return fetchByDateArticle(db, startDate, endDate)
 
+
 @app.get("/v1/top5Dieseases")
 def fetchTopDiseasesContinent(continent):
     return fetchTopDiseases(db, continent)
+
 
 @app.get("/v1/latestReports")
 def getLatestReps():
     return getLatestReports(db)
 
+
 @app.get("/v1/hangman/{id}")
 async def getWords(id):
-    return fetchWords(db,id)
+    return fetchWords(db, id)
+
 
 @app.post("/v1/quiz/create", status_code=status.HTTP_201_CREATED)
 async def postNewQuiz(quizData: quizModel):
     return newQuiz(db, jsonable_encoder(quizData))
 
+
 @app.get("/v1/quizzes/{disease}/getAll")
 async def getQuizzes(disease):
-    return fetchQuizzes(db,disease)
+    return fetchQuizzes(db, disease)
+
 
 @app.get("/v1/quiz/{disease}/{id}")
-async def getQuiz(disease,id):
-    return fetchQuiz(db,disease,id)
+async def getQuiz(disease, id):
+    return fetchQuiz(db, disease, id)
+
+
 @app.get("/v1/quizzes/{disease}/{userId}")
-async def getQuizCompleted(disease,userId):
-    return fetchCompletedQuizzes(db,disease,userId)
+async def getQuizCompleted(disease, userId):
+    return fetchCompletedQuizzes(db, disease, userId)
 
 
 @app.post("/v1/quiz/{id}/answer")
 async def createAnswer(id, questiondata: answerModel):
-    return addAnswer(db,id, jsonable_encoder(questiondata))
+    return addAnswer(db, id, jsonable_encoder(questiondata))
+
+
 @app.post("/v1/quiz/complete/{disease}/{userId}/{quizId}/{score}")
-async def completeQuizzes( disease,userId, quizId,score):
-    return completeQuiz(db,disease,userId,quizId,score)
+async def completeQuizzes(disease, userId, quizId, score):
+    return completeQuiz(db, disease, userId, quizId, score)
+
 
 @app.get("/v1/answer/{id}")
 async def getQuiz(id):
-    return fetchAnswer(db,id)
+    return fetchAnswer(db, id)
+
 
 @app.get("/v1/hangman/{id}/{userId}")
 async def getWords(id, userId):
-    return fetchWords(db,id, userId)
+    return fetchWords(db, id, userId)
+
 
 @app.post("/v1/hangman/complete/{disease}/{userId}/{word}")
-async def completeWords(disease,userId, word):
-    return completeWord(db,disease, userId, word)
+async def completeWords(disease, userId, word):
+    return completeWord(db, disease, userId, word)
+
 
 @app.get("/v1/crosswords/{id}/getAll")
-async def getCrosswords( id):
-    return fetchCrosswords(db,id)
+async def getCrosswords(id):
+    return fetchCrosswords(db, id)
+
 
 @app.get("/v1/crosswords/{disease}/{id}")
 async def getCrossword(disease, id):
-    return fetchCrossword(db,disease, id)
+    return fetchCrossword(db, disease, id)
+
 
 @app.get("/v1/crosswords/getCompleted/{disease}/{userId}")
 async def getCrossword(disease, userId):
-    return getCompletedCrosswords(db,disease, userId)
+    return getCompletedCrosswords(db, disease, userId)
+
 
 @app.post("/v1/crosswords/complete/{disease}/{crosswordId}/{userId}")
 async def getCrossword(disease, crosswordId, userId):
-    return completeCrossword(db,disease, crosswordId, userId)
+    return completeCrossword(db, disease, crosswordId, userId)
+
+
 @app.get("/v1/listDiseases")
 async def getAllDiseases():
     return getDiseases(db)
+
 
 # logger (keeps track of API performance) Runs for each request of the api
 @app.middleware("http")
@@ -356,4 +389,3 @@ def ipToLocation(ip):
     result = json.loads(result)
 
     return result["country_name"] + ", " + result["city"]
-

@@ -11,12 +11,12 @@ const TopDiseases = (props) => {
     axios
       .get(
         `http://${process.env.NEXT_PUBLIC_API_URL}/v1/top5Dieseases?continent=` +
-          props.continent
+        props.continent
       )
       .then((result) => {
         // console.log(result);
         setData(result.data);
-        
+
       }).catch((err) => alert(err));
   }, [props.continent]);
 
@@ -61,7 +61,7 @@ const TopDiseases = (props) => {
         Top Diseases
         <Box textAlign="start">
           <li>
-            <Link color="blue" href={`/disease/${D1}`}>
+            <Link color="blue" onClick={`/disease/${D1}`}>
               {D1}
             </Link>
           </li>

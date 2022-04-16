@@ -7,33 +7,35 @@ import Popup from "../../../components/hangman/Popup";
 import Notification from "../../../components/hangman/Notification";
 import { Center, ChakraProvider, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import NotLogged from "../../../components/users/notLogged";
 import {
   showNotification as show,
   checkWin,
 } from "../../../utils/helpers/helpers";
 import https from "https";
-
-var selectedWord = "";
-export default function Hangman(data) {
+import { userContext } from "../../../context/userState";
+import { useContext } from "react";
+export default function Hangman() {
+  const { userValues, setUserData } = useContext(userContext);
   const [playable, setPlayable] = useState(true);
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
+  const [word, setWord] = useState("");
+  const [wordList, setWordList] = useState(null);
+  const [facts, setFacts] = useState(null);
+  const [forfun, setFun] = useState(null);
+  const [allwords, setAllwords] = useState(null);
   const router = useRouter();
-  let words = data["wordList"];
-  let forfun = data["fun"];
-  if (words.length == 0) {
-    forfun = true;
-    words = data["allwords"];
-  }
-  let disease = data.diseaseName;
-  let facts = data["facts"];
+  const { id } = router.query;
+
   useEffect(() => {
+
     const handleKeydown = (event) => {
       const { key, keyCode } = event;
       if (playable && keyCode >= 65 && keyCode <= 90) {
         const letter = key.toLowerCase();
-        if (selectedWord.includes(letter)) {
+        if (word.includes(letter)) {
           if (!correctLetters.includes(letter)) {
             setCorrectLetters((currentLetters) => [...currentLetters, letter]);
           } else {
@@ -53,38 +55,69 @@ export default function Hangman(data) {
     return () => window.removeEventListener("keydown", handleKeydown);
   }, [correctLetters, wrongLetters, playable]);
 
-  function playAgain() {
-    if (checkWin(correctLetters, wrongLetters, selectedWord) === "win") {
-      let remove = words.indexOf(selectedWord);
-      words.splice(remove, 1);
+
+
+  useEffect(() => {
+    if (userValues.userId == "") {
+      return <NotLogged></NotLogged>
     }
-    if (forfun == false) {
-      const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-      const profleData = axios.post(
-        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/complete/${disease}/f3BNKAJFnlZuLZVuX1Zpk77TCsr2/${selectedWord}`,
-        { httpsAgent }
-      );
-    } else setPlayable(true);
+    const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+    axios.get(
+      `http://${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/${id}/${userValues.userId}`,
+      { httpsAgent }
+    ).then((response) => {
+      console.log(response)
+      setWordList(response.data["difference"]);
+      setAllwords(response.data["allwords"]);
+      setFacts(response.data["facts"])
+      if (response.data["difference"].length == 0) {
+        setFun(true);
+        setWord(response.data["allwords"][
+          Math.floor(Math.random() * response.data["allwords"].length)]);
+      } else {
+        setFun(false);
+        setWord(response.data["difference"][
+          Math.floor(Math.random() * response.data["difference"].length)]);
+      }
+    });
+  }, [])
+  if (userValues.userId == "") {
+    return <NotLogged></NotLogged>
+  }
+  function playAgain() {
+    if (checkWin(correctLetters, wrongLetters, word) === "win") {
+      let remove = wordList.indexOf(word);
+      wordList.splice(remove, 1);
+      if (forfun == false) {
+        const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+        const profleData = axios.post(
+          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/complete/${id}/${userValues.userId}/${word}`,
+          { httpsAgent }
+        );
+      }
+    }
+    setPlayable(true);
     setCorrectLetters([]);
     setWrongLetters([]);
-    if (words.length == 0) {
-      words = data["allwords"];
-    }
-    const random = Math.floor(Math.random() * words.length);
 
-    selectedWord = words[random];
-    console.log(words.length);
+    if (wordList.length == 0) {
+      setFun(true);
+      setWordList(allwords);
+      console.log(wordList)
+      const random = Math.floor(Math.random() * allwords.length);
+      setWord(allwords[random]);
+    } else {
+      const random = Math.floor(Math.random() * wordList.length);
+      setWord(wordList[random]);
+    }
   }
-  if (selectedWord == "") {
-    selectedWord = data.word;
-  }
-  console.log(selectedWord);
-  return selectedWord == "" ? (
+  console.log(word);
+  return word == null || facts == null || wordList == null || forfun == null ? (
     <ChakraProvider>
       <div className="selectionHeader">
         <button
           className="backButton custom-btn"
-          onClick={() => router.push(`/disease/${disease}/games`)}
+          onClick={() => router.push(`/disease/${id}/games`)}
         >
           Back
         </button>
@@ -101,12 +134,12 @@ export default function Hangman(data) {
           <div className="selectionHeader">
             <button
               className="backButton custom-btn"
-              onClick={() => router.push(`/disease/${disease}/games`)}
+              onClick={() => router.push(`/disease/${id}/games`)}
             >
               Back
             </button>
             <Center>
-              <h1>{disease} Hangman</h1>
+              <h1>{id} Hangman</h1>
             </Center>
             <Center>
               <p>Find the hidden word - Enter a letter</p>
@@ -126,17 +159,17 @@ export default function Hangman(data) {
               <Figure wrongLetters={wrongLetters} />
               <WrongLetters wrongLetters={wrongLetters} />
               <Word
-                selectedWord={selectedWord}
+                selectedWord={word}
                 correctLetters={correctLetters}
               />
             </div>
             <Popup
               correctLetters={correctLetters}
               wrongLetters={wrongLetters}
-              fact={facts[selectedWord]}
+              fact={facts[word]}
               forfun={forfun}
-              wordsLeft={words}
-              selectedWord={selectedWord}
+              wordsLeft={wordList}
+              selectedWord={word}
               setPlayable={setPlayable}
               playAgain={playAgain}
             />
@@ -148,51 +181,4 @@ export default function Hangman(data) {
       </ChakraProvider>
     </div>
   );
-}
-export async function getServerSideProps(context) {
-  const hangmanId = context.query.id;
-  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-  const snapshot = await axios.get(
-    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/${hangmanId}/f3BNKAJFnlZuLZVuX1Zpk77TCsr2`,
-    { httpsAgent }
-  );
-  let wordSelection = [];
-  let forfun = false;
-  if (snapshot.data != null) {
-    wordSelection = snapshot.data["difference"];
-  }
-  console.log(snapshot.data);
-  var selectedWord = "";
-  if (wordSelection.length == 0) {
-    forfun = true;
-    var selectedWord =
-      snapshot.data["allwords"][
-        Math.floor(Math.random() * snapshot.data["allwords"].length)
-      ];
-  } else {
-    var selectedWord =
-      wordSelection[Math.floor(Math.random() * wordSelection.length)];
-  }
-  console.log(selectedWord);
-  return selectedWord == undefined
-    ? {
-        props: {
-          word: "",
-          wordList: wordSelection,
-          diseaseName: hangmanId,
-          facts: snapshot.data["facts"],
-          fun: forfun,
-          allwords: snapshot.data["allwords"],
-        },
-      }
-    : {
-        props: {
-          word: selectedWord,
-          wordList: wordSelection,
-          diseaseName: hangmanId,
-          facts: snapshot.data["facts"],
-          fun: forfun,
-          allwords: snapshot.data["allwords"],
-        },
-      };
 }
