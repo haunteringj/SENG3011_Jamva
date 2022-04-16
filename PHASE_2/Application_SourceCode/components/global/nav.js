@@ -17,10 +17,24 @@ const Nav = () => {
 
   return (
     <nav className={navStyles.nav}>
+      {/* This is the left div */}
+      <div className={navStyles.routebar}>
+        <div className={navStyles.title}>
+          <Link className={navStyles.hometext} href="/">JAMVA</Link>
+        </div>
+        <div className={navStyles.divider}></div>
+      
+
+
+        <Link className={navStyles.hometext} href="/explore">EXPLORE</Link>
+        
+
+      </div>
+
+      {/* This is the right div */}
+
       <ul>
-        <li>
-          <Link href="/">Home</Link>
-        </li>
+        
 
         {(userValues.userId != "") ? (
         <>
@@ -54,3 +68,4 @@ const Nav = () => {
 };
 
 export default Nav;
+

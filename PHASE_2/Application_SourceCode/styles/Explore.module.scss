@@ -13,13 +13,14 @@
 .earth {
   width: 100%;
   height: 100%;
+  // margin-left: -200px;
 }
 
 .overlay {
   display: flex;
   z-index: 1;
   top: 10%;
-  right: 5%;
+  left: 5%;
   position:absolute;
 }
 
@@ -47,13 +48,6 @@
 .diseaseList ol li a {
   margin: 5px 15px;
   color: blue
-}
-
-.sidebar {
-  z-index: 1;
-  top: 10%;
-  right: 5%;
-  position:absolute;
 }
 
 
