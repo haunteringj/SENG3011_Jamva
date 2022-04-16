@@ -4,7 +4,7 @@ import axios from "axios";
 
 // receives a continent and a list of dieseases and prints then out
 const TopDiseases = (props) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({});
   // load from backend api the top dieseases in the continent
   console.log(process.env.NEXT_PUBLIC_API_URL);
   useEffect(() => {
@@ -14,15 +14,18 @@ const TopDiseases = (props) => {
           props.continent
       )
       .then((result) => {
-        setData(result);
+        // console.log(result);
+        setData(result.data);
         
       }).catch((err) => alert(err));
   }, [props.continent]);
 
   // format the data into a string
-  const D1 = data[1] + "\n";
-  const D2 = data[2] + "\n";
-  const D3 = data[3] + "\n";
+
+  console.log(data);
+  const D1 = data[1];
+  const D2 = data[2];
+  const D3 = data[3];
 
   // return component
   return (
