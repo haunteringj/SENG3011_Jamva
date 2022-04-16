@@ -9,10 +9,20 @@ import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import Carousel from "react-elastic-carousel";
 import Link from "next/link";
 import { CardContent, CardMedia } from "@mui/material";
-const Dashboard = ({ data }) => {
-  console.log("HERE", data);
-  const leaders = data.leaders;
-  return (
+import { userContext } from "../../context/userState";
+import { useContext } from "react";
+const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
+  console.log("HERE", profile);
+  const { userValues, setUserData } = useContext(userContext);
+  const leaders = leaderboard;
+  return profile == null ||
+    progress == null ||
+    unprogress == null ||
+    leaderboard == null ? (
+    <div>
+      <h1 style={{ color: "white" }}>Welcome To Jamva!</h1>
+    </div>
+  ) : (
     <div className="dashboard_container">
       <Grid container spacing={2}>
         <Grid item xs={9}>
@@ -28,13 +38,13 @@ const Dashboard = ({ data }) => {
                 </Grid>
                 <Grid item xs={9}>
                   <Card className="top_profile">
-                    <CardContent>Badges: {data.profile.badges}</CardContent>
+                    <CardContent>Badges: {profile.badges}</CardContent>
                   </Card>
                 </Grid>
                 <Grid item xs={3}>
                   <Card className="bottom_profile ">
-                    <CardContent>Welcome {data.profile.username}!</CardContent>
-                    <CardContent>Points: {data.profile.score}</CardContent>
+                    <CardContent>Welcome {profile.username}!</CardContent>
+                    <CardContent>Points: {profile.score}</CardContent>
                   </Card>
                 </Grid>
                 <Grid item xs={9}>
@@ -88,8 +98,8 @@ const Dashboard = ({ data }) => {
           <Card className="progress_box">
             <CardContent>Diseases In Progress</CardContent>
             <Carousel itemsToShow={3}>
-              {Object.keys(data.diseaseProg).map((disease) => (
-                <Link href={`disease/${disease}`}>
+              {Object.keys(progress).map((disease) => (
+                <Link href={`disease/${disease}/games`}>
                   <div
                     style={{
                       width: 130,
@@ -100,8 +110,8 @@ const Dashboard = ({ data }) => {
                     }}
                   >
                     <CircularProgressbar
-                      value={data.diseaseProg[disease]}
-                      text={`${data.diseaseProg[disease]}%`}
+                      value={progress[disease]}
+                      text={`${progress[disease]}%`}
                     />
 
                     {disease}
@@ -115,7 +125,7 @@ const Dashboard = ({ data }) => {
           <Card className="progress_box">
             <CardContent>Look at Next</CardContent>
             <Carousel itemsToShow={3} itemsToScroll={3}>
-              {data.diseaseUnprog.map((disease) => (
+              {unprogress.map((disease) => (
                 <Link href={`disease/${disease}`}>
                   <div
                     style={{

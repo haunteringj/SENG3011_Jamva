@@ -1,6 +1,9 @@
 from ast import excepthandler
+from asyncio import QueueEmpty
+from asyncio.windows_events import NULL
 from datetime import datetime
 from dis import dis
+from fastapi import Query
 from firebase_admin import firestore
 from fastapi.responses import JSONResponse
 
@@ -77,13 +80,19 @@ def fetchAnswer(db,id):
     except:
         return toJsonResponse(500, "Unable to fetch from database")
 
-def fetchWords(db,id):
+def fetchWords(db,id, userId):
     try:
-        query = db.collection("hangman").document(id).get().to_dict()
-
-        return toJsonResponse(200, query)
+        allWords = db.collection("hangman").document(id).get().to_dict()
+        allWords = allWords["words"]
+        Query = db.collection("userDetails").document(userId).get().to_dict()
+        completedWords = Query["completed"][id]["hangman"]
+        
+        print(list(set(allWords.keys()) - set(completedWords)))
+        return {"allwords":list(allWords.keys()),"facts":allWords, "difference":list(set(allWords.keys()) - set(completedWords))}
     except:
         return toJsonResponse(500, "Unable to fetch from database")
+    
+
 
 
 def fetchCrossword(db,disease,id):
@@ -106,4 +115,81 @@ def fetchCrosswords(db,id):
         return toJsonResponse(200, crosswords)
     except:
 
+        return toJsonResponse(500, "Unable to fetch from database")
+
+
+def completeWord(db,disease, userId, word):
+    try:
+        query = db.collection("userDetails").document(userId)
+        dictVer = query.get().to_dict()
+        completed = dictVer["completed"]
+        points = dictVer["score"]
+        completed[disease]["hangman"].append(word)
+        print(completed)
+        query.update({"completed" : completed, "score":points+len(word)*10})
+        return toJsonResponse(200,"OK")
+    except:
+        return toJsonResponse(500, "Unable to fetch from database")
+
+def fetchCompletedQuizzes(db,disease,userId):
+    try:
+        query = db.collection("userDetails").document(userId)
+        getted = query.get().to_dict()
+        if(disease in getted["completed"].keys()):
+            quizzes = getted["completed"][disease]["quizzes"]
+        else:
+            completed = getted["completed"]
+            completed[disease] ={"quizzes":{}, "hangman":[],"crosswords":[]
+            }
+            query.update({"completed" : completed})
+            quizzes = []
+
+        return toJsonResponse(200, quizzes)
+    except:
+        return toJsonResponse(500, "Unable to fetch from database")
+
+def completeQuiz(db,disease,userId,QuizId,score):
+    try:
+        print(score)
+        score = int(score)
+        query = db.collection("userDetails").document(userId)
+        dictVer = query.get().to_dict()
+        completed = dictVer["completed"]
+        points = dictVer["score"]
+        oldscore = completed[disease]["quizzes"]
+        if QuizId in oldscore.keys():
+            print(oldscore[QuizId], score)
+            if int(oldscore[QuizId]) < score:
+                olderscore = int(oldscore[QuizId])
+                completed[disease]["quizzes"][QuizId] = score
+                query.update({"completed" : completed, "score":points+(score - olderscore)*10})
+                return toJsonResponse(200,{"score":(score - olderscore)*10})
+        else:
+            completed[disease]["quizzes"][QuizId] = score
+            query.update({"completed" : completed, "score":points+(score)*10})
+            return toJsonResponse(200,{"score":(score)*10})
+        return toJsonResponse(200,{"score":0})
+    except:
+        return toJsonResponse(500, "Unable to fetch from database")
+
+def getCompletedCrosswords(db,disease, userId):
+    try:
+        query = db.collection("userDetails").document(userId).get().to_dict()
+        quizzes = query["completed"][disease]["crosswords"]
+
+        return toJsonResponse(200, quizzes)
+    except:
+        return toJsonResponse(500, "Unable to fetch from database")
+
+def completeCrossword(db,disease, crosswordId, userId):
+    try:
+        query = db.collection("userDetails").document(userId)
+        dictVer = query.get().to_dict()
+        completed = dictVer["completed"]
+        points = dictVer["score"]
+        completed[disease]["crosswords"].append(crosswordId)
+        print(completed)
+        query.update({"completed" : completed, "score":points+300})
+        return toJsonResponse(200,"OK")
+    except:
         return toJsonResponse(500, "Unable to fetch from database")

@@ -2,36 +2,61 @@ import React from "react";
 import https from "http";
 import axios from "axios";
 import Dashboard from "../components/dashboard/dashboard";
+import { useEffect, useContext, useState } from "react";
+import { userContext } from "../context/userState";
 const index = (props) => {
-  return <Dashboard data={props}></Dashboard>;
+  const { userValues, setUserData } = useContext(userContext);
+  const [profileData, setProfileData] = useState(null);
+  const [diseaseProgress, setDiseaseProgress] = useState(null);
+  const [unProgressed, setDiseaseUnProgressed] = useState(null);
+  const [leaderboard, setLeaderboard] = useState(null);
+  useEffect(() => {
+    if (userValues.userId != "") {
+      const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+      axios
+        .get(
+          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/details/${userValues.userId}`,
+          { httpsAgent }
+        )
+        .then((response) => {
+          setProfileData(response.data);
+        });
+      axios
+        .get(
+          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/progressDiseases/${userValues.userId}`,
+          { httpsAgent }
+        )
+        .then((response) => {
+          setDiseaseProgress(response.data);
+        });
+
+      axios
+        .get(
+          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/unProgressedDiseases/${userValues.userId}`,
+          { httpsAgent }
+        )
+        .then((response) => {
+          setDiseaseUnProgressed(response.data);
+        });
+      axios
+        .get(
+          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/getLeaderboard`,
+          { httpsAgent }
+        )
+        .then((response) => {
+          setLeaderboard(response.data);
+        });
+    }
+  }, []);
+
+  return (
+    <Dashboard
+      profile={profileData}
+      progress={diseaseProgress}
+      unprogress={unProgressed}
+      leaderboard={leaderboard}
+    ></Dashboard>
+  );
 };
 
-export async function getServerSideProps(context) {
-  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-  const profleData = await axios.get(
-    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/details/f3BNKAJFnlZuLZVuX1Zpk77TCsr2`,
-    { httpsAgent }
-  );
-  const diseaseProgress = await axios.get(
-    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/progressDiseases/f3BNKAJFnlZuLZVuX1Zpk77TCsr2`,
-    { httpsAgent }
-  );
-
-  const unProgressed = await axios.get(
-    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/unProgressedDiseases/f3BNKAJFnlZuLZVuX1Zpk77TCsr2`,
-    { httpsAgent }
-  );
-  const leaderboard = await axios.get(
-    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/getLeaderboard`,
-    { httpsAgent }
-  );
-  return {
-    props: {
-      profile: profleData.data,
-      diseaseProg: diseaseProgress.data,
-      diseaseUnprog: unProgressed.data,
-      leaders: leaderboard.data,
-    },
-  };
-}
 export default index;

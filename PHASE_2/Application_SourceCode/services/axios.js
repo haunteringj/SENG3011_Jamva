@@ -1,11 +1,11 @@
 import Axios from "axios";
 
 const API = Axios.create({
-  baseURL: "https://3.106.142.227/v1/",
+  baseURL: `http://${process.env.NEXT_PUBLIC_API_URL}/v1/`,
   timeout: 30000,
-})
+});
 
-const exceptionHandler = e => {
+const exceptionHandler = (e) => {
   let responseContent = {};
   if (e.response) {
     // The request was made and the server responded with a status code
@@ -49,7 +49,7 @@ const exceptionHandler = e => {
   return responseContent;
 };
 
-export const putRecord =  async (relativeUri, data) => {
+export const putRecord = async (relativeUri, data) => {
   let responseContent = {
     status: "",
     message: "",
@@ -58,21 +58,21 @@ export const putRecord =  async (relativeUri, data) => {
 
   try {
     let response = await API.put(relativeUri, data)
-      .then(reponse => {
+      .then((reponse) => {
         responseContent = {
           status: reponse.status,
           data: reponse.data,
         };
         return responseContent;
       })
-      .catch(e => {
+      .catch((e) => {
         return exceptionHandler(e);
       });
     return response;
   } catch (e) {
     return exceptionHandler(e);
   }
-}
+};
 
 export const postRecord = async (relativeUri, data) => {
   let responseContent = {
@@ -82,7 +82,7 @@ export const postRecord = async (relativeUri, data) => {
   };
   try {
     let response = await API.post(relativeUri, data)
-      .then(response => {
+      .then((response) => {
         responseContent = {
           status: response.status,
           data: response.data,
@@ -90,7 +90,7 @@ export const postRecord = async (relativeUri, data) => {
 
         return responseContent;
       })
-      .catch(e => {
+      .catch((e) => {
         return exceptionHandler(e);
       });
     return response;
@@ -99,7 +99,7 @@ export const postRecord = async (relativeUri, data) => {
   }
 };
 
-export const getRecord = async relativeUri => {
+export const getRecord = async (relativeUri) => {
   let responseContent = {
     status: "",
     message: "",
@@ -107,14 +107,14 @@ export const getRecord = async relativeUri => {
   };
   try {
     let response = await API.get(relativeUri)
-      .then(response => {
+      .then((response) => {
         responseContent = {
           status: response.status,
           data: response.data,
         };
         return responseContent;
       })
-      .catch(e => {
+      .catch((e) => {
         return exceptionHandler(e);
       });
     return response;
@@ -132,18 +132,18 @@ export const deleteRecord = async (relativeUri, data) => {
 
   try {
     let response = await API.delete(relativeUri, data)
-      .then(reponse => {
+      .then((reponse) => {
         responseContent = {
           status: reponse.status,
           data: reponse.data,
         };
         return responseContent;
       })
-      .catch(e => {
+      .catch((e) => {
         return exceptionHandler(e);
       });
     return response;
   } catch (e) {
     return exceptionHandler(e);
   }
-}
+};

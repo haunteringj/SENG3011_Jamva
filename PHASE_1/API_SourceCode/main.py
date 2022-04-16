@@ -235,18 +235,29 @@ async def getQuizzes(disease):
 @app.get("/v1/quiz/{disease}/{id}")
 async def getQuiz(disease,id):
     return fetchQuiz(db,disease,id)
+@app.get("/v1/quizzes/{disease}/{userId}")
+async def getQuizCompleted(disease,userId):
+    return fetchCompletedQuizzes(db,disease,userId)
+
 
 @app.post("/v1/quiz/{id}/answer")
 async def createAnswer(id, questiondata: answerModel):
     return addAnswer(db,id, jsonable_encoder(questiondata))
+@app.post("/v1/quiz/complete/{disease}/{userId}/{quizId}/{score}")
+async def completeQuizzes( disease,userId, quizId,score):
+    return completeQuiz(db,disease,userId,quizId,score)
 
 @app.get("/v1/answer/{id}")
 async def getQuiz(id):
     return fetchAnswer(db,id)
 
-@app.get("/v1/hangman/{id}")
-async def getWords(id):
-    return fetchWords(db,id)
+@app.get("/v1/hangman/{id}/{userId}")
+async def getWords(id, userId):
+    return fetchWords(db,id, userId)
+
+@app.post("/v1/hangman/complete/{disease}/{userId}/{word}")
+async def completeWords(disease,userId, word):
+    return completeWord(db,disease, userId, word)
 
 @app.get("/v1/crosswords/{id}/getAll")
 async def getCrosswords( id):
@@ -256,6 +267,13 @@ async def getCrosswords( id):
 async def getCrossword(disease, id):
     return fetchCrossword(db,disease, id)
 
+@app.get("/v1/crosswords/getCompleted/{disease}/{userId}")
+async def getCrossword(disease, userId):
+    return getCompletedCrosswords(db,disease, userId)
+
+@app.post("/v1/crosswords/complete/{disease}/{crosswordId}/{userId}")
+async def getCrossword(disease, crosswordId, userId):
+    return completeCrossword(db,disease, crosswordId, userId)
 @app.get("/v1/listDiseases")
 async def getAllDiseases():
     return getDiseases(db)

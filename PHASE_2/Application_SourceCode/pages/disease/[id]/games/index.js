@@ -13,7 +13,7 @@ const index = () => {
             className="backButton custom-btn"
             onClick={() => router.push(`/disease/${id}`)}
           >
-            Back
+            Learn
           </button>
           <Center>
             <h1 className="title">Pick a Game to learn about {id}!</h1>

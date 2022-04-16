@@ -109,6 +109,7 @@ def getProgressDiseases(db, uid:str):
         completedActivities = len(specificDisease["hangman"]) + len(specificDisease["quizzes"]) + len(specificDisease["crosswords"])
         percentage = completedActivities/totalActivities
         return_dict[disease] = int(percentage*100)
+    return_dict = dict(sorted(return_dict.items(), key=lambda x: x[1], reverse=True))
     return return_dict
 
 def getUnprogressedDiseases(db,uid:str):

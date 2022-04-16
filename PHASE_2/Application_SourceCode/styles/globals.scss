@@ -24,9 +24,7 @@ a {
 .crosswordContainer {
   padding-top: 1vh;
   color:white;
-}
-* {
-  box-sizing: border-box;
+  width: auto;
 }
 
 .main-wrapper {
@@ -324,7 +322,7 @@ button {
 
 .backButton {
   background-color: #2c2c2c78;
-  width: 5em;
+  width: 6em;
   height: 3em;
   border: 1px solid white;
   cursor: pointer;

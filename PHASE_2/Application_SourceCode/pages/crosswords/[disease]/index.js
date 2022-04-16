@@ -17,16 +17,19 @@ const index = (props) => {
   const quiz = JSON.parse(props.quiz);
   const router = useRouter();
   const disease = props.diseaseName;
-  const generateQuizCard = (singleQuiz) => {
+  const completed = props.completed;
+  const generateQuizCard = (singleQuiz, completed) => {
     return (
       <Box
         m={3}
         width={500}
         height={180}
-        className="selectionBox"
         borderWidth="1px"
         borderRadius="lg"
         p={6}
+        backgroundColor={
+          completed.includes(singleQuiz.crosswordId) ? "#44a832" : "#a83232"
+        }
         boxShadow="xl"
       >
         <Heading color="white" as="h3" size="lg">
@@ -72,7 +75,7 @@ const index = (props) => {
           <Container maxW="6xl">
             {quiz.length > 0 && (
               <SimpleGrid minChildWidth="400px">
-                {quiz.map((singleQuiz) => (
+                {quiz.map((singleQuiz, index) => (
                   <Box
                     key={singleQuiz.id}
                     onClick={() =>
@@ -83,7 +86,11 @@ const index = (props) => {
                     as="button"
                     textAlign="start"
                   >
-                    {generateQuizCard(singleQuiz)}
+                    {generateQuizCard(
+                      singleQuiz,
+                      completed,
+                      singleQuiz.crosswordId
+                    )}
                   </Box>
                 ))}
               </SimpleGrid>
@@ -100,11 +107,20 @@ export async function getServerSideProps(context) {
   const disease = context.query.disease;
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const snapshot = await axios.get(
-    `https://3.106.142.227/v1/crosswords/${disease}/getAll`,
+    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/getAll`,
     { httpsAgent }
   );
+  const completeData = await axios.get(
+    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/getCompleted/${disease}/f3BNKAJFnlZuLZVuX1Zpk77TCsr2`,
+    { httpsAgent }
+  );
+  console.log(completeData.data);
   return {
-    props: { quiz: JSON.stringify(snapshot.data), diseaseName: disease },
+    props: {
+      quiz: JSON.stringify(snapshot.data),
+      diseaseName: disease,
+      completed: completeData.data,
+    },
   };
 }
 export default index;

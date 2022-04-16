@@ -7,7 +7,10 @@ import Popup from "../../../components/hangman/Popup";
 import Notification from "../../../components/hangman/Notification";
 import { Center, ChakraProvider, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { showNotification as show, checkWin } from "../../../utils/helpers/helpers";
+import {
+  showNotification as show,
+  checkWin,
+} from "../../../utils/helpers/helpers";
 import https from "https";
 
 var selectedWord = "";
@@ -18,8 +21,13 @@ export default function Hangman(data) {
   const [showNotification, setShowNotification] = useState(false);
   const router = useRouter();
   let words = data["wordList"];
+  let forfun = data["fun"];
+  if (words.length == 0) {
+    forfun = true;
+    words = data["allwords"];
+  }
   let disease = data.diseaseName;
-  console.log(words);
+  let facts = data["facts"];
   useEffect(() => {
     const handleKeydown = (event) => {
       const { key, keyCode } = event;
@@ -46,17 +54,31 @@ export default function Hangman(data) {
   }, [correctLetters, wrongLetters, playable]);
 
   function playAgain() {
-    setPlayable(true);
+    if (checkWin(correctLetters, wrongLetters, selectedWord) === "win") {
+      let remove = words.indexOf(selectedWord);
+      words.splice(remove, 1);
+    }
+    if (forfun == false) {
+      const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+      const profleData = axios.post(
+        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/complete/${disease}/f3BNKAJFnlZuLZVuX1Zpk77TCsr2/${selectedWord}`,
+        { httpsAgent }
+      );
+    } else setPlayable(true);
     setCorrectLetters([]);
     setWrongLetters([]);
-    console.log(words);
+    if (words.length == 0) {
+      words = data["allwords"];
+    }
     const random = Math.floor(Math.random() * words.length);
-    console.log("random", random);
+
     selectedWord = words[random];
+    console.log(words.length);
   }
   if (selectedWord == "") {
     selectedWord = data.word;
   }
+  console.log(selectedWord);
   return selectedWord == "" ? (
     <ChakraProvider>
       <div className="selectionHeader">
@@ -84,11 +106,19 @@ export default function Hangman(data) {
               Back
             </button>
             <Center>
-              <h1>Hangman</h1>
+              <h1>{disease} Hangman</h1>
             </Center>
             <Center>
               <p>Find the hidden word - Enter a letter</p>
             </Center>
+            {forfun ? (
+              <p>
+                You have completed this Disease's hangman! Currently playing for
+                fun.
+              </p>
+            ) : (
+              <></>
+            )}
           </div>
 
           <div className="game-container">
@@ -103,6 +133,9 @@ export default function Hangman(data) {
             <Popup
               correctLetters={correctLetters}
               wrongLetters={wrongLetters}
+              fact={facts[selectedWord]}
+              forfun={forfun}
+              wordsLeft={words}
               selectedWord={selectedWord}
               setPlayable={setPlayable}
               playAgain={playAgain}
@@ -120,22 +153,46 @@ export async function getServerSideProps(context) {
   const hangmanId = context.query.id;
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const snapshot = await axios.get(
-    `https://3.106.142.227/v1/hangman/${hangmanId}`,
+    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/${hangmanId}/f3BNKAJFnlZuLZVuX1Zpk77TCsr2`,
     { httpsAgent }
   );
-  let allwords = [];
+  let wordSelection = [];
+  let forfun = false;
   if (snapshot.data != null) {
-    allwords = snapshot.data["words"];
+    wordSelection = snapshot.data["difference"];
   }
-  var selectedWord = allwords[Math.floor(Math.random() * allwords.length)];
-
+  console.log(snapshot.data);
+  var selectedWord = "";
+  if (wordSelection.length == 0) {
+    forfun = true;
+    var selectedWord =
+      snapshot.data["allwords"][
+        Math.floor(Math.random() * snapshot.data["allwords"].length)
+      ];
+  } else {
+    var selectedWord =
+      wordSelection[Math.floor(Math.random() * wordSelection.length)];
+  }
+  console.log(selectedWord);
   return selectedWord == undefined
-    ? { props: { word: "", wordList: allwords, diseaseName: hangmanId } }
+    ? {
+        props: {
+          word: "",
+          wordList: wordSelection,
+          diseaseName: hangmanId,
+          facts: snapshot.data["facts"],
+          fun: forfun,
+          allwords: snapshot.data["allwords"],
+        },
+      }
     : {
         props: {
           word: selectedWord,
-          wordList: allwords,
+          wordList: wordSelection,
           diseaseName: hangmanId,
+          facts: snapshot.data["facts"],
+          fun: forfun,
+          allwords: snapshot.data["allwords"],
         },
       };
 }

@@ -16,18 +16,55 @@ import React from "react";
 import { getAnswer, getSingleQuiz } from "../../../../../utils/db";
 import { useRouter } from "next/router";
 import https from "https";
-
-const answer = (props) => {
-  const quiz = JSON.parse(props.quiz);
-  const answer = JSON.parse(props.answer);
-  const diseaseName = props.disease;
+import { useEffect } from "react";
+import http from "http";
+import { useState, useContext } from "react";
+import { userContext } from "../../../../../context/userState";
+const answer = () => {
+  const [points, setPoints] = useState("");
+  const [quiz, setQuiz] = useState(null);
+  const { userValues, setUserData } = useContext(userContext);
+  const [answer, setAnswer] = useState(null);
   const router = useRouter();
+  const { disease, id, answerId } = router.query;
+  let numRight = 0;
+  let numCounted = 0;
+  useEffect(() => {
+    console.log(numRight);
+    if(numCounted == numRight)
+    const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+    axios
+      .post(
+        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/complete/${disease}/${userValues.userId}/${id}/${numRight}`,
+        { httpsAgent }
+      )
+      .then((response) => {
+        if (response.data["score"] != 0) {
+          setPoints(query.data["score"]);
+        }
+      });
+    axios
+      .get(
+        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${disease}/${id}`,
+        { httpsAgent }
+      )
+      .then((response) => {
+        setQuiz(response.data);
+      });
+    axios
+      .get(`http://${process.env.NEXT_PUBLIC_API_URL}/v1/answer/${answerId}`, {
+        httpsAgent,
+      })
+      .then((response) => {
+        setAnswer(response.data);
+      });
+  }, []);
   return (
     <ChakraProvider>
       <div className="selectionHeader">
         <button
           className="backButton custom-btn"
-          onClick={() => router.push(`/quizzes/${diseaseName}`)}
+          onClick={() => router.push(`/quizzes/${disease}`)}
         >
           Back
         </button>
@@ -36,6 +73,11 @@ const answer = (props) => {
         <Container maxW="3xl">
           <Center flexDirection="column">
             <Heading color="white">Correct Answers for {quiz.title}</Heading>
+            <Heading color="white" textAlign="center">
+              {points > 0
+                ? `You scored ${points} points for this attempt!`
+                : `You didnt get any extra points for this attempt.`}
+            </Heading>
             <Text color="white" mt={4}>
               {quiz.description}
             </Text>
@@ -48,6 +90,13 @@ const answer = (props) => {
             }}
           />
           {quiz.questions.map((singleQuiz, index) => {
+            if (
+              answer.questions[index].answerId &&
+              singleQuiz.options[singleQuiz.answer].optionId ===
+                answer.questions[index].answerId
+            ) {
+              numRight += 1;
+            }
             return (
               <Box
                 mt={index !== 0 && 4}
@@ -100,28 +149,5 @@ const answer = (props) => {
     </ChakraProvider>
   );
 };
-
-export async function getServerSideProps(context) {
-  const quizId = context.query.id;
-  const diseaseName = context.query.disease;
-  const answerId = context.query.answerId;
-  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-  const quizData = await axios.get(
-    `https://3.106.142.227/v1/quiz/${diseaseName}/${quizId}`,
-    { httpsAgent }
-  );
-  const answerData = await axios.get(
-    `https://3.106.142.227/v1/answer/${answerId}`,
-    { httpsAgent }
-  );
-  console.log(answerData.data);
-  return {
-    props: {
-      answer: JSON.stringify(answerData.data),
-      quiz: JSON.stringify(quizData.data),
-      disease: diseaseName,
-    },
-  };
-}
 
 export default answer;

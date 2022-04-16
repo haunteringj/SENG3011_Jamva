@@ -15,12 +15,39 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import React from "react";
 import https from "https";
-
-const Home = (props) => {
-  const quiz = JSON.parse(props.quiz);
+import { useState, useEffect, useContext } from "react";
+import { userContext } from "../../../context/userState";
+import NotLogged from "../../../components/users/notLogged";
+const Home = () => {
   const router = useRouter();
-  const disease = props.diseaseName;
-  const generateQuizCard = (singleQuiz) => {
+  const { disease } = router.query;
+  const { userValues, setUserData } = useContext(userContext);
+  const [quiz, setQuiz] = useState(null);
+  const [completed, setCompletedQuiz] = useState(null);
+  useEffect(() => {
+    if (userValues.userId != "") {
+      const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+      axios
+        .get(
+          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quizzes/${disease}/getAll`,
+          { httpsAgent }
+        )
+        .then((response) => {
+          setQuiz(response.data);
+        });
+      axios
+        .get(
+          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quizzes/${disease}/${userValues.userId}`,
+          { httpsAgent }
+        )
+        .then((response) => {
+          setCompletedQuiz(response.data);
+        });
+    }
+  }, []);
+
+  const generateQuizCard = (singleQuiz, completed, index) => {
+    console.log(singleQuiz);
     return (
       <Box
         m={3}
@@ -28,6 +55,14 @@ const Home = (props) => {
         height={180}
         className="selectionBox"
         borderWidth="1px"
+        backgroundColor={
+          Object.keys(completed).includes(String(index)) &&
+          completed[String(index)] == singleQuiz.questions.length
+            ? "#44a832"
+            : Object.keys(completed).includes(String(index))
+            ? "#cc7337"
+            : "#a83232"
+        }
         borderRadius="lg"
         p={6}
         boxShadow="xl"
@@ -37,7 +72,12 @@ const Home = (props) => {
         </Heading>
 
         <Text color="white" mt={2}>
-          No of Questions: {singleQuiz.questions.length}
+          No of Questions: {singleQuiz.questions.length}{" "}
+          {Object.keys(completed).includes(String(index))
+            ? `| Best attempt: ${completed[String(index)]}/${
+                singleQuiz.questions.length
+              }`
+            : ""}
         </Text>
 
         <Divider mt={3} mb={3} />
@@ -47,7 +87,10 @@ const Home = (props) => {
       </Box>
     );
   };
-  return quiz.length == 0 ? (
+  if (userValues.userId == "") {
+    return <NotLogged></NotLogged>;
+  }
+  return quiz == null || completed == null || quiz.length == 0 ? (
     <ChakraProvider>
       <div className="selectionHeader">
         <button
@@ -116,7 +159,7 @@ const Home = (props) => {
                       router.push(`/quizzes/${singleQuiz.disease}/${index}`)
                     }
                   >
-                    {generateQuizCard(singleQuiz)}
+                    {generateQuizCard(singleQuiz, completed, index)}
                   </Box>
                 ))}
                 <Box
@@ -144,17 +187,5 @@ const Home = (props) => {
     </ChakraProvider>
   );
 };
-
-export async function getServerSideProps(context) {
-  const disease = context.query.disease;
-  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-  const snapshot = await axios.get(
-    `https://3.106.142.227/v1/quizzes/${disease}/getAll`,
-    { httpsAgent }
-  );
-  return {
-    props: { quiz: JSON.stringify(snapshot.data), diseaseName: disease },
-  };
-}
 
 export default Home;
