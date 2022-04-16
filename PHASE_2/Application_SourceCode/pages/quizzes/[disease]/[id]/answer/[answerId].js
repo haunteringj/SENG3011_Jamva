@@ -21,28 +21,35 @@ import http from "http";
 import { useState, useContext } from "react";
 import { userContext } from "../../../../../context/userState";
 const answer = () => {
-  const [points, setPoints] = useState("");
+  const [points, setPoints] = useState(null);
   const [quiz, setQuiz] = useState(null);
   const { userValues, setUserData } = useContext(userContext);
   const [answer, setAnswer] = useState(null);
   const router = useRouter();
   const { disease, id, answerId } = router.query;
   let numRight = 0;
+
   let numCounted = 0;
   useEffect(() => {
-    console.log(numRight);
-    if(numCounted == numRight)
+    if (answer != null && numCounted == answer.questions.length) {
+      numCounted += 1;
+      console.log("SET SCORE", numRight)
+      const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+      axios
+        .post(
+          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/complete/${disease}/${userValues.userId}/${id}/${numRight}`,
+          { httpsAgent }
+        )
+        .then((response) => {
+          if (response.data["score"] != 0) {
+            setPoints(response.data["score"]);
+          }
+        });
+    }
+  })
+  useEffect(() => {
+    console.log(numRight, answer);
     const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-    axios
-      .post(
-        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/complete/${disease}/${userValues.userId}/${id}/${numRight}`,
-        { httpsAgent }
-      )
-      .then((response) => {
-        if (response.data["score"] != 0) {
-          setPoints(query.data["score"]);
-        }
-      });
     axios
       .get(
         `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${disease}/${id}`,
@@ -93,10 +100,12 @@ const answer = () => {
             if (
               answer.questions[index].answerId &&
               singleQuiz.options[singleQuiz.answer].optionId ===
-                answer.questions[index].answerId
+              answer.questions[index].answerId
             ) {
               numRight += 1;
             }
+            numCounted += 1;
+            console.log("COUNTED", numCounted);
             return (
               <Box
                 mt={index !== 0 && 4}
@@ -107,7 +116,7 @@ const answer = () => {
                 boxShadow="xl"
                 backgroundColor={
                   answer.questions[index].answerId &&
-                  singleQuiz.options[singleQuiz.answer].optionId ===
+                    singleQuiz.options[singleQuiz.answer].optionId ===
                     answer.questions[index].answerId
                     ? "green.200"
                     : "red.200"
