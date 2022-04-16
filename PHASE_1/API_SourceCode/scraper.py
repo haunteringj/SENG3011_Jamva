@@ -348,10 +348,24 @@ def findDisease(title):
     if diseases == []:
         return ["unknown"]
     return diseases
-
-
 # for each id in the list get the article data
 count = 0
+dailyReportRef = db.collection("dailyReports").document("daily")
+data = dailyReportRef.get()
+for i in data.to_dict()["diseaseMap"]:
+    for key, value in i.items():
+        for country in value:
+            countryRef = db.collection("countries").document(country)
+            countryData = countryRef.get()
+            for user in countryData.to_dict()["users"]:
+                #reset user alerts
+                userRef = db.collection("userDetails").document(user)
+                userRef.set({
+                    "alerts": []
+                }, merge=True)
+
+diseaseMapArray = []
+
 for element in latest_id_list:
     diseasesList = [
         {"name": "unknown"},
@@ -500,6 +514,8 @@ for element in latest_id_list:
     }
     diseases = findDisease(a["headline"])
 
+
+
     articleRef = db.collection("articles").document(element["id"])
     diseaseRefList = []
     for disease in diseases:
@@ -517,15 +533,37 @@ for element in latest_id_list:
             )
             diseaseRefList.append(db.collection("diseases").document(disease))
 
-    # Now we create our report, which takes our diseases reference list
     countrycode = pycountry.countries.search_fuzzy(element["country"])[0].alpha_2
+    locationList = [db.collection("countries").document(countrycode)]
+    newDiseaseMap = {
+        element["id"]: locationList
+    }
+    diseaseMapArray.append(newDiseaseMap)
+    print(newDiseaseMap)
+    alertInfo = {
+        "article": element["id"],
+        "cases": 0,
+        "diseases": diseases,
+    }
+
+    countryRef = db.collection("countries").document(countrycode)
+    countryData = countryRef.get()
+    for user in countryData.to_dict()["users"]:
+        userRef = db.collection("userDetails").document(user)
+        userRef.update({"alerts": firestore.ArrayUnion([alertInfo])})
+
+    # Now we create our report, which takes our diseases reference list
     report = {
         "article": articleRef,
         "cases": 0,
         "diseases": diseaseRefList,
         "event_date": element["published_date"],
-        "locations": [db.collection("countries").document(countrycode)],
+        "locations": locationList,
     }
+
+    # go through each daily, reset each users alerts
+    # then add each report in each users alerts
+
 
     db.collection("reports").document(element["id"]).set(report)
     a["reports"].append(db.collection("reports").document(element["id"]))
@@ -558,3 +596,9 @@ for element in latest_id_list:
     print(element)
     driver1.close()
     count += 1
+
+query = db.collection("dailyReports").document("daily")
+query.set({
+    "diseaseMap": diseaseMapArray
+})
+

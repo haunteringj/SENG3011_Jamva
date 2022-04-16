@@ -4,6 +4,7 @@ from fastapi import status, HTTPException
 from fastapi.responses import JSONResponse
 from firebase_admin import auth
 from firebase_admin import exceptions
+from firebase_admin import firestore
 import json
 from pydantic import BaseModel
 
@@ -50,11 +51,12 @@ def createUserEntry(db, userInfo: userCreationModel):
             "completed":{},
             "badges":[],
             "score":0,
-
         }
         try:
             db.collection("userDetails").document(
                 user.uid).set(createUserDetail)
+            query = db.collection("countries").document(userInfo.country)
+            query.update({"users": firestore.ArrayUnion([user.uid])})
             return successResponse
         except:
             return toJsonResponse(409, {"status": "failed_userDetailExists", "uid": 0})
