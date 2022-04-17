@@ -3,6 +3,7 @@
     color: blue;
     padding-top: 3vh;
 }
+
 .progress_box {
     height: 30vh;
 }
@@ -10,19 +11,24 @@
 .first_half {
     height: 50vh;
 }
+
 .profile {
     padding: 10;
-    
+
 }
-.top_profile{
+
+.top_profile {
     height: 32vh;
 }
+
 .bottom_profile {
     height: 13vh;
 }
+
 .center-text {
     width: 50%;
 }
+
 table {
     border-collapse: collapse;
 }
@@ -32,12 +38,12 @@ table td {
 }
 
 .rank-header {
-  color: blue;
-  font-size: 20px;
-  font-weight: bold;
-}
-.data:first-child {
-  font-size: 18px;
-  font-weight: bold;
+    color: blue;
+    font-size: 20px;
+    font-weight: bold;
 }
 
+.data:first-child {
+    font-size: 18px;
+    font-weight: bold;
+}

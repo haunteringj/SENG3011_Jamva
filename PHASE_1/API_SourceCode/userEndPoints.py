@@ -1,3 +1,4 @@
+from audioop import cross
 from csv import Dialect
 from tracemalloc import start
 from fastapi import status, HTTPException
@@ -21,11 +22,22 @@ class userCreationModel(BaseModel):
 class userIdModel(BaseModel):
     uid: str
 
+
 # Reorders the queryresults to have a consistent format
 
 
 def reorderFields(queryResult):
-    orderOfFields = ["username", "city", "state", "age", "alerts", "country","badges","completed","score"]
+    orderOfFields = [
+        "username",
+        "city",
+        "state",
+        "age",
+        "alerts",
+        "country",
+        "badges",
+        "completed",
+        "score",
+    ]
     return {k: queryResult.to_dict()[k] for k in orderOfFields}
 
 
@@ -35,10 +47,7 @@ def toJsonResponse(statusCode, body):
 
 def createUserEntry(db, userInfo: userCreationModel):
     try:
-        user = auth.create_user(
-            email=userInfo.email,
-            password=userInfo.password
-        )
+        user = auth.create_user(email=userInfo.email, password=userInfo.password)
         successResponse = {"status": "success", "uid": user.uid}
         createUserDetail = {
             "username": userInfo.username,
@@ -47,14 +56,12 @@ def createUserEntry(db, userInfo: userCreationModel):
             "city": userInfo.city,
             "age": userInfo.age,
             "alerts": [],
-            "completed":{},
-            "badges":[],
-            "score":0,
-
+            "completed": {},
+            "badges": [],
+            "score": 0,
         }
         try:
-            db.collection("userDetails").document(
-                user.uid).set(createUserDetail)
+            db.collection("userDetails").document(user.uid).set(createUserDetail)
             return successResponse
         except:
             return toJsonResponse(409, {"status": "failed_userDetailExists", "uid": 0})
@@ -72,8 +79,10 @@ def deleteUserEntry(db, userId: str):
         db.collection("userDetails").document(userId).delete()
         return toJsonResponse(204, {})
     except:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail=f"user with {userId} wasn't found")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"user with {userId} wasn't found",
+        )
 
 
 def getUserDetail(db, uid: str):
@@ -85,34 +94,54 @@ def getUserDetail(db, uid: str):
     queryDict = reorderFields(query)
     return toJsonResponse(200, queryDict)
 
-def getTotalActivities(disease,db):
+
+def getTotalActivities(disease, db):
     try:
         hangman = db.collection("hangman").document(disease).get().to_dict()
+        if hangman == None:
+            hangman = {"words": []}
         quizzes = db.collection("quizzes").document(disease).get().to_dict()
-        crosswords = db.collection("crosswords").document(disease).collection("crosswords").get()
+        if quizzes == None:
+            quizzes = {"quizzes": []}
+        crosswords = (
+            db.collection("crosswords").document(disease).collection("crosswords").get()
+        )
+        if crosswords == None:
+            crosswords = []
     except:
         return -1
+    print(disease)
     return len(hangman["words"]) + len(quizzes["quizzes"]) + len(crosswords)
 
-def getProgressDiseases(db, uid:str):
+
+def getProgressDiseases(db, uid: str):
     try:
         query = db.collection("userDetails").document(uid).get().to_dict()
     except:
         return toJsonResponse(500, "User id doesnt exist")
     return_dict = {}
+    print(uid)
     allDiseases = query["completed"]
     for disease in allDiseases.keys():
-        totalActivities = getTotalActivities(disease,db)
+        totalActivities = getTotalActivities(disease, db)
         if totalActivities == -1:
             return toJsonResponse(500, "Error Collecting activities")
         specificDisease = allDiseases[disease]
-        completedActivities = len(specificDisease["hangman"]) + len(specificDisease["quizzes"]) + len(specificDisease["crosswords"])
-        percentage = completedActivities/totalActivities
-        return_dict[disease] = int(percentage*100)
+        completedActivities = (
+            len(specificDisease["hangman"])
+            + len(specificDisease["quizzes"])
+            + len(specificDisease["crosswords"])
+        )
+        if totalActivities == 0:
+            percentage = 0
+        else:
+            percentage = completedActivities / totalActivities
+        return_dict[disease] = int(percentage * 100)
     return_dict = dict(sorted(return_dict.items(), key=lambda x: x[1], reverse=True))
     return return_dict
 
-def getUnprogressedDiseases(db,uid:str):
+
+def getUnprogressedDiseases(db, uid: str):
     try:
         query = db.collection("userDetails").document(uid).get().to_dict()
     except:
@@ -129,7 +158,7 @@ def getUnprogressedDiseases(db,uid:str):
 
 
 def getLeaders(db):
-    
+
     try:
         query = db.collection("userDetails").get()
     except:
@@ -137,20 +166,19 @@ def getLeaders(db):
     usersArray = []
     for user in query:
         usersdict = {}
-        
-        
+
         try:
             indiv = user.to_dict()
-            
+
             usersdict["Name"] = indiv["username"]
             usersdict["Points"] = indiv["score"]
             usersArray.append(usersdict)
         except:
             return toJsonResponse(500, "Issue getting users")
-    
-    finalList = sorted(usersArray, key=lambda e:e['Points'],reverse=True)
+
+    finalList = sorted(usersArray, key=lambda e: e["Points"], reverse=True)
     count = 1
     for dict in finalList:
         dict["id"] = count
-        count+=1
+        count += 1
     return finalList

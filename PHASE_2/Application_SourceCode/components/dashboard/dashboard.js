@@ -60,7 +60,7 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
       <Grid container spacing={2}>
         <Grid item xs={9}>
           <Card className="first_half">
-            <CardContent>
+            <CardContent >
               <Grid container spacing={2}>
                 <Grid item xs={3}>
                   <CardMedia
@@ -70,7 +70,7 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
                   />
                 </Grid>
                 <Grid item xs={9}>
-                  <Card className="top_profile">
+                  <Card className="top_profile" >
                     <CardContent>Badges: {profile.badges}</CardContent>
                   </Card>
                 </Grid>

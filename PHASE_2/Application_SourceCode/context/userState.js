@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const userContext = createContext(null);
 
@@ -15,6 +15,15 @@ export const INITIAL_USER_STATE = {
 
 export function UserWrapper({ children }) {
   const [userValues, setUserValues] = useState(INITIAL_USER_STATE);
+  useEffect(() => {
+    setUserValues(localStorage.getItem("userKey"));
+  }, [])
+
+  useEffect(() => {
+    if (userValues != localStorage.getItem("userKey")) {
+      localStorage.setItem("userKey", userValues);
+    }
+  }, [userValues])
 
   return (
     <userContext.Provider value={{ userValues, setUserValues }}>

@@ -47,7 +47,7 @@ const index = (props) => {
           setLeaderboard(response.data);
         });
     }
-  }, []);
+  }, [userValues]);
 
   return (
     <Dashboard
