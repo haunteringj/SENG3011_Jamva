@@ -1,5 +1,5 @@
 .nav {
-  height: 5.3vh;
+  height: 7vh;
   padding: 10px;
   background: #000;
   color: #fff;
@@ -7,7 +7,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  background-color: #2c2c2c;
+  background-color: #264653;
 }
 
 .nav ul {
@@ -42,7 +42,9 @@
   margin-left: 20px;
   justify-items: center;
 }
-
+.hometext{
+  font-size: 20px;
+}
 .authbar {
   display: flex;
   justify-content: flex-start;

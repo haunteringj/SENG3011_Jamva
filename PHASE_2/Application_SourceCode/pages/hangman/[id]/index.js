@@ -15,6 +15,7 @@ import {
 import https from "https";
 import { userContext } from "../../../context/userState";
 import { useContext } from "react";
+import ReactLoading from "react-loading";
 export default function Hangman() {
   const { userValues, setUserData } = useContext(userContext);
   const [playable, setPlayable] = useState(true);
@@ -25,12 +26,12 @@ export default function Hangman() {
   const [wordList, setWordList] = useState(null);
   const [facts, setFacts] = useState(null);
   const [forfun, setFun] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [allwords, setAllwords] = useState(null);
   const router = useRouter();
   const { id } = router.query;
 
   useEffect(() => {
-
     const handleKeydown = (event) => {
       const { key, keyCode } = event;
       if (playable && keyCode >= 65 && keyCode <= 90) {
@@ -55,34 +56,48 @@ export default function Hangman() {
     return () => window.removeEventListener("keydown", handleKeydown);
   }, [correctLetters, wrongLetters, playable]);
 
-
-
   useEffect(() => {
     if (userValues.userId == "") {
-      return <NotLogged></NotLogged>
+      return <NotLogged></NotLogged>;
     }
     const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-    axios.get(
-      `http://${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/${id}/${userValues.userId}`,
-      { httpsAgent }
-    ).then((response) => {
-      console.log(response)
-      setWordList(response.data["difference"]);
-      setAllwords(response.data["allwords"]);
-      setFacts(response.data["facts"])
-      if (response.data["difference"].length == 0) {
-        setFun(true);
-        setWord(response.data["allwords"][
-          Math.floor(Math.random() * response.data["allwords"].length)]);
-      } else {
-        setFun(false);
-        setWord(response.data["difference"][
-          Math.floor(Math.random() * response.data["difference"].length)]);
-      }
-    });
-  }, [])
+    axios
+      .get(
+        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/${id}/${userValues.userId}`,
+        { httpsAgent }
+      )
+      .then((response) => {
+        console.log(response);
+        setWordList(response.data["difference"]);
+        setAllwords(response.data["allwords"]);
+        setFacts(response.data["facts"]);
+        if (response.data["difference"].length == 0) {
+          setFun(true);
+          setWord(
+            response.data["allwords"][
+              Math.floor(Math.random() * response.data["allwords"].length)
+            ]
+          );
+        } else {
+          setFun(false);
+          setWord(
+            response.data["difference"][
+              Math.floor(Math.random() * response.data["difference"].length)
+            ]
+          );
+        }
+        setLoading(false);
+      });
+  }, []);
   if (userValues.userId == "") {
-    return <NotLogged></NotLogged>
+    return <NotLogged></NotLogged>;
+  }
+  if (loading) {
+    return (
+      <div style={{ paddingTop: "40vh" }}>
+        <ReactLoading type={"spin"} />
+      </div>
+    );
   }
   function playAgain() {
     if (checkWin(correctLetters, wrongLetters, word) === "win") {
@@ -103,7 +118,7 @@ export default function Hangman() {
     if (wordList.length == 0) {
       setFun(true);
       setWordList(allwords);
-      console.log(wordList)
+      console.log(wordList);
       const random = Math.floor(Math.random() * allwords.length);
       setWord(allwords[random]);
     } else {
@@ -158,10 +173,7 @@ export default function Hangman() {
             <div>
               <Figure wrongLetters={wrongLetters} />
               <WrongLetters wrongLetters={wrongLetters} />
-              <Word
-                selectedWord={word}
-                correctLetters={correctLetters}
-              />
+              <Word selectedWord={word} correctLetters={correctLetters} />
             </div>
             <Popup
               correctLetters={correctLetters}

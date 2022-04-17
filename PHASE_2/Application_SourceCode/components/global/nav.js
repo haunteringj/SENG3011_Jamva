@@ -1,5 +1,5 @@
-import Link from "next/link"
-import navStyles from "../../styles/Nav.module.scss"
+import Link from "next/link";
+import navStyles from "../../styles/Nav.module.scss";
 import { useContext } from "react";
 import { userContext, INITIAL_USER_STATE } from "../../context/userState";
 import { useRouter } from "next/router";
@@ -11,56 +11,72 @@ const Nav = () => {
 
   const signOutUser = async () => {
     await auth.signOut();
-    setUserValues(INITIAL_USER_STATE)
+    setUserValues(INITIAL_USER_STATE);
     router.push("/");
-  }
+  };
 
   return (
     <nav className={navStyles.nav}>
       {/* This is the left div */}
       <div className={navStyles.routebar}>
         <div className={navStyles.title}>
-          <Link className={navStyles.hometext} href="/">JAMVA</Link>
+          <Link href="/">
+            <img
+              style={{ width: "7vw", cursor: "pointer" }}
+              src="/images/jamva.png"
+            />
+          </Link>
         </div>
         <div className={navStyles.divider}></div>
-      
 
-
-        <Link className={navStyles.hometext} href="/explore">EXPLORE</Link>
-        
-
+        <Link href="/explore">
+          <div style={{ fontSize: "1.3vw", cursor: "pointer" }}>EXPLORE</div>
+        </Link>
       </div>
 
       {/* This is the right div */}
 
       <ul>
-        
-
-        {(userValues.userId != "") ? (
-        <>
-          <li>
-            <div
-              className="signout-button"
-              onClick={() => {
-                signOutUser();
-              }}
-            >
+        {userValues.userId != "" ? (
+          <>
+            <li>
+              <div
+                className="signout-button"
+                onClick={() => {
+                  signOutUser();
+                }}
+              >
                 Signout
-            </div>
-          </li>
-          <li>
+              </div>
+            </li>
+            <li>
               <Link href="/user">Account</Link>
-          </li>
-        </>
+            </li>
+          </>
         ) : (
-        <>
-          <li>
-            <Link href="/login">Login</Link>
-          </li>
-          <li>
-            <Link href="/signup">Signup</Link>
-          </li>
-        </>
+          <>
+            <li>
+              <Link href="/login">
+                <div style={{ fontSize: "1.3vw", cursor: "pointer" }}>
+                  Login
+                </div>
+              </Link>
+            </li>
+            <li>
+              <Link href="/signup">
+                <div
+                  style={{
+                    fontSize: "1.3vw",
+                    marginLeft: "1vw",
+                    marginRight: "1vw",
+                    cursor: "pointer",
+                  }}
+                >
+                  Signup
+                </div>
+              </Link>
+            </li>
+          </>
         )}
       </ul>
     </nav>
@@ -68,4 +84,3 @@ const Nav = () => {
 };
 
 export default Nav;
-

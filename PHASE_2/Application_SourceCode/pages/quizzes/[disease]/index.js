@@ -18,12 +18,14 @@ import https from "https";
 import { useState, useEffect, useContext } from "react";
 import { userContext } from "../../../context/userState";
 import NotLogged from "../../../components/users/notLogged";
+import ReactLoading from "react-loading";
 const Home = () => {
   const router = useRouter();
   const { disease } = router.query;
   const { userValues, setUserData } = useContext(userContext);
   const [quiz, setQuiz] = useState(null);
   const [completed, setCompletedQuiz] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (userValues.userId != "") {
       const httpsAgent = new https.Agent({ rejectUnauthorized: false });
@@ -42,10 +44,17 @@ const Home = () => {
         )
         .then((response) => {
           setCompletedQuiz(response.data);
+          setLoading(false);
         });
     }
   }, []);
-
+  if (loading) {
+    return (
+      <div style={{ paddingTop: "40vh" }}>
+        <ReactLoading type={"spin"} />
+      </div>
+    );
+  }
   const generateQuizCard = (singleQuiz, completed, index) => {
     console.log(singleQuiz);
     return (

@@ -11,16 +11,49 @@ import Link from "next/link";
 import { CardContent, CardMedia } from "@mui/material";
 import { userContext } from "../../context/userState";
 import { useContext } from "react";
+import ReactLoading from "react-loading";
+import { Center } from "@chakra-ui/react";
+import navStyles from "../../styles/Nav.module.scss";
+import { useRouter } from "next/router";
 const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
   console.log("HERE", profile);
+  const router = useRouter();
   const { userValues, setUserData } = useContext(userContext);
   const leaders = leaderboard;
+  if (
+    userValues.userId != "" &&
+    (profile == null ||
+      progress == null ||
+      unprogress == null ||
+      leaderboard == null)
+  ) {
+    return (
+      <div style={{ paddingTop: "40vh" }}>
+        <ReactLoading type={"spin"} />
+      </div>
+    );
+  }
   return profile == null ||
     progress == null ||
     unprogress == null ||
     leaderboard == null ? (
     <div>
-      <h1 style={{ color: "white" }}>Welcome To Jamva!</h1>
+      <div style={{ textAlign: "center", color: "white", paddingTop: "20vh" }}>
+        <h1>The best form of preperation,</h1>
+        <h1>is education.</h1>
+        <h1>Why not start learning today?</h1>
+        <h2 style={{ fontSize: "1vw" }}>
+          With over 20 diseases to learn about, you would be crazy not to.
+        </h2>
+        <button
+          className="btn-games custom-btn"
+          style={{ width: "10vw", height: "7vh", fontSize: "1vw" }}
+          onClick={() => router.push(`/signup`)}
+        >
+          Start Now
+        </button>
+      </div>
+      <div></div>
     </div>
   ) : (
     <div className="dashboard_container">

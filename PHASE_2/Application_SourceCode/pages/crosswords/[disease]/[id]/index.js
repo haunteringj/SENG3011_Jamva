@@ -8,21 +8,45 @@ import { Center } from "@chakra-ui/react";
 import { ThemeProvider } from "styled-components";
 import { useRouter } from "next/router";
 import https from "https";
-
+import { useEffect } from "react";
+import { useContext } from "react";
+import { userContext } from "../../../../context/userState";
 const index = (passed) => {
   const router = useRouter();
-  const data = passed["crossword"];
   const [done, setDone] = useState(false);
-  const disease = passed.diseaseName;
-  const crosswordid = passed.id;
-  const forfun = passed.completed.includes(crosswordid);
+  const [crossword, setCrossword] = useState(null);
+  const [completed, setCompleted] = useState(null);
+  const { userValues, setUserData } = useContext(userContext);
+  const { disease, id } = router.query;
+  const [forfun, setFun] = useState(null);
+  useEffect(() => {
+    const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+    axios
+      .get(
+        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/${id}`,
+        { httpsAgent }
+      )
+      .then((response) => {
+        setCrossword(response.data);
+      });
+    axios
+      .get(
+        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/getCompleted/${disease}/${userValues.userId}`,
+        { httpsAgent }
+      )
+      .then((response) => {
+        console.log(response.data);
+        setCompleted(response.data);
+        setFun(response.data.includes(id));
+      });
+  }, []);
 
   async function finished() {
     console.log("DONE");
     if (!forfun) {
       const httpsAgent = new https.Agent({ rejectUnauthorized: false });
       const completeData = await axios.post(
-        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/complete/${disease}/${crosswordid}/f3BNKAJFnlZuLZVuX1Zpk77TCsr2`,
+        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/complete/${disease}/${id}/${userValues.userId}`,
         { httpsAgent }
       );
     }
@@ -37,8 +61,10 @@ const index = (passed) => {
     highlightBackground: "#2c2c2c78",
     focusBackground: "rgb(0,0,0,0.1)",
   };
-  const crosswordRef = useRef(null);
-  return (
+  const crosswordRef = useRef(crossword);
+  return completed == null || crossword == null ? (
+    <div>HEY</div>
+  ) : (
     <ChakraProvider>
       <div className="selectionHeader">
         <button
@@ -48,7 +74,7 @@ const index = (passed) => {
           Back
         </button>
         <Heading as="h1" size="lg">
-          {disease} Crossword {crosswordid}
+          {disease} Crossword {id}
         </Heading>
         <Heading as="h2" size="md">
           {forfun ? "You cannot earn points from this crossword" : ""}
@@ -59,7 +85,7 @@ const index = (passed) => {
           <Crossword
             ref={crosswordRef}
             onCrosswordCorrect={finished}
-            data={data}
+            data={crossword}
           />
         </ThemeProvider>
         <Popup finished={done} forfun={forfun} />
@@ -67,25 +93,4 @@ const index = (passed) => {
     </ChakraProvider>
   );
 };
-export async function getServerSideProps(context) {
-  const disease = context.query.disease;
-  const crosswordId = context.query.id;
-  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-  const snapshot = await axios.get(
-    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/${crosswordId}`,
-    { httpsAgent }
-  );
-  const completeData = await axios.get(
-    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/getCompleted/${disease}/f3BNKAJFnlZuLZVuX1Zpk77TCsr2`,
-    { httpsAgent }
-  );
-  return {
-    props: {
-      crossword: snapshot.data,
-      diseaseName: disease,
-      id: crosswordId,
-      completed: completeData.data,
-    },
-  };
-}
 export default index;

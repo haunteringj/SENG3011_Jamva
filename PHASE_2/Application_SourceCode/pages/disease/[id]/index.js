@@ -3,7 +3,8 @@ import axios from "axios";
 import { Center, ChakraProvider, Heading } from "@chakra-ui/react";
 import Link from "next/link";
 import https from "https";
-
+import { useContext } from "react";
+import { userContext } from "../../../context/userState";
 export default function disease_info(data) {
   let name = data["diseaseName"];
   let definition = data["definition"];
@@ -11,17 +12,26 @@ export default function disease_info(data) {
   let treatments = data["treatments"];
   let diagnosis = data["diagnosis"];
   let prevention = data["prevention"];
+  const { userValues, setUserData } = useContext(userContext);
 
   return (
     <div>
       <div className="centered">
-        <div className="align-right">
-          <Link href={`/disease/${name}/games`}>
-            <button className="button">
-              <span>Play a Game!</span>
-            </button>
-          </Link>
-        </div>
+        {userValues.userId != "" ? (
+          <div className="align-right">
+            <Link href={`/disease/${name}/games`}>
+              <button className="button">
+                <span>Play a Game!</span>
+              </button>
+            </Link>
+          </div>
+        ) : (
+          <div className="align-right">
+            <Heading style={{ color: "white" }}>
+              Login above to play games!{" "}
+            </Heading>
+          </div>
+        )}
         <h1 className="white">{name}</h1>
       </div>
       <div className="title"></div>
@@ -98,6 +108,7 @@ export async function getServerSideProps(context) {
   let treatmen = snapshot.data["treatment"];
   let diagnose = snapshot.data["diagnosis"];
   let preventing = snapshot.data["prevention"];
+
   console.log(snapshot.data);
   let def = defin.join(". ");
   let syn = synd.join(". ");

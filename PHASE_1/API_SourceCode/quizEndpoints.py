@@ -86,9 +86,24 @@ def fetchAnswer(db, id):
 def fetchWords(db, id, userId):
     try:
         allWords = db.collection("hangman").document(id).get().to_dict()
+        if allWords == None:
+            return {
+            "allwords": [],
+            "facts": {},
+            "difference": [],
+        }
         allWords = allWords["words"]
-        Query = db.collection("userDetails").document(userId).get().to_dict()
-        completedWords = Query["completed"][id]["hangman"]
+        Query = db.collection("userDetails").document(userId)
+        getted = Query.get().to_dict()
+        if(id in getted["completed"].keys()):
+            
+            completedWords = getted["completed"][id]["hangman"]
+
+        else:
+            completed = getted["completed"]
+            completed[id] = {"quizzes": {}, "hangman": [], "crosswords": []}
+            Query.update({"completed": completed})
+            completedWords = []
 
         print(list(set(allWords.keys()) - set(completedWords)))
         return {
@@ -194,9 +209,16 @@ def completeQuiz(db, disease, userId, QuizId, score):
 
 def getCompletedCrosswords(db, disease, userId):
     try:
-        query = db.collection("userDetails").document(userId).get().to_dict()
-        quizzes = query["completed"][disease]["crosswords"]
-
+        query = db.collection("userDetails").document(userId)
+        getted = query.get().to_dict()
+        
+        if disease in getted["completed"].keys():
+            quizzes = getted["completed"][disease]["crosswords"]
+        else:
+            completed = getted["completed"]
+            completed[disease] = {"quizzes": {}, "hangman": [], "crosswords": []}
+            query.update({"completed": completed})
+            quizzes = []
         return toJsonResponse(200, quizzes)
     except:
         return toJsonResponse(500, "Unable to fetch from database")

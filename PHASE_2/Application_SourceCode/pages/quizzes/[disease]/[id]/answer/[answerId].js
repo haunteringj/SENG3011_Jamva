@@ -20,12 +20,14 @@ import { useEffect } from "react";
 import http from "http";
 import { useState, useContext } from "react";
 import { userContext } from "../../../../../context/userState";
+import ReactLoading from "react-loading";
 const answer = () => {
   const [points, setPoints] = useState(null);
   const [quiz, setQuiz] = useState(null);
   const { userValues, setUserData } = useContext(userContext);
   const [answer, setAnswer] = useState(null);
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const { disease, id, answerId } = router.query;
   let numRight = 0;
 
@@ -33,7 +35,7 @@ const answer = () => {
   useEffect(() => {
     if (answer != null && numCounted == answer.questions.length) {
       numCounted += 1;
-      console.log("SET SCORE", numRight)
+      console.log("SET SCORE", numRight);
       const httpsAgent = new https.Agent({ rejectUnauthorized: false });
       axios
         .post(
@@ -46,7 +48,7 @@ const answer = () => {
           }
         });
     }
-  })
+  });
   useEffect(() => {
     console.log(numRight, answer);
     const httpsAgent = new https.Agent({ rejectUnauthorized: false });
@@ -64,8 +66,16 @@ const answer = () => {
       })
       .then((response) => {
         setAnswer(response.data);
+        setLoading(false);
       });
   }, []);
+  if (loading) {
+    return (
+      <div style={{ paddingTop: "40vh" }}>
+        <ReactLoading type={"spin"} />
+      </div>
+    );
+  }
   return (
     <ChakraProvider>
       <div className="selectionHeader">
@@ -100,7 +110,7 @@ const answer = () => {
             if (
               answer.questions[index].answerId &&
               singleQuiz.options[singleQuiz.answer].optionId ===
-              answer.questions[index].answerId
+                answer.questions[index].answerId
             ) {
               numRight += 1;
             }
@@ -116,7 +126,7 @@ const answer = () => {
                 boxShadow="xl"
                 backgroundColor={
                   answer.questions[index].answerId &&
-                    singleQuiz.options[singleQuiz.answer].optionId ===
+                  singleQuiz.options[singleQuiz.answer].optionId ===
                     answer.questions[index].answerId
                     ? "green.200"
                     : "red.200"

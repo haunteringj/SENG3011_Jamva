@@ -13,11 +13,38 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-const index = (props) => {
-  const quiz = JSON.parse(props.quiz);
+import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { userContext } from "../../../context/userState";
+import ReactLoading from "react-loading";
+const index = () => {
+  const [quiz, setQuiz] = useState(null);
+  const [completed, setCompleted] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { userValues, setUserData } = useContext(userContext);
   const router = useRouter();
-  const disease = props.diseaseName;
-  const completed = props.completed;
+  const { disease } = router.query;
+  useEffect(() => {
+    const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+    axios
+      .get(
+        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/getAll`,
+        { httpsAgent }
+      )
+      .then((response) => {
+        setQuiz(response.data);
+      });
+    axios
+      .get(
+        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/getCompleted/${disease}/${userValues.userId}`,
+        { httpsAgent }
+      )
+      .then((response) => {
+        setCompleted(response.data);
+        setLoading(false);
+      });
+  }, []);
+
   const generateQuizCard = (singleQuiz, completed) => {
     return (
       <Box
@@ -43,7 +70,14 @@ const index = (props) => {
       </Box>
     );
   };
-  return quiz.length == 0 ? (
+  if (loading) {
+    return (
+      <div style={{ paddingTop: "40vh" }}>
+        <ReactLoading type={"spin"} />
+      </div>
+    );
+  }
+  return completed == null || quiz == null || quiz.length == 0 ? (
     <ChakraProvider>
       <div className="selectionHeader">
         <button
@@ -103,24 +137,4 @@ const index = (props) => {
   );
 };
 
-export async function getServerSideProps(context) {
-  const disease = context.query.disease;
-  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-  const snapshot = await axios.get(
-    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/getAll`,
-    { httpsAgent }
-  );
-  const completeData = await axios.get(
-    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/getCompleted/${disease}/f3BNKAJFnlZuLZVuX1Zpk77TCsr2`,
-    { httpsAgent }
-  );
-  console.log(completeData.data);
-  return {
-    props: {
-      quiz: JSON.stringify(snapshot.data),
-      diseaseName: disease,
-      completed: completeData.data,
-    },
-  };
-}
 export default index;
