@@ -21,6 +21,9 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
   const router = useRouter();
   const { userValues, setUserData } = useContext(userContext);
   const leaders = leaderboard;
+  if (userValues == null) {
+    router.reload();
+  }
   if (
     userValues.userId != "" &&
     (profile == null ||

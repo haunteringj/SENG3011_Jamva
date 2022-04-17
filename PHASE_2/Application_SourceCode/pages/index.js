@@ -4,12 +4,17 @@ import axios from "axios";
 import Dashboard from "../components/dashboard/dashboard";
 import { useEffect, useContext, useState } from "react";
 import { userContext } from "../context/userState";
+import { Router, useRouter } from "next/router";
 const index = (props) => {
   const { userValues, setUserData } = useContext(userContext);
   const [profileData, setProfileData] = useState(null);
   const [diseaseProgress, setDiseaseProgress] = useState(null);
   const [unProgressed, setDiseaseUnProgressed] = useState(null);
   const [leaderboard, setLeaderboard] = useState(null);
+  const router = useRouter();
+  if (userValues == null) {
+    router.reload();
+  }
   useEffect(() => {
     if (userValues.userId != "") {
       const httpsAgent = new https.Agent({ rejectUnauthorized: false });
