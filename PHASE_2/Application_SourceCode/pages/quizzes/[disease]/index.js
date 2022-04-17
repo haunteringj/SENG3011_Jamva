@@ -31,7 +31,7 @@ const Home = () => {
       const httpsAgent = new https.Agent({ rejectUnauthorized: false });
       axios
         .get(
-          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quizzes/${disease}/getAll`,
+          `${process.env.NEXT_PUBLIC_API_URL}/v1/quizzes/${disease}/getAll`,
           { httpsAgent }
         )
         .then((response) => {
@@ -39,7 +39,7 @@ const Home = () => {
         });
       axios
         .get(
-          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quizzes/${disease}/${userValues.userId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/v1/quizzes/${disease}/${userValues.userId}`,
           { httpsAgent }
         )
         .then((response) => {

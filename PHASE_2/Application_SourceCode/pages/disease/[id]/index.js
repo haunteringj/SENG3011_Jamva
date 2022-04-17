@@ -94,7 +94,7 @@ export async function getServerSideProps(context) {
   const disease_name = context.query.id;
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const snapshot = await axios.get(
-    `http://${process.env.NEXT_PUBLIC_API_URL}/v1/diseases/${disease_name}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/v1/diseases/${disease_name}`,
     { httpsAgent }
   );
   let name = snapshot.data.diseaseName;

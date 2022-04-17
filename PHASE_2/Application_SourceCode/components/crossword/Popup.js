@@ -36,7 +36,7 @@ const Popup = ({ finished, forfun }) => {
   );
 };
 Popup.getInitialProps = async function () {
-  const res = await fetch("https://jamva-front.vercel.app/hangman");
+  const res = await fetch("https://jamva.vercel.app/hangman");
   const data = await res.json();
   console.log(data);
   return { data: data };

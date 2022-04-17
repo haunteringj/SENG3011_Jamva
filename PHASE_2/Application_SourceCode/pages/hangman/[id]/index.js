@@ -64,7 +64,7 @@ export default function Hangman() {
     const httpsAgent = new https.Agent({ rejectUnauthorized: false });
     axios
       .get(
-        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/${id}/${userValues.userId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/${id}/${userValues.userId}`,
         { httpsAgent }
       )
       .then((response) => {
@@ -107,7 +107,7 @@ export default function Hangman() {
       if (forfun == false) {
         const httpsAgent = new https.Agent({ rejectUnauthorized: false });
         const profleData = axios.post(
-          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/complete/${id}/${userValues.userId}/${word}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/v1/hangman/complete/${id}/${userValues.userId}/${word}`,
           { httpsAgent }
         );
       }

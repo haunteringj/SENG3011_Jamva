@@ -42,7 +42,7 @@ function Earth() {
       });
 
     axios
-      .get(`http://${process.env.NEXT_PUBLIC_API_URL}/v1/latestReports`)
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/v1/latestReports`)
       .then((resp) => {
         const countries = resp.data;
         const result = [];

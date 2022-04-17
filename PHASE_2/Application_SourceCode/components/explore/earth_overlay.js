@@ -10,14 +10,14 @@ const TopDiseases = (props) => {
   useEffect(() => {
     axios
       .get(
-        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/top5Dieseases?continent=` +
-        props.continent
+        `${process.env.NEXT_PUBLIC_API_URL}/v1/top5Dieseases?continent=` +
+          props.continent
       )
       .then((result) => {
         // console.log(result);
         setData(result.data);
-
-      }).catch((err) => alert(err));
+      })
+      .catch((err) => alert(err));
   }, [props.continent]);
 
   // format the data into a string

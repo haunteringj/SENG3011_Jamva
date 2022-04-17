@@ -17,10 +17,9 @@ const WrongLetters = ({ wrongLetters }) => {
 };
 
 WrongLetters.getInitialProps = async function () {
-  const res = await fetch("https://jamva-front.vercel.app/hangman");
+  const res = await fetch("https://jamva.vercel.app/hangman");
   const data = await res.json();
   return { wrongLetters: data };
 };
 
 export default WrongLetters;
-

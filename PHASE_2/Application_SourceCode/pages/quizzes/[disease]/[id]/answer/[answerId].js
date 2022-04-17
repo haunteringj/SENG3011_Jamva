@@ -39,7 +39,7 @@ const answer = () => {
       const httpsAgent = new https.Agent({ rejectUnauthorized: false });
       axios
         .post(
-          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/complete/${disease}/${userValues.userId}/${id}/${numRight}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/complete/${disease}/${userValues.userId}/${id}/${numRight}`,
           { httpsAgent }
         )
         .then((response) => {
@@ -54,20 +54,16 @@ const answer = () => {
       console.log(numRight, answer);
       const httpsAgent = new https.Agent({ rejectUnauthorized: false });
       axios
-        .get(
-          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${disease}/${id}`,
-          { httpsAgent }
-        )
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${disease}/${id}`, {
+          httpsAgent,
+        })
         .then((response) => {
           setQuiz(response.data);
         });
       axios
-        .get(
-          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/answer/${answerId}`,
-          {
-            httpsAgent,
-          }
-        )
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/v1/answer/${answerId}`, {
+          httpsAgent,
+        })
         .then((response) => {
           setAnswer(response.data);
           setLoading(false);

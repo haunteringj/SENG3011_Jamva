@@ -15,7 +15,7 @@ const index = (props) => {
       const httpsAgent = new https.Agent({ rejectUnauthorized: false });
       axios
         .get(
-          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/details/${userValues.userId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/v1/users/details/${userValues.userId}`,
           { httpsAgent }
         )
         .then((response) => {
@@ -23,7 +23,7 @@ const index = (props) => {
         });
       axios
         .get(
-          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/progressDiseases/${userValues.userId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/v1/users/progressDiseases/${userValues.userId}`,
           { httpsAgent }
         )
         .then((response) => {
@@ -32,17 +32,16 @@ const index = (props) => {
 
       axios
         .get(
-          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/unProgressedDiseases/${userValues.userId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/v1/users/unProgressedDiseases/${userValues.userId}`,
           { httpsAgent }
         )
         .then((response) => {
           setDiseaseUnProgressed(response.data);
         });
       axios
-        .get(
-          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/users/getLeaderboard`,
-          { httpsAgent }
-        )
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/v1/users/getLeaderboard`, {
+          httpsAgent,
+        })
         .then((response) => {
           setLeaderboard(response.data);
         });

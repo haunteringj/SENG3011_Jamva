@@ -27,7 +27,7 @@ const index = (passed) => {
     }
     axios
       .get(
-        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/${id}`,
         { httpsAgent }
       )
       .then((response) => {
@@ -35,7 +35,7 @@ const index = (passed) => {
       });
     axios
       .get(
-        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/getCompleted/${disease}/${userValues.userId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/getCompleted/${disease}/${userValues.userId}`,
         { httpsAgent }
       )
       .then((response) => {
@@ -50,7 +50,7 @@ const index = (passed) => {
     if (!forfun) {
       const httpsAgent = new https.Agent({ rejectUnauthorized: false });
       const completeData = await axios.post(
-        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/complete/${disease}/${id}/${userValues.userId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/complete/${disease}/${id}/${userValues.userId}`,
         { httpsAgent }
       );
     }

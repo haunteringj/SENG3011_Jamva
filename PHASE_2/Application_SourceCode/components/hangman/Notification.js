@@ -8,7 +8,7 @@ const Notification = ({ showNotification }) => {
   );
 };
 Notification.getInitialProps = async function () {
-  const res = await fetch("https://jamva-front.vercel.app/hangman");
+  const res = await fetch("https://jamva.vercel.app/hangman");
   const data = await res.json();
   console.log("NOTIF", data);
   return { data: data };

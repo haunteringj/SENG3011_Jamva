@@ -33,7 +33,7 @@ const index = () => {
     const { disease } = router.query;
     axios
       .get(
-        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/getAll`,
+        `${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/getAll`,
         { httpsAgent }
       )
       .then((response) => {
@@ -41,7 +41,7 @@ const index = () => {
       });
     axios
       .get(
-        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/getCompleted/${disease}/${userValues.userId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/getCompleted/${disease}/${userValues.userId}`,
         { httpsAgent }
       )
       .then((response) => {
