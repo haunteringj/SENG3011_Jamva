@@ -25,11 +25,11 @@ firebase_admin.initialize_app(
 
 db = firestore.client()
 
-
 url1 = "https://promedmail.org"
 postid = 0
 url2 = "https://promedmail.org/promed-post/?place="
 
+getCounter = 1
 
 driver.get(url1)
 
@@ -357,6 +357,9 @@ for i in data.to_dict()["diseaseMap"]:
         for country in value:
             countryRef = db.collection("countries").document(country)
             countryData = countryRef.get()
+            getCounter += 1
+            if getCounter > 2000:
+                exit(1)
             for user in countryData.to_dict()["users"]:
                 #reset user alerts
                 userRef = db.collection("userDetails").document(user)
@@ -521,6 +524,7 @@ for element in latest_id_list:
     for disease in diseases:
         diseaseref = db.collection("diseases").document(disease)
         if diseaseref.get().exists:
+            getCounter += 1
             diseaseRefList.append(diseaseref)
         else:
             db.collection("diseases").document(disease).set(
@@ -531,10 +535,12 @@ for element in latest_id_list:
                     "syndromes": [],
                 }
             )
+            getCounter += 1
             diseaseRefList.append(db.collection("diseases").document(disease))
 
     countrycode = pycountry.countries.search_fuzzy(element["country"])[0].alpha_2
     locationList = [db.collection("countries").document(countrycode)]
+    getCounter += 1
     newDiseaseMap = {
         element["id"]: locationList
     }
@@ -548,9 +554,15 @@ for element in latest_id_list:
 
     countryRef = db.collection("countries").document(countrycode)
     countryData = countryRef.get()
+    getCounter += 1
+    if getCounter > 2000:
+        exit(1)
     for user in countryData.to_dict()["users"]:
         userRef = db.collection("userDetails").document(user)
         userRef.update({"alerts": firestore.ArrayUnion([alertInfo])})
+        getCounter += 1
+        if getCounter > 2000:
+            exit(1)
 
     # Now we create our report, which takes our diseases reference list
     report = {
