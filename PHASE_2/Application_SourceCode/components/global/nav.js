@@ -36,7 +36,7 @@ const Nav = () => {
             <Center>
               <img
                 style={{ width: "7vw", cursor: "pointer" }}
-                src="/images/jamva.png"
+                src="/images/JAMVA.png"
                 className="imgChange"
               />
             </Center>

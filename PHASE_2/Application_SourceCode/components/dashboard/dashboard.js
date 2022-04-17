@@ -72,7 +72,7 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
                   <CardMedia
                     component="img"
                     className="top_profile"
-                    image="/images/defaultprofile.jpg"
+                    image="/images/defaultProfile.jpg"
                   />
                 </Grid>
                 <Grid item xs={9}>
