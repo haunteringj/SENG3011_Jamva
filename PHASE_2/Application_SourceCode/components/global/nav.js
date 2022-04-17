@@ -4,7 +4,9 @@ import { useContext } from "react";
 import { userContext, INITIAL_USER_STATE } from "../../context/userState";
 import { useRouter } from "next/router";
 import app, { auth } from "../../services/firebase";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { SearchIcon } from "@chakra-ui/icons";
+import { Center, ChakraProvider } from "@chakra-ui/react";
 const Nav = () => {
   const { userValues, setUserValues } = useContext(userContext);
   const router = useRouter();
@@ -12,26 +14,52 @@ const Nav = () => {
   const signOutUser = async () => {
     await auth.signOut();
     setUserValues(INITIAL_USER_STATE);
-    router.push("/");
+    router.reload();
   };
 
   return (
     <nav className={navStyles.nav}>
       {/* This is the left div */}
       <div className={navStyles.routebar}>
-        <div className={navStyles.title}>
+        <div
+          className="up homeDiv"
+          style={{
+            fontSize: "1.3vw",
+            cursor: "pointer",
+            height: "7vh",
+            width: "9vw",
+            textAlign: "center",
+            paddingTop: "2vh",
+          }}
+        >
           <Link href="/">
-            <img
-              style={{ width: "7vw", cursor: "pointer" }}
-              src="/images/jamva.png"
-            />
+            <Center>
+              <img
+                style={{ width: "7vw", cursor: "pointer" }}
+                src="/images/jamva.png"
+                className="imgChange"
+              />
+            </Center>
           </Link>
         </div>
         <div className={navStyles.divider}></div>
 
         <Link href="/explore">
-          <div style={{ fontSize: "1.3vw", cursor: "pointer" }}>EXPLORE</div>
+          <div
+            className="up"
+            style={{
+              fontSize: "1.3vw",
+              cursor: "pointer",
+              height: "7vh",
+              width: "9vw",
+              textAlign: "center",
+              paddingTop: "1.5vh",
+            }}
+          >
+            EXPLORE <SearchIcon />
+          </div>
         </Link>
+        <div className={navStyles.divider}></div>
       </div>
 
       {/* This is the right div */}
@@ -39,37 +67,58 @@ const Nav = () => {
       <ul>
         {userValues.userId != "" ? (
           <>
+            <div className={navStyles.divider}></div>
             <li>
               <div
-                className="signout-button"
+                className="signout-button up"
+                style={{
+                  fontSize: "1.3vw",
+                  cursor: "pointer",
+                  height: "7vh",
+                  width: "7vw",
+                  paddingTop: "1.5vh",
+                }}
                 onClick={() => {
                   signOutUser();
                 }}
               >
-                Signout
+                <Center>Signout</Center>
               </div>
-            </li>
-            <li>
-              <Link href="/user">Account</Link>
             </li>
           </>
         ) : (
           <>
+            <div className={navStyles.divider}></div>
             <li>
               <Link href="/login">
-                <div style={{ fontSize: "1.3vw", cursor: "pointer" }}>
+                <div
+                  className="up"
+                  style={{
+                    fontSize: "1.3vw",
+                    cursor: "pointer",
+                    height: "7vh",
+                    width: "6vw",
+                    textAlign: "center",
+                    paddingTop: "1.5vh",
+                  }}
+                >
                   Login
                 </div>
               </Link>
             </li>
+            <div className={navStyles.divider}></div>
+
             <li>
               <Link href="/signup">
                 <div
+                  className="up"
                   style={{
                     fontSize: "1.3vw",
-                    marginLeft: "1vw",
-                    marginRight: "1vw",
                     cursor: "pointer",
+                    height: "7vh",
+                    width: "7vw",
+                    textAlign: "center",
+                    paddingTop: "1.5vh",
                   }}
                 >
                   Signup

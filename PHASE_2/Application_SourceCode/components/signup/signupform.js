@@ -11,7 +11,6 @@ const arrowStyle = {
   transform: "rotate(180deg) scale(1)",
 };
 
-
 const SignupForm = () => {
   const router = useRouter();
   const { userValues, setUserValues } = useContext(userContext);
@@ -20,12 +19,12 @@ const SignupForm = () => {
   const [stateClicked, setStateClicked] = useState(false);
   const [error, setError] = useState("");
 
-  const handleChange = e => {
-    setUserValues(prevState => ({
+  const handleChange = (e) => {
+    setUserValues((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
-    }))
-  }
+    }));
+  };
 
   const reactSelectStyles = {
     option: (provided, state) => ({
@@ -54,7 +53,7 @@ const SignupForm = () => {
       minHeight: "1px",
       borderRadius: "none",
       cursor: "pointer",
-      backgroundColor: "#eee"
+      backgroundColor: "#eee",
     }),
     indicatorSeparator: (provided, state) => ({
       visibility: "none",
@@ -80,7 +79,7 @@ const SignupForm = () => {
     }),
     placeholder: (provided, state) => ({
       ...provided,
-      color: "rgba(122, 6, 63, 0.25)",
+      color: "black",
     }),
   };
 
@@ -102,7 +101,7 @@ const SignupForm = () => {
       return false;
     }
     return true;
-  }
+  };
 
   const DropdownIcon = () => {
     return (
@@ -114,7 +113,7 @@ const SignupForm = () => {
     );
   };
 
-  const DropdownIndicator = props => {
+  const DropdownIndicator = (props) => {
     return (
       <components.DropdownIndicator {...props}>
         <DropdownIcon />
@@ -122,7 +121,7 @@ const SignupForm = () => {
     );
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validationCheck()) {
       try {
@@ -134,150 +133,156 @@ const SignupForm = () => {
           city: "",
           state: "",
           age: Number(userValues.age),
-        }
+        };
         console.log(postData);
-        const uriValue = "users/create"
+        const uriValue = "users/create";
         const res = await postRecord(uriValue, postData);
         console.log(res);
-        const userData = res.data
+        const userData = res.data;
         if (userData.status == "success") {
-          setUserValues(prevState => ({
+          setUserValues((prevState) => ({
             ...prevState,
-            userId: userData.uid
+            userId: userData.uid,
           }));
           router.push("/");
         }
         if (userData.status == "failed_userExists") {
-          setError("userExists")
-        }
-        else {
-          setError("somethingWrong")
+          setError("userExists");
+        } else {
+          setError("somethingWrong");
         }
       } catch (err) {
         console.log("hell3");
-        setError("somethingWrong")
+        setError("somethingWrong");
       }
     } else {
       return;
     }
-  } 
+  };
 
-  const handleCountrySelect = e => {
-    setUserValues(prevState => ({
+  const handleCountrySelect = (e) => {
+    setUserValues((prevState) => ({
       ...prevState,
       country: e.value,
     }));
   };
 
   return (
-      <form onSubmit={handleSubmit}>
-        <div className="inner-form">
-          <div className={userValues.email == "" ? "input" : "input input--has-value"}>
-            <input 
-              className="input__field"
-              name="email"
-              type="email"
-              placeholder="email"
-              onChange={e => {
-                handleChange(e)
-              }}
-              value={userValues.email}
-            />
-            <label className="input__label">Email</label>
-          </div>
-          <div className={password == "" ? "input password-input" : "input input--has-value password-input"}>
-            <input 
-              className="input__field"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="password"
-              onChange={e => {
-                setPassword(e.target.value);
-              }}
-              value={password}
-            />
-            <label className="input__label">Password</label>
-            {showPassword ? 
-            <ViewIcon 
-              onClick={() => {
-                setShowPassword(false)
-              }}
-            /> 
-            : 
-            <ViewOffIcon 
-              onClick={() => {
-                setShowPassword(true)
-              }}
-            />}
-          </div>
-          <div className={userValues.username == "" ? "input" : "input input--has-value"}>
-            <input 
-              className="input__field"
-              name="username"
-              type="text"
-              placeholder="username"
-              onChange={e => {
-                handleChange(e)
-              }}
-              value={userValues.username}
-            />
-            <label className="input__label">Username</label>
-          </div>
-          <div className="input-select">
-            <Select
-              options={COUNTRY_LIST}
-              onChange={handleCountrySelect}
-              components={{ DropdownIndicator }}
-              styles={reactSelectStyles}
-              defaultValue={userValues.country}
-              onMenuOpen={() => {
-                setStateClicked(true);
-              }}
-              onMenuClose={() => {
-                setStateClicked(false);
-              }}
-              placeholder="Country"
-            />
-          </div>
-          <div className={userValues.age == "" ? "input" : "input input--has-value"}>
-            <input 
-              className="input__field"
-              name="age"
-              type="number"
-              placeholder="age"
-              min="1"
-              max="100"
-              onChange={e => {
-                handleChange(e)
-              }}
-              value={userValues.age}
-            />
-            <label className="input__label">Age</label>
-          </div>
-          {error == "missingFields" && (
-            <p className="error">
-              You're missing some fields
-            </p>
-          )}
-          {error == "invalidAge" && (
-            <p className="error">
-              Invalid age input
-            </p>
-          )}
-          {error == "somethingWrong" && (
-            <p className="error">
-              Something went wrong, please contact us!
-            </p>
-          )}
-          {error == "userExists" && (
-            <p className="error">
-              Email is already being used, use another!
-            </p>
-          )}
-          <input type="submit" value="Create Account" className="submit-button" />
+    <form onSubmit={handleSubmit}>
+      <div className="inner-form">
+        <div
+          className={
+            userValues.email == "" ? "input" : "input input--has-value"
+          }
+        >
+          <input
+            className="input__field"
+            name="email"
+            type="email"
+            placeholder="email"
+            onChange={(e) => {
+              handleChange(e);
+            }}
+            value={userValues.email}
+          />
+          <label className="input__label">Email</label>
         </div>
-      </form>
-  )
-}
+        <div
+          className={
+            password == ""
+              ? "input password-input"
+              : "input input--has-value password-input"
+          }
+        >
+          <input
+            className="input__field"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            placeholder="password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            value={password}
+          />
+          <label className="input__label">Password</label>
+          {showPassword ? (
+            <ViewIcon
+              onClick={() => {
+                setShowPassword(false);
+              }}
+            />
+          ) : (
+            <ViewOffIcon
+              onClick={() => {
+                setShowPassword(true);
+              }}
+            />
+          )}
+        </div>
+        <div
+          className={
+            userValues.username == "" ? "input" : "input input--has-value"
+          }
+        >
+          <input
+            className="input__field"
+            name="username"
+            type="text"
+            placeholder="username"
+            onChange={(e) => {
+              handleChange(e);
+            }}
+            value={userValues.username}
+          />
+          <label className="input__label">Username</label>
+        </div>
+        <div className="input-select">
+          <Select
+            options={COUNTRY_LIST}
+            onChange={handleCountrySelect}
+            components={{ DropdownIndicator }}
+            styles={reactSelectStyles}
+            defaultValue={userValues.country}
+            onMenuOpen={() => {
+              setStateClicked(true);
+            }}
+            onMenuClose={() => {
+              setStateClicked(false);
+            }}
+            placeholder="Country"
+          />
+        </div>
+        <div
+          className={userValues.age == "" ? "input" : "input input--has-value"}
+        >
+          <input
+            className="input__field"
+            name="age"
+            type="number"
+            placeholder="age"
+            min="1"
+            max="100"
+            onChange={(e) => {
+              handleChange(e);
+            }}
+            value={userValues.age}
+          />
+          <label className="input__label">Age</label>
+        </div>
+        {error == "missingFields" && (
+          <p className="error">You're missing some fields</p>
+        )}
+        {error == "invalidAge" && <p className="error">Invalid age input</p>}
+        {error == "somethingWrong" && (
+          <p className="error">Something went wrong, please contact us!</p>
+        )}
+        {error == "userExists" && (
+          <p className="error">Email is already being used, use another!</p>
+        )}
+        <input type="submit" value="Create Account" className="submit-button" />
+      </div>
+    </form>
+  );
+};
 
-export default SignupForm
+export default SignupForm;

@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { userContext } from "../../../context/userState";
 import ReactLoading from "react-loading";
+import NotLogged from "../../../components/users/notLogged";
 const index = () => {
   const [quiz, setQuiz] = useState(null);
   const [completed, setCompleted] = useState(null);
@@ -26,6 +27,10 @@ const index = () => {
   const { disease } = router.query;
   useEffect(() => {
     const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+    if (userValues.userId == "") {
+      return <NotLogged></NotLogged>;
+    }
+    const { disease } = router.query;
     axios
       .get(
         `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/getAll`,
@@ -43,7 +48,7 @@ const index = () => {
         setCompleted(response.data);
         setLoading(false);
       });
-  }, []);
+  }, [disease]);
 
   const generateQuizCard = (singleQuiz, completed) => {
     return (

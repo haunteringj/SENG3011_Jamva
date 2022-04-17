@@ -11,19 +11,17 @@ export const INITIAL_USER_STATE = {
   age: "",
   state: "",
   userId: "",
-}
+};
 
 export function UserWrapper({ children }) {
   const [userValues, setUserValues] = useState(INITIAL_USER_STATE);
   useEffect(() => {
-    setUserValues(localStorage.getItem("userKey"));
-  }, [])
+    setUserValues(JSON.parse(localStorage.getItem("userKey")));
+  }, []);
 
   useEffect(() => {
-    if (userValues != localStorage.getItem("userKey")) {
-      localStorage.setItem("userKey", userValues);
-    }
-  }, [userValues])
+    localStorage.setItem("userKey", JSON.stringify(userValues));
+  }, [userValues]);
 
   return (
     <userContext.Provider value={{ userValues, setUserValues }}>

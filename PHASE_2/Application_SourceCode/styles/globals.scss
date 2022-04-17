@@ -10,6 +10,7 @@ body {
 
 .signout-button {
   cursor: pointer;
+
 }
 
 .chakra-ui-light {
@@ -26,7 +27,6 @@ a {
   color:white;
   width: auto;
 }
-
 .main-wrapper {
   width: 100%;
   height: 100%;
@@ -73,22 +73,23 @@ a {
   border-radius: 28px;
   display: flex;
   flex-direction: column;
-  border: 2px solid rgb(33, 33, 33);
+  border: 2px solid 3e98c7;
   justify-content: center;
   align-items: center;
-  background-color: rgb(33, 33, 33);
+  background-color: white;
 
   .submit-button {
     position: relative;
     width: 60%;
     border-radius: 28px;
-    border: 1px solid #FF4B2B;
+    border: 1px solid #3e98c7;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
     font-family: "Arial";
+    color:white;
     height: 40px;
-    background-color: #FF4B2B;
+    background-color: #3e98c7;
   }
 
   .input-select {
@@ -96,7 +97,7 @@ a {
     justify-content: center;
     align-items: center;
     position: relative;
-    border: 1px solid #eee;
+    border: 1px solid #3e98c7;
     border-radius: 1.75rem;
     width: 100%;
     height: 56px !important;
@@ -196,7 +197,7 @@ a {
   &--has-value,
   &:focus-within {
     .input__field {
-      border-color: #eee;
+      border-color: #3e98c7;
     }
 
     .input__label {
@@ -356,4 +357,19 @@ button {
 .backButton:hover,
 .backButton:focus {
   box-shadow: 0.5em 0em 1em -0.4em #c1c1c1;
+}
+.up {
+  transition: 0.5s;
+}
+.up:hover,
+.up:focus {
+  box-shadow: inset 0 -3.25em 0 0  white ;
+  color: #3e98c7;
+}
+.imgChange:hover {
+  filter: invert(45%) sepia(92%) saturate(359%) hue-rotate(157deg) brightness(100%) contrast(84%);
+}
+
+.homeDiv:hover > .imgChange {
+  filter: invert(45%) sepia(92%) saturate(359%) hue-rotate(157deg) brightness(100%) contrast(84%);
 }

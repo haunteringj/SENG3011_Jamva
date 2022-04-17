@@ -47,7 +47,7 @@ const Home = () => {
           setLoading(false);
         });
     }
-  }, []);
+  }, [disease]);
   if (loading) {
     return (
       <div style={{ paddingTop: "40vh" }}>
@@ -100,7 +100,7 @@ const Home = () => {
     return <NotLogged></NotLogged>;
   }
   return quiz == null || completed == null || quiz.length == 0 ? (
-    <ChakraProvider>
+    <ChakraProvider resetCSS={false}>
       <div className="selectionHeader">
         <button
           className="backButton custom-btn"

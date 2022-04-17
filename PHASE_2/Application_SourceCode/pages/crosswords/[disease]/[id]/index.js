@@ -11,6 +11,7 @@ import https from "https";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { userContext } from "../../../../context/userState";
+import NotLogged from "../../../../components/users/notLogged";
 const index = (passed) => {
   const router = useRouter();
   const [done, setDone] = useState(false);
@@ -21,6 +22,9 @@ const index = (passed) => {
   const [forfun, setFun] = useState(null);
   useEffect(() => {
     const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+    if (userValues.userId == "") {
+      return <NotLogged></NotLogged>;
+    }
     axios
       .get(
         `http://${process.env.NEXT_PUBLIC_API_URL}/v1/crosswords/${disease}/${id}`,
@@ -39,7 +43,7 @@ const index = (passed) => {
         setCompleted(response.data);
         setFun(response.data.includes(id));
       });
-  }, []);
+  }, [disease]);
 
   async function finished() {
     console.log("DONE");
@@ -63,7 +67,7 @@ const index = (passed) => {
   };
   const crosswordRef = useRef(crossword);
   return completed == null || crossword == null ? (
-    <div>HEY</div>
+    <div></div>
   ) : (
     <ChakraProvider>
       <div className="selectionHeader">

@@ -19,6 +19,7 @@ import ReactLoading from "react-loading";
 export default function Hangman() {
   const { userValues, setUserData } = useContext(userContext);
   const [playable, setPlayable] = useState(true);
+  const [reload, setReload] = useState(true);
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
@@ -88,7 +89,7 @@ export default function Hangman() {
         }
         setLoading(false);
       });
-  }, []);
+  }, [id]);
   if (userValues.userId == "") {
     return <NotLogged></NotLogged>;
   }

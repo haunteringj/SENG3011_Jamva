@@ -50,25 +50,30 @@ const answer = () => {
     }
   });
   useEffect(() => {
-    console.log(numRight, answer);
-    const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-    axios
-      .get(
-        `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${disease}/${id}`,
-        { httpsAgent }
-      )
-      .then((response) => {
-        setQuiz(response.data);
-      });
-    axios
-      .get(`http://${process.env.NEXT_PUBLIC_API_URL}/v1/answer/${answerId}`, {
-        httpsAgent,
-      })
-      .then((response) => {
-        setAnswer(response.data);
-        setLoading(false);
-      });
-  }, []);
+    if (userValues.userId != "") {
+      console.log(numRight, answer);
+      const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+      axios
+        .get(
+          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${disease}/${id}`,
+          { httpsAgent }
+        )
+        .then((response) => {
+          setQuiz(response.data);
+        });
+      axios
+        .get(
+          `http://${process.env.NEXT_PUBLIC_API_URL}/v1/answer/${answerId}`,
+          {
+            httpsAgent,
+          }
+        )
+        .then((response) => {
+          setAnswer(response.data);
+          setLoading(false);
+        });
+    }
+  }, [answerId]);
   if (loading) {
     return (
       <div style={{ paddingTop: "40vh" }}>

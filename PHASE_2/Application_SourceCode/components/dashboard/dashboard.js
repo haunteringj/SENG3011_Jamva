@@ -8,13 +8,14 @@ import "react-circular-progressbar/dist/styles.css";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import Carousel from "react-elastic-carousel";
 import Link from "next/link";
-import { CardContent, CardMedia } from "@mui/material";
+import { CardContent, CardMedia, Tooltip, Typography } from "@mui/material";
 import { userContext } from "../../context/userState";
 import { useContext } from "react";
 import ReactLoading from "react-loading";
 import { Center } from "@chakra-ui/react";
 import navStyles from "../../styles/Nav.module.scss";
 import { useRouter } from "next/router";
+import { textAlign } from "@mui/system";
 const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
   console.log("HERE", profile);
   const router = useRouter();
@@ -39,7 +40,7 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
     leaderboard == null ? (
     <div>
       <div style={{ textAlign: "center", color: "white", paddingTop: "20vh" }}>
-        <h1>The best form of preperation,</h1>
+        <h1>The best form of preparation,</h1>
         <h1>is education.</h1>
         <h1>Why not start learning today?</h1>
         <h2 style={{ fontSize: "1vw" }}>
@@ -47,7 +48,12 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
         </h2>
         <button
           className="btn-games custom-btn"
-          style={{ width: "10vw", height: "7vh", fontSize: "1vw" }}
+          style={{
+            width: "10vw",
+            height: "7vh",
+            fontSize: "1vw",
+            backgroundColor: "#3e98c7",
+          }}
           onClick={() => router.push(`/signup`)}
         >
           Start Now
@@ -60,7 +66,7 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
       <Grid container spacing={2}>
         <Grid item xs={9}>
           <Card className="first_half">
-            <CardContent >
+            <CardContent>
               <Grid container spacing={2}>
                 <Grid item xs={3}>
                   <CardMedia
@@ -70,8 +76,53 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
                   />
                 </Grid>
                 <Grid item xs={9}>
-                  <Card className="top_profile" >
-                    <CardContent>Badges: {profile.badges}</CardContent>
+                  <Card className="top_profile">
+                    <CardContent>Badges:</CardContent>
+                    {profile.badges.length == 0 ? (
+                      <CardContent style={{ paddingTop: "8vh" }}>
+                        <Center>
+                          You have no badges! Play a game to earn some!
+                        </Center>
+                      </CardContent>
+                    ) : (
+                      <Carousel itemsToShow={3}>
+                        {profile["badges"].map((badge) => (
+                          <div
+                            style={{
+                              width: "7.5vw",
+                              height: "18vh",
+                              justifyContent: "center",
+                              textAlign: "center",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <Center>
+                              <Tooltip
+                                title={
+                                  <Typography>
+                                    {badge["description"]}
+                                  </Typography>
+                                }
+                                style={{ fontSize: "100px" }}
+                                placement="bottom"
+                              >
+                                <Tooltip
+                                  title={
+                                    <Typography>{badge["name"]}</Typography>
+                                  }
+                                  placement="top"
+                                >
+                                  <img
+                                    style={{ height: "9vw", width: "9vw" }}
+                                    src={`/badges/${badge["file"]}`}
+                                  />
+                                </Tooltip>
+                              </Tooltip>
+                            </Center>
+                          </div>
+                        ))}
+                      </Carousel>
+                    )}
                   </Card>
                 </Grid>
                 <Grid item xs={3}>
@@ -92,7 +143,7 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
         <Grid item xs={3}>
           <Card className="first_half">
             <CardContent>
-              Leaderboard
+              <Center>Leaderboard</Center>
               <div style={{ height: "43vh", width: "100%" }}>
                 <DataGrid
                   rows={leaders}
@@ -130,52 +181,65 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
         <Grid item xs={6}>
           <Card className="progress_box">
             <CardContent>Diseases In Progress</CardContent>
-            <Carousel itemsToShow={3}>
-              {Object.keys(progress).map((disease) => (
-                <Link href={`disease/${disease}/games`}>
-                  <div
-                    style={{
-                      width: "7.5vw",
-                      height: "18vh",
-                      justifyContent: "center",
-                      textAlign: "center",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <CircularProgressbar
-                      value={progress[disease]}
-                      text={`${progress[disease]}%`}
-                    />
+            {Object.keys(progress).length == 0 ? (
+              <CardContent style={{ paddingTop: "8vh", textAlign: "center" }}>
+                <Center>
+                  You havent progressed any diseases yet! Have a look at the
+                  list to the right!
+                </Center>
+              </CardContent>
+            ) : (
+              <Carousel itemsToShow={3}>
+                {Object.keys(progress).map((disease) => (
+                  <Link href={`disease/${disease}/games`}>
+                    <div
+                      style={{
+                        width: "7.5vw",
+                        height: "18vh",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <CircularProgressbar
+                        value={progress[disease]}
+                        text={`${progress[disease]}%`}
+                      />
 
-                    {disease}
-                  </div>
-                </Link>
-              ))}
-            </Carousel>
+                      {disease}
+                    </div>
+                  </Link>
+                ))}
+              </Carousel>
+            )}
           </Card>
         </Grid>
         <Grid item xs={6}>
           <Card className="progress_box">
             <CardContent>Look at Next</CardContent>
-            <Carousel itemsToShow={3} itemsToScroll={3}>
-              {unprogress.map((disease) => (
-                <Link href={`disease/${disease}`}>
-                  <div
-                    style={{
-                      width: "7.5vw",
-                      height: "18vh",
-                      justifyContent: "center",
-                      textAlign: "center",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <CircularProgressbar value={0} text={`0%`} />
+            {unprogress.length == 0 ? (
+              "You have no badges! Play a game to earn some!"
+            ) : (
+              <Carousel itemsToShow={3} itemsToScroll={3}>
+                {unprogress.map((disease) => (
+                  <Link href={`disease/${disease}`}>
+                    <div
+                      style={{
+                        width: "7.5vw",
+                        height: "18vh",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <CircularProgressbar value={0} text={`0%`} />
 
-                    {disease}
-                  </div>
-                </Link>
-              ))}
-            </Carousel>
+                      {disease}
+                    </div>
+                  </Link>
+                ))}
+              </Carousel>
+            )}
           </Card>
         </Grid>
       </Grid>

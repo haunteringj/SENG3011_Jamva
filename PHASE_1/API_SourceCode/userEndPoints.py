@@ -90,8 +90,16 @@ def getUserDetail(db, uid: str):
     try:
         query = db.collection("userDetails").document(uid).get()
     except:
+        
         return toJsonResponse(500, "User id doesnt exist")
     queryDict = reorderFields(query)
+    
+    badges = []
+    for badge in queryDict["badges"]:
+        getBadge = db.collection("badges").document(badge).get().to_dict()
+        badges.append(getBadge)
+    queryDict["badges"] = badges
+    print(queryDict)
     return toJsonResponse(200, queryDict)
 
 

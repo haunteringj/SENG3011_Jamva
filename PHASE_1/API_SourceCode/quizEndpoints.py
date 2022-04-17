@@ -152,10 +152,14 @@ def completeWord(db, disease, userId, word):
         dictVer = query.get().to_dict()
         completed = dictVer["completed"]
         points = dictVer["score"]
+        badges = []
+        if(len(completed[disease]["hangman"]) == 0 and "1" not in dictVer["badges"] ):
+            badges.append("1")
+        
         completed[disease]["hangman"].append(word)
         print(completed)
-        query.update({"completed": completed, "score": points + len(word) * 10})
-        return toJsonResponse(200, "OK")
+        query.update({"completed": completed, "score": points + len(word) * 10,"badges":dictVer["badges"] + badges})
+        return toJsonResponse(200, {"badges":badges})
     except:
         return toJsonResponse(500, "Unable to fetch from database")
 
@@ -186,6 +190,9 @@ def completeQuiz(db, disease, userId, QuizId, score):
         completed = dictVer["completed"]
         points = dictVer["score"]
         oldscore = completed[disease]["quizzes"]
+        badges = []
+        if("2" not in dictVer["badges"] and len(completed[disease]["quizzes"].keys()) == 0 ):
+            badges.append("2")
         if QuizId in oldscore.keys():
             print(oldscore[QuizId], score)
             if int(oldscore[QuizId]) < score:
@@ -195,12 +202,13 @@ def completeQuiz(db, disease, userId, QuizId, score):
                     {
                         "completed": completed,
                         "score": points + (score - olderscore) * 10,
+                        "badges": dictVer["badges"] + badges
                     }
                 )
                 return toJsonResponse(200, {"score": (score - olderscore) * 10})
         else:
             completed[disease]["quizzes"][QuizId] = score
-            query.update({"completed": completed, "score": points + (score) * 10})
+            query.update({"completed": completed, "score": points + (score) * 10, "badges": dictVer["badges"] + badges})
             return toJsonResponse(200, {"score": (score) * 10})
         return toJsonResponse(200, {"score": 0})
     except:
@@ -230,9 +238,12 @@ def completeCrossword(db, disease, crosswordId, userId):
         dictVer = query.get().to_dict()
         completed = dictVer["completed"]
         points = dictVer["score"]
+        badges = []
+        if("3" not in dictVer["badges"] and len(completed[disease]["crosswords"])==0):
+            badges.append("3")
         completed[disease]["crosswords"].append(crosswordId)
         print(completed)
-        query.update({"completed": completed, "score": points + 300})
+        query.update({"completed": completed, "score": points + 300, "badges": dictVer["badges"] + badges})
         return toJsonResponse(200, "OK")
     except:
         return toJsonResponse(500, "Unable to fetch from database")
