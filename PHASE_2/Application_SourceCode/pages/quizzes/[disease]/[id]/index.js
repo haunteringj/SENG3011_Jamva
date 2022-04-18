@@ -14,7 +14,6 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Field, Form, Formik } from "formik";
-import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { addAnswerApi } from "../../../../utils/service";
@@ -128,7 +127,7 @@ const ShowQuiz = (quiz, onSubmit, disease) => {
   );
 };
 
-export async function getServerSideProps(context) {
+export async function getStaticProps(context) {
   const quizId = context.query.id;
   const diseaseName = context.query.disease;
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
