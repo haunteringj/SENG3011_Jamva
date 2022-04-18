@@ -10,16 +10,21 @@ import { useRouter } from "next/router";
 import https from "https";
 import { useEffect } from "react";
 import { useContext } from "react";
+import Notification from "../../../../components/crossword/Notification";
 import { userContext } from "../../../../context/userState";
 import NotLogged from "../../../../components/users/notLogged";
+import { showNotification as show } from "../../../../utils/helpers/helpers";
 const index = (passed) => {
   const router = useRouter();
   const [done, setDone] = useState(false);
   const [crossword, setCrossword] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [completed, setCompleted] = useState(null);
+  const [showNotification, setShowNotification] = useState(false);
   const { userValues, setUserData } = useContext(userContext);
   const { disease, id } = router.query;
   const [forfun, setFun] = useState(null);
+
   useEffect(() => {
     const httpsAgent = new https.Agent({ rejectUnauthorized: false });
     if (userValues.userId == "") {
@@ -46,7 +51,10 @@ const index = (passed) => {
   }, [disease]);
 
   async function finished() {
-    console.log("DONE");
+    if (!crosswordRef.current.isCrosswordCorrect()) {
+      show(setShowNotification);
+      return;
+    }
     if (!forfun) {
       const httpsAgent = new https.Agent({ rejectUnauthorized: false });
       const completeData = await axios.post(
@@ -66,6 +74,10 @@ const index = (passed) => {
     focusBackground: "rgb(0,0,0,0.1)",
   };
   const crosswordRef = useRef(crossword);
+  if (loading && crosswordRef.current != undefined) {
+    crosswordRef.current.reset();
+    setLoading(false);
+  }
   return completed == null || crossword == null ? (
     <div></div>
   ) : (
@@ -92,8 +104,9 @@ const index = (passed) => {
             data={crossword}
           />
         </ThemeProvider>
-        <Popup finished={done} forfun={forfun} />
+        <Popup finished={done} crosswordRef={crossword} forfun={forfun} />
       </div>
+      <Notification showNotification={showNotification} />
     </ChakraProvider>
   );
 };

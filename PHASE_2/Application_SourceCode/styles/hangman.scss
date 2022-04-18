@@ -108,11 +108,24 @@
     transition: transform 0.3s ease-in-out;
     opacity: 0%;
   }
+  .notification-container-crossword {
+    background-color: #3e98c7;
+    border-radius: 10px;
+    color: white;
+    padding: 15px 20px;
+    position: absolute;
+    bottom: 68.5vh;
+    transition: transform 0.3s ease-in-out;
+    opacity: 0%;
+  }
   
   .notification-container p {
     margin: 0;
   }
   
   .notification-container.show {
+    opacity: 1000%;
+  }
+  .notification-container-crossword.show {
     opacity: 1000%;
   }
