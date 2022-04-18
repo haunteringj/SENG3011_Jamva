@@ -14,33 +14,12 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Field, Form, Formik } from "formik";
+import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { addAnswerApi } from "../../../../utils/service";
 import https from "https";
-const SingleQuiz = (props) => {
-  const router = useRouter();
-  const quiz = JSON.parse(props.quiz);
-  const disease = props.disease;
-  const onSubmit = async (values, actions) => {
-    try {
-      const questions = [];
-      for (const [key, value] of Object.entries(values)) {
-        questions.push({ questionId: key, answerId: value });
-      }
-      const resp = await addAnswerApi(props.quizId, questions);
-      console.log(resp);
-      const answerId = resp.data.answerId;
-      router.push(`/quizzes/${props.disease}/${props.id}/answer/${answerId}`);
-    } catch (error) {
-      console.log("error", error);
-    } finally {
-      actions.setSubmitting(false);
-    }
-  };
 
-  return <>{quiz && ShowQuiz(quiz, onSubmit, disease)}</>;
-};
 const ShowQuiz = (quiz, onSubmit, disease) => {
   const router = useRouter();
   return (
@@ -127,7 +106,31 @@ const ShowQuiz = (quiz, onSubmit, disease) => {
   );
 };
 
-export async function getStaticProps(context) {
+const SingleQuiz = (props) => {
+  const router = useRouter();
+  const quiz = JSON.parse(props.quiz);
+  const disease = props.disease;
+  const onSubmit = async (values, actions) => {
+    try {
+      const questions = [];
+      for (const [key, value] of Object.entries(values)) {
+        questions.push({ questionId: key, answerId: value });
+      }
+      const resp = await addAnswerApi(props.quizId, questions);
+      console.log(resp);
+      const answerId = resp.data.answerId;
+      router.push(`/quizzes/${props.disease}/${props.id}/answer/${answerId}`);
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      actions.setSubmitting(false);
+    }
+  };
+
+  return <>{quiz && ShowQuiz(quiz, onSubmit, disease)}</>;
+};
+
+export async function getInitialProps(context) {
   const quizId = context.query.id;
   const diseaseName = context.query.disease;
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
