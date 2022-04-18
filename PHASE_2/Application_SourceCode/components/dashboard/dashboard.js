@@ -12,6 +12,7 @@ import { CardContent, CardMedia, Tooltip, Typography } from "@mui/material";
 import { userContext } from "../../context/userState";
 import { useContext } from "react";
 import ReactLoading from "react-loading";
+import { Divider } from "@mui/material";
 import { Center } from "@chakra-ui/react";
 import navStyles from "../../styles/Nav.module.scss";
 import { useRouter } from "next/router";
@@ -146,8 +147,20 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
         <Grid item xs={3}>
           <Card className="first_half">
             <CardContent>
-              <Center>Leaderboard</Center>
-              <div style={{ height: "43vh", width: "100%" }}>
+              <Center>
+                <h2 style={{ margin: 10 }}>Leaderboard</h2>
+              </Center>
+              <Divider />
+              <Center>
+                {leaders.map((person) => {
+                  return person.userId == userValues.userId ? (
+                    <h4 style={{ margin: 10 }}>You are rank #{person.id}</h4>
+                  ) : (
+                    ""
+                  );
+                })}
+              </Center>
+              <div style={{ height: "35vh", width: "100%" }}>
                 <DataGrid
                   rows={leaders}
                   getRowClassName={(params) => {
