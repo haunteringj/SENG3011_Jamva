@@ -1,7 +1,7 @@
 import Axios from "axios";
 
 const API = Axios.create({
-  baseURL: `http://${process.env.NEXT_PUBLIC_API_URL}/v1/`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/v1/`,
   timeout: 30000,
 });
 
