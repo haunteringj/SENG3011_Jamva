@@ -150,7 +150,20 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
               <div style={{ height: "43vh", width: "100%" }}>
                 <DataGrid
                   rows={leaders}
+                  getRowClassName={(params) => {
+                    console.log(params.row.userId);
+                    return params.row.userId == userValues.userId
+                      ? "highlight"
+                      : "";
+                  }}
                   columns={[
+                    {
+                      field: "id",
+                      headerName: "Rank",
+                      flex: 0.5,
+                      align: "center",
+                      headerAlign: "center",
+                    },
                     {
                       field: "Name",
                       flex: 1,
@@ -170,10 +183,13 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
                     boxShadow: 2,
                     border: 2,
                     borderColor: "primary.light",
-                    "& .MuiDataGrid-cell:hover": {
-                      color: "primary.main",
+                    ".highlight:hover": {
+                      bgcolor: "#3e98c7",
                     },
                     width: "100%",
+                    ".highlight": {
+                      bgcolor: "#3e98c7",
+                    },
                   }}
                   hideFooter
                 />
@@ -249,4 +265,13 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
     </div>
   );
 };
+
+export async function getServerSideProps(context) {
+  const disease = context.query.disease;
+  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+  const snapshot = await axios.get(`https://3.106.142.227/v1/listDiseases`, {
+    httpsAgent,
+  });
+  return { props: { diseases: snapshot.data } };
+}
 export default Dashboard;

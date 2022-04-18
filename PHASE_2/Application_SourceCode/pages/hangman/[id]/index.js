@@ -55,7 +55,7 @@ export default function Hangman() {
     window.addEventListener("keydown", handleKeydown);
 
     return () => window.removeEventListener("keydown", handleKeydown);
-  }, [correctLetters, wrongLetters, playable]);
+  }, [correctLetters, wrongLetters, playable, word]);
 
   useEffect(() => {
     if (userValues.userId == "") {
@@ -68,7 +68,6 @@ export default function Hangman() {
         { httpsAgent }
       )
       .then((response) => {
-        console.log(response);
         setWordList(response.data["difference"]);
         setAllwords(response.data["allwords"]);
         setFacts(response.data["facts"]);
@@ -87,6 +86,9 @@ export default function Hangman() {
             ]
           );
         }
+        setPlayable(true);
+        setCorrectLetters([]);
+        setWrongLetters([]);
         setLoading(false);
       });
   }, [id]);
@@ -119,7 +121,6 @@ export default function Hangman() {
     if (wordList.length == 0) {
       setFun(true);
       setWordList(allwords);
-      console.log(wordList);
       const random = Math.floor(Math.random() * allwords.length);
       setWord(allwords[random]);
     } else {
@@ -127,7 +128,6 @@ export default function Hangman() {
       setWord(wordList[random]);
     }
   }
-  console.log(word);
   return word == null || facts == null || wordList == null || forfun == null ? (
     <ChakraProvider>
       <div className="selectionHeader">

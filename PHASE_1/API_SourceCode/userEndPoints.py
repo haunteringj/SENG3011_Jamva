@@ -180,6 +180,7 @@ def getLeaders(db):
 
             usersdict["Name"] = indiv["username"]
             usersdict["Points"] = indiv["score"]
+            usersdict["userId"] = user.id
             usersArray.append(usersdict)
         except:
             return toJsonResponse(500, "Issue getting users")

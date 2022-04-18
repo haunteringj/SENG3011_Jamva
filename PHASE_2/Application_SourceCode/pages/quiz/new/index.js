@@ -357,7 +357,7 @@ export async function getServerSideProps(context) {
   const disease = context.query.disease;
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
   const snapshot = await axios.get(
-    `https://3.106.142.227/v1/listDiseases`,
+    `${process.env.NEXT_PUBLIC_API_URL}/v1/listDiseases`,
     { httpsAgent }
   );
   return { props: { diseases: snapshot.data } };
