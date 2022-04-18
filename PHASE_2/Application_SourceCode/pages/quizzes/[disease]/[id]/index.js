@@ -16,7 +16,7 @@ import axios from "axios";
 import { Field, Form, Formik } from "formik";
 import { NextPageContext } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { addAnswerApi } from "../../../../utils/service";
 import https from "https";
 
@@ -108,8 +108,8 @@ const ShowQuiz = (quiz, onSubmit, disease) => {
 
 const SingleQuiz = (props) => {
   const router = useRouter();
-  const quiz = JSON.parse(props.quiz);
-  const disease = props.disease;
+  const [quiz, setQuiz] = useState(null);
+  const { disease, id } = router.query;
   const onSubmit = async (values, actions) => {
     try {
       const questions = [];
@@ -126,25 +126,20 @@ const SingleQuiz = (props) => {
       actions.setSubmitting(false);
     }
   };
+  useEffect(() => {
+    if (disease != undefined && id != undefined) {
+      const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+      axios
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${disease}/${id}`, {
+          httpsAgent,
+        })
+        .then((response) => {
+          setQuiz(response.data);
+        });
+    }
+  }, [disease]);
 
   return <>{quiz && ShowQuiz(quiz, onSubmit, disease)}</>;
 };
-
-export async function getInitialProps(context) {
-  const quizId = context.query.id;
-  const diseaseName = context.query.disease;
-  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-  const snapshot = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${diseaseName}/${quizId}`,
-    { httpsAgent }
-  );
-  return {
-    props: {
-      quiz: JSON.stringify(snapshot.data),
-      id: quizId,
-      disease: diseaseName,
-    },
-  };
-}
 
 export default SingleQuiz;

@@ -21,18 +21,18 @@ const Nav = () => {
     <nav className={navStyles.nav}>
       {/* This is the left div */}
       <div className={navStyles.routebar}>
-        <div
-          className="up homeDiv"
-          style={{
-            fontSize: "1.3vw",
-            cursor: "pointer",
-            height: "7vh",
-            width: "9vw",
-            textAlign: "center",
-            paddingTop: "2vh",
-          }}
-        >
-          <Link href="/">
+        <Link href="/">
+          <div
+            className="up homeDiv"
+            style={{
+              fontSize: "1.3vw",
+              cursor: "pointer",
+              height: "7vh",
+              width: "9vw",
+              textAlign: "center",
+              paddingTop: "2vh",
+            }}
+          >
             <Center>
               <img
                 style={{ width: "7vw", cursor: "pointer" }}
@@ -40,8 +40,8 @@ const Nav = () => {
                 className="imgChange"
               />
             </Center>
-          </Link>
-        </div>
+          </div>
+        </Link>
         <div className={navStyles.divider}></div>
 
         <Link href="/explore">
