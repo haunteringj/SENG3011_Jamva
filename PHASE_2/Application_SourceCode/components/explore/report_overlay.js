@@ -10,13 +10,12 @@ export default function ReportOverlay({ reports, country }) {
     <Box
       display="flex"
       flexDir="column"
-      overflowY="scroll"
+      overflow="scroll"
       width="400px"
       h="sm"
       borderWidth="1px"
       borderRadius="lg"
       opacity={0.7}
-      overflow="hidden"
       backgroundColor={"whitesmoke"}
       alignItems="center"
 
@@ -41,6 +40,7 @@ export default function ReportOverlay({ reports, country }) {
               title={r["headline"]}
               id={r["id"]}
               date={r["date"]}
+              source={r["source"]}
             />
           ))}
         </Box>
