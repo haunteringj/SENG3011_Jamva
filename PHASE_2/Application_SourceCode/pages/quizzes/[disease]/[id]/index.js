@@ -116,10 +116,10 @@ const SingleQuiz = (props) => {
       for (const [key, value] of Object.entries(values)) {
         questions.push({ questionId: key, answerId: value });
       }
-      const resp = await addAnswerApi(props.quizId, questions);
+      const resp = await addAnswerApi(id, questions);
       console.log(resp);
       const answerId = resp.data.answerId;
-      router.push(`/quizzes/${props.disease}/${props.id}/answer/${answerId}`);
+      router.push(`/quizzes/${disease}/${id}/answer/${answerId}`);
     } catch (error) {
       console.log("error", error);
     } finally {

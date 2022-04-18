@@ -5,7 +5,7 @@ export const addQuizApi = async (values) => {
     console.log(values);
     const httpsAgent = new https.Agent({ rejectUnauthorized: false });
     const resp = await axios.post(
-      `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/create`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/create`,
       values,
       { httpsAgent }
     );
@@ -24,7 +24,7 @@ export const addAnswerApi = async (quizId, values) => {
     const httpsAgent = new https.Agent({ rejectUnauthorized: false });
     console.log("ADDED", values);
     const resp = await axios.post(
-      `http://${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${quizId}/answer`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/quiz/${quizId}/answer`,
       {
         questions: values,
         createdAt: new Date(),
