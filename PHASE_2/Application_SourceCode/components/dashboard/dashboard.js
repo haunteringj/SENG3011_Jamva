@@ -138,6 +138,9 @@ const Dashboard = ({ profile, progress, unprogress, leaderboard }) => {
                 <Grid item xs={9}>
                   <Card className="bottom_profile ">
                     <CardContent>Alerts</CardContent>
+                    <CardContent style={{ textAlign: "center" }}>
+                      <Center>No Alerts</Center>
+                    </CardContent>
                   </Card>
                 </Grid>
               </Grid>
