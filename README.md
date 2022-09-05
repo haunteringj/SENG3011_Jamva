@@ -8,12 +8,15 @@ user interested in epidemics detection.
 For more information check the following documents:
 Design Details doc:
 https://jamva.atlassian.net/wiki/spaces/JAMVA/pages/491521/Design+Details
+https://docs.google.com/document/d/1rDB0Hgq3pa9USQnC0l13VOzCMphaM5S4zOjs2dD7oqA/edit?usp=sharing
 
 Management doc:
 https://jamva.atlassian.net/wiki/spaces/JAMVA/pages/262145/Management+Information
+https://docs.google.com/document/d/12mmPqggnxFl_NaQwkgCcqeUpNFKowX9PP0ITG8iDOns/edit?usp=sharing
 
 Testing doc:
 https://jamva.atlassian.net/wiki/spaces/JAMVA/pages/1474561/Testing+Documentation
+https://docs.google.com/document/d/1ezcL9NQtav-bhpFY0ZLryxFu27rS_3xK6PsMIARhba0/edit?usp=sharing
 
 Swagger API doc:
 https://app.swaggerhub.com/apis/Jam35/JamvaReal/1.0.0
